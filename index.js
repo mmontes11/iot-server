@@ -1,16 +1,14 @@
 import mongoose from 'mongoose';
 import app from './config/express';
+import config from './config/env'
 
-const db = 'mongodb://localhost/node_template';
-const port = 8080;
-
-mongoose.connect(db, { server: { socketOptions: { keepAlive: 1 } } });
+mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } });
 mongoose.connection.on('error', () => {
-  throw new Error(`unable to connect to database: ${db}`);
+  throw new Error(`Unable to connect to database: ${config.db}`);
 });
 
-app.listen(port, () => {
-  console.log(`server started on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Server started on port ${config.port}`);
 });
 
 export default app;
