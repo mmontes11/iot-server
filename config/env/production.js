@@ -1,5 +1,5 @@
 export default {
     env: 'production',
-    db: 'mongodb://localhost/node_template',
+    db: 'mongodb://mongodb_docker/node_template',
     port: 8080
 };

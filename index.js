@@ -2,9 +2,12 @@ import mongoose from 'mongoose';
 import app from './config/express';
 import config from './config/env'
 
-mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } });
-mongoose.connection.on('error', () => {
-  throw new Error(`Unable to connect to database: ${config.db}`);
+mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } }, function(error) {
+	if (error) {
+		throw new Error(`Unable to connect to database ${config.db}`);
+	} else {
+		console.log(`Connected to database ${config.db}`);
+	}
 });
 
 app.listen(config.port, () => {

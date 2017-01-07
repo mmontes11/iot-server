@@ -11,6 +11,8 @@ COPY package.json ${workdir}
 
 RUN npm install
 
+COPY . ${workdir}
+
 RUN export NODE_ENV='production'
 
 EXPOSE ${port}
