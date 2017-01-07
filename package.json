@@ -1,7 +1,7 @@
 {
-  "name": "node_template",
+  "name": "node_mongo",
   "version": "0.0.1",
-  "description": "ES6 NodeJS project template",
+  "description": "ES6 NodeJS + MongoDB project template",
   "author": "Martín Montes <martin11lrx@gmail.com>",
   "main": "index.js",
   "private": false,
