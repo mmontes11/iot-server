@@ -1,20 +1,20 @@
 FROM node:6
 
-ENV workdir /usr/src/node_mongo
-ENV port 8080
+ENV WORKDIR /usr/src/node_mongo
+ENV PORT 8080
 
-RUN mkdir ${workdir}
+RUN mkdir ${WORKDIR}
 
-WORKDIR ${workdir}
+WORKDIR ${WORKDIR}
 
-COPY package.json ${workdir}
+COPY package.json ${WORKDIR}
 
 RUN npm install
 
-COPY . ${workdir}
+COPY . ${WORKDIR}
 
-RUN export NODE_ENV="production"
+ENV NODE_ENV 'production'
 
-EXPOSE ${port}
+EXPOSE ${PORT}
 
 CMD ["npm", "start"]
