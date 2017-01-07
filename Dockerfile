@@ -1,6 +1,6 @@
 FROM node:6
 
-ENV workdir /usr/src/node_template
+ENV workdir /usr/src/node_mongo
 ENV port 8080
 
 RUN mkdir ${workdir}
@@ -13,7 +13,7 @@ RUN npm install
 
 COPY . ${workdir}
 
-RUN export NODE_ENV='production'
+RUN export NODE_ENV="production"
 
 EXPOSE ${port}
 
