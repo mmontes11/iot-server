@@ -1,2 +1,2 @@
 # node_mongo
-ES6 NodeJS project template
+ES6 NodeJS + MongoDB project template
