@@ -1,2 +1,2 @@
-# node_template
+# node_mongo
 ES6 NodeJS project template
