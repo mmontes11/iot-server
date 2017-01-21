@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import regex from '../validation/regex';
 
-const paramValidation = {
+export default {
     createUser: {
         body: {
             userName: Joi.string().required(),
@@ -9,5 +9,3 @@ const paramValidation = {
         }
     }
 };
-
-export default paramValidation;

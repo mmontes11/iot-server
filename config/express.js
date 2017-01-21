@@ -5,7 +5,6 @@ import compress from 'compression';
 import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
-import httpStatus from 'http-status';
 import routes from '../src/routes/indexRouter';
 
 const app = express();
@@ -20,5 +19,11 @@ app.use(cors());
 app.use(helmet());
 
 app.use('/api', routes);
+
+app.use((err, req, res, next) =>
+    res.status(err.status).json({
+        message: err.message
+    })
+);
 
 export default app;

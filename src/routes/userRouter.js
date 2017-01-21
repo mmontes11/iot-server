@@ -6,6 +6,6 @@ import userController from '../controllers/userController'
 const router = express.Router();
 
 router.route('/')
-    .post(expressValidation(paramValidation.createUser), userController.save);
+    .post(expressValidation(paramValidation.createUser), userController.createIfNotExists);
 
 export default router;
