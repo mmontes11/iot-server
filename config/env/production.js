@@ -4,5 +4,6 @@ export default {
     port: 8080,
     basicAuthUsers: {
         'admin': 'ad6YchnPLQ'
-    }
+    },
+    jwtSecret: '67cqPCxRFZmz4rXEVqCSyzzk'
 };
