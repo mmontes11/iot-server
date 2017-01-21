@@ -1,2 +1,2 @@
-# node_mongo
+# js_backend
 ES6 NodeJS + MongoDB project template
