@@ -36,8 +36,10 @@
     "cors": "2.8.1",
     "debug": "^2.4.5",
     "express": "4.14.0",
+    "express-validation": "^1.0.1",
     "helmet": "^3.3.0",
-    "joi": "^10.1.0",
+    "http-status": "^0.2.5",
+    "joi": "^10.2.0",
     "method-override": "^2.3.5",
     "mongoose": "^4.7.4",
     "winston": "^2.3.0"

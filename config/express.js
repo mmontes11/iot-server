@@ -5,7 +5,8 @@ import compress from 'compression';
 import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
-import routes from '../src/routes/index';
+import httpStatus from 'http-status';
+import routes from '../src/routes/indexRouter';
 
 const app = express();
 
