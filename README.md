@@ -1,2 +1,2 @@
-# js_backend
-ES6 NodeJS + MongoDB project template
+# js_server
+ES6 NodeJS + MongoDB server
