@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
-import Measurement from '../models/measurementModel';
+import measurement from '../models/measurement';
 import requestUtils from '../utils/requestUtils'
 
 function createMeasurement(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
-    const measurement = new Measurement({
+    const newMeasurement = measurement.MeasurementModel({
         creator: {
             userName: userName,
             device: req.body.device
@@ -15,7 +15,7 @@ function createMeasurement(req, res) {
         value: req.body.value
     });
 
-    measurement.save()
+    newMeasurement.save()
         .then( savedMeasurement => res.json(savedMeasurement) )
         .catch( err => {
             res.status(httpStatus.BAD_REQUEST).json(err);

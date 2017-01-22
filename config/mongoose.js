@@ -1,3 +1,4 @@
+import 'mongoose-geojson-schema';
 import mongoose from 'mongoose';
 
 // Set default ES6 promises to mongoose

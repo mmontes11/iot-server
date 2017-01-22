@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from '../../config/mongoose';
 import regex from '../validation/regex'
 
 const UserSchema = new mongoose.Schema({
@@ -9,13 +9,14 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        match: [regex.passwordRegex, 'Invalid {PATH}. It must contain uppercase letters, lowercase letters, numbers and symbols.']
+        match: regex.passwordRegex
     },
     creationTime: {
         type: Date,
         default: Date.now()
     }
 });
+const UserModel = mongoose.model('User', UserSchema);
 
-export default mongoose.model('User', UserSchema);
+export default { UserSchema, UserModel };
 

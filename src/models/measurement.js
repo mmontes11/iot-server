@@ -1,22 +1,16 @@
-import mongoose from 'mongoose';
-import GeoJSON from 'mongoose-geojson-schema';
+import mongoose from '../../config/mongoose';
+import relatedEntity from './relatedEntity';
 
 const MeasurementSchema = new mongoose.Schema({
     creator: {
         userName: String,
         device: String
     },
-    creationTime: {
+    measurementTime: {
         type: Date,
         default: Date.now()
     },
-    relatedEntities: [
-        {
-            name: String,
-            type: String,
-            geometry: GeoJSON
-        }
-    ],
+    relatedEntities: [ relatedEntity.RelatedEntitySchema ],
     type: {
         type: String,
         required: true
@@ -30,5 +24,6 @@ const MeasurementSchema = new mongoose.Schema({
         required: true
     }
 });
+const MeasurementModel = mongoose.model('Measurement', MeasurementSchema);
 
-export default mongoose.model('Measurement', MeasurementSchema)
+export default { MeasurementSchema, MeasurementModel };

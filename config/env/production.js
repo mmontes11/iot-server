@@ -3,7 +3,7 @@ export default {
     db: 'mongodb://mongo_docker/js_backend',
     port: 8080,
     basicAuthUsers: {
-        'admin': 'ad6YchnPLQ'
+        'admin': process.env.BASIC_AUTH_PASWORD
     },
-    jwtSecret: '67cqPCxRFZmz4rXEVqCSyzzk'
+    jwtSecret: process.env.JWT_SECRET
 };

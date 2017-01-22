@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel';
+import user from '../models/user';
 import config from '../../config/env';
 
 function createIfNotExists(req, res) {
-    const query = User.where({ userName: req.body.userName });
+    const query = user.UserModel.where({ userName: req.body.userName });
     query.findOne( (err, user) => {
         if (err) {
             handleError(res, err)
@@ -12,7 +12,7 @@ function createIfNotExists(req, res) {
             if (user) {
                 res.sendStatus(httpStatus.CONFLICT)
             } else {
-                user = new User({
+                user = new user.UserModel({
                     userName: req.body.userName,
                     password: req.body.password
                 });
@@ -27,7 +27,7 @@ function createIfNotExists(req, res) {
 }
 
 function logIn(req, res) {
-    const query = User.where({ userName: req.body.userName, password: req.body.password });
+    const query = user.UserModel.where({ userName: req.body.userName, password: req.body.password });
     query.findOne( (err, user) => {
         if (err) {
             handleError(res, err)
