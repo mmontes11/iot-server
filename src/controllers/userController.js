@@ -46,7 +46,7 @@ function logIn(req, res) {
 }
 
 function handleError(res, err) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    res.status(httpStatus.BAD_REQUEST).json(err);
 }
 
 export default { createIfNotExists, logIn };

@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         match: [regex.passwordRegex, 'Invalid {PATH}. It must contain uppercase letters, lowercase letters, numbers and symbols.']
     },
-    createdAt: {
+    creationTime: {
         type: Date,
         default: Date.now()
     }
