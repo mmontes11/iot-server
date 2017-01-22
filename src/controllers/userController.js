@@ -12,11 +12,11 @@ function createIfNotExists(req, res) {
             if (user) {
                 res.sendStatus(httpStatus.CONFLICT)
             } else {
-                user = new user.UserModel({
+                const newUser = new user.UserModel({
                     userName: req.body.userName,
                     password: req.body.password
                 });
-                user.save()
+                newUser.save()
                     .then( savedUser => res.json(savedUser))
                     .catch( err => {
                         handleError(res, err);

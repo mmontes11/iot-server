@@ -6,7 +6,6 @@ import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
 import routes from '../src/routes/indexRouter';
-import config from './env';
 
 const app = express();
 
@@ -23,7 +22,7 @@ app.use('/api', routes);
 app.use((err, req, res, next) =>
     res.status(err.status).json({
         message: err.message,
-        stack: config.env === 'development' ? err.stack : {}
+        errors: err.errors
     })
 );
 

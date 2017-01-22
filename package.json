@@ -46,6 +46,7 @@
     "method-override": "^2.3.5",
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
+    "mongoose-schema-extend": "^0.2.2",
     "winston": "^2.3.0"
   },
   "devDependencies": {

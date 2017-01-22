@@ -1,20 +1,7 @@
 import mongoose from '../../config/mongoose';
-import relatedEntity from './relatedEntity';
+import observation from './observation';
 
-const MeasurementSchema = new mongoose.Schema({
-    creator: {
-        userName: String,
-        device: String
-    },
-    measurementTime: {
-        type: Date,
-        default: Date.now()
-    },
-    relatedEntities: [ relatedEntity.RelatedEntitySchema ],
-    type: {
-        type: String,
-        required: true
-    },
+const MeasurementSchema = observation.ObservationSchema.extend({
     units: {
         type: String,
         required: true

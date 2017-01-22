@@ -1,25 +1,24 @@
 import httpStatus from 'http-status';
-import measurement from '../models/measurement';
+import event from '../models/event';
 import requestUtils from '../utils/requestUtils'
 
-function createMeasurement(req, res) {
+function createEvent(req, res, next) {
     const userName = requestUtils.extractUserNameFromRequest(req);
-    const newMeasurement = new measurement.MeasurementModel({
+    const newEvent = new event.EventModel({
         creator: {
             userName: userName,
             device: req.body.device
         },
         type: req.body.type,
         relatedEntities: req.body.relatedEntities,
-        units: req.body.units,
-        value: req.body.value
+        duration: req.body.duration,
     });
 
-    newMeasurement.save()
-        .then( savedMeasurement => res.json(savedMeasurement) )
+    newEvent.save()
+        .then( savedEvent => res.json(savedEvent) )
         .catch( err => {
             res.status(httpStatus.BAD_REQUEST).json(err);
         })
 }
 
-export default { createMeasurement };
+export default { createEvent };

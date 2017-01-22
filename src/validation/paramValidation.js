@@ -10,9 +10,14 @@ export default {
     },
     createMeasurement: {
         body: {
-            type: Joi.string(),
+            type: Joi.string().required(),
             units: Joi.string().required(),
             value: Joi.number().required()
+        }
+    },
+    createEvent: {
+        body: {
+            type: Joi.string().required()
         }
     }
 };
