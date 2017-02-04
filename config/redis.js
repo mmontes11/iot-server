@@ -1,9 +1,9 @@
 import redis from 'redis';
-import bluebird from 'bluebird';
+import Promise from 'bluebird';
 import config from './env';
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+Promise.promisifyAll(redis.RedisClient.prototype);
+Promise.promisifyAll(redis.Multi.prototype);
 
 const redisClient = redis.createClient(config.redis);
 
