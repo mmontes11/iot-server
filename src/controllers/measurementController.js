@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import measurement from '../models/measurement';
-import requestUtils from '../utils/requestUtils'
+import requestUtils from '../utils/requestUtils';
+import statsCache from '../cache/statsCache';
 
 
 function createMeasurement(req, res) {
@@ -38,14 +39,28 @@ function getLastMeasurement(req, res) {
 
 function getStats(req, res) {
     const type = req.params.type;
-    measurement.MeasurementModel.getStats(type)
-        .then( stats => {
-            if (_.isEmpty(stats)) {
-                res.sendStatus(httpStatus.NOT_FOUND)
+    statsCache
+        .getStatsCache(type)
+        .then( cachedStats => {
+            if (cachedStats){
+                getStatsSuccess(res, cachedStats)
             } else {
-                res.json(stats)
+                measurement.MeasurementModel
+                    .getStats(type)
+                    .then( stats => {
+                        statsCache.setStatsCache(type, stats);
+                        getStatsSuccess(res, stats)
+                    })
             }
-        })
+        });
+}
+
+function getStatsSuccess(res, stats) {
+    if (_.isEmpty(stats)) {
+        res.sendStatus(httpStatus.NOT_FOUND)
+    } else {
+        res.json(stats)
+    }
 }
 
 export default { createMeasurement, getLastMeasurement, getStats };

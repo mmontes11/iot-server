@@ -7,7 +7,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
 import routes from '../src/routes/indexRouter';
-import config from './env';
+import config from '../';
 
 const app = express();
 
@@ -22,10 +22,9 @@ app.use(helmet());
 app.use('/api', routes);
 
 
-if (config.env == 'production') {
-    app.use((err, req, res, next) =>
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err)
-    );
-}
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err)
+});
 
 export default app;
