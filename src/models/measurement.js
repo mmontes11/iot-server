@@ -1,5 +1,7 @@
+import _ from 'underscore';
 import mongoose from '../../config/mongoose';
 import observation from './observation';
+
 
 const MeasurementSchema = observation.ObservationSchema.extend({
     units: {
@@ -14,7 +16,7 @@ const MeasurementSchema = observation.ObservationSchema.extend({
 
 MeasurementSchema.statics.getStats = function (type){
     const pipeline = [];
-    if (type) {
+    if (!_.isUndefined(type)) {
         pipeline.push({
             "$match": {
                 "type": type

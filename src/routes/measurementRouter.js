@@ -13,11 +13,19 @@ router
                 measurementController.createMeasurement);
 
 router
+    .route('/last')
+        .get(measurementController.getLastMeasurement);
+
+router
+    .route('/:type/last')
+        .get(measurementController.getLastMeasurement);
+
+router
     .route('/stats')
         .get(measurementController.getStats);
 
 router
-    .route('/stats/:type')
+    .route('/:type/stats')
         .get(measurementController.getStats);
 
 export default router;

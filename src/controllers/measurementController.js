@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
+import _ from 'underscore';
 import measurement from '../models/measurement';
 import requestUtils from '../utils/requestUtils'
-import _ from 'underscore';
+
 
 function createMeasurement(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
@@ -23,6 +24,18 @@ function createMeasurement(req, res) {
         })
 }
 
+function getLastMeasurement(req, res) {
+    const type = req.params.type;
+    measurement.MeasurementModel.last(type)
+        .then( lastMeasurement => {
+            if (_.isNull(lastMeasurement)) {
+                res.sendStatus(httpStatus.NOT_FOUND)
+            } else {
+                res.json(lastMeasurement)
+            }
+        })
+}
+
 function getStats(req, res) {
     const type = req.params.type;
     measurement.MeasurementModel.getStats(type)
@@ -33,9 +46,6 @@ function getStats(req, res) {
                 res.json(stats)
             }
         })
-        .catch( err => {
-            res.status(httpStatus.BAD_REQUEST).json(err);
-        })
 }
 
-export default { createMeasurement, getStats };
+export default { createMeasurement, getLastMeasurement, getStats };
