@@ -11,6 +11,27 @@ const MeasurementSchema = observation.ObservationSchema.extend({
         required: true
     }
 });
+
+MeasurementSchema.statics.getStats = function (type){
+    const pipeline = [];
+    if (type) {
+        pipeline.push({
+            "$match": {
+                "type": type
+            }
+        });
+    }
+    pipeline.push({
+        "$group": {
+            "_id": "$type",
+            "average": {
+                "$avg": "$value"
+            }
+        }
+    });
+    return this.aggregate(pipeline)
+};
+
 const MeasurementModel = mongoose.model('Measurement', MeasurementSchema);
 
 export default { MeasurementSchema, MeasurementModel };

@@ -12,4 +12,12 @@ router
         .post(expressJwt({ secret: config.jwtSecret }), expressValidation(paramValidation.createMeasurement),
                 measurementController.createMeasurement);
 
+router
+    .route('/stats')
+        .get(measurementController.getStats);
+
+router
+    .route('/stats/:type')
+        .get(measurementController.getStats);
+
 export default router;
