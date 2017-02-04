@@ -17,7 +17,7 @@ function createEvent(req, res, next) {
     newEvent.save()
         .then( savedEvent => res.json(savedEvent) )
         .catch( err => {
-            res.status(httpStatus.BAD_REQUEST).json(err);
+            res.status(httpStatus.BAD_REQUEST).json(err)
         })
 }
 
