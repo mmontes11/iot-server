@@ -1,7 +1,9 @@
 export default {
     env: 'development',
-    db: 'mongodb://localhost/IoT',
-    port: 8000,
+    server_port: 8000,
+    db: 'mongodb://localhost:27017/IoT',
+    redis_host: 'localhost',
+    redis_port: 6379,
     basicAuthUsers: {
         'admin': 'admin'
     },

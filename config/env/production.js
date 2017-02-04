@@ -1,7 +1,9 @@
 export default {
     env: 'production',
-    db: 'mongodb://mongo_docker/IoT',
-    port: 8080,
+    server_port: 8080,
+    db: 'mongodb://mongo_docker:27017/IoT',
+    redis_host: 'localhost',
+    redis_port: 6379,
     basicAuthUsers: {
         'admin': process.env.BASIC_AUTH_PASSWORD
     },

@@ -30,6 +30,7 @@
     "template"
   ],
   "dependencies": {
+    "bluebird": "^3.4.7",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
     "cookie-parser": "1.4.3",
@@ -47,6 +48,7 @@
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
     "mongoose-schema-extend": "^0.2.2",
+    "redis": "^2.6.5",
     "underscore": "^1.8.3",
     "winston": "^2.3.0"
   },
