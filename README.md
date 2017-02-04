@@ -1,2 +1,2 @@
-# js_backend
-ES6 NodeJS + MongoDB backend
+# IoT_backend
+ES6 NodeJS + MongoDB IoT backend
