@@ -5,11 +5,11 @@ import config from '../../config/env';
 
 function createIfNotExists(req, res) {
     const query = user.UserModel.where({ userName: req.body.userName });
-    query.findOne( (err, user) => {
+    query.findOne( (err, userFound) => {
         if (err) {
             handleError(res, err)
         } else {
-            if (user) {
+            if (userFound) {
                 res.sendStatus(httpStatus.CONFLICT)
             } else {
                 const newUser = new user.UserModel({
