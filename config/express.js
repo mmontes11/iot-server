@@ -23,7 +23,7 @@ app.use('/api', routes);
 
 
 app.use((err, req, res, next) => {
-    console.log(err);
+    console.log(`Express error: ${err}`);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err)
 });
 
