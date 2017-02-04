@@ -1,7 +1,7 @@
 {
-  "name": "node_mongo",
+  "name": "IoT_backend",
   "version": "0.0.1",
-  "description": "ES6 NodeJS + MongoDB project template",
+  "description": "ES6 NodeJS + MongoDB IoT backend",
   "author": "Martín Montes <martin11lrx@gmail.com>",
   "main": "index.js",
   "private": false,
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com/mmontes11/node_mongo.git"
+    "url": "https://github.com/mmontes11/IoT_backend.git"
   },
   "keywords": [
     "express",

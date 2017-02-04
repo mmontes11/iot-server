@@ -1,6 +1,6 @@
 export default {
     env: 'development',
-    db: 'mongodb://localhost/js_backend',
+    db: 'mongodb://localhost/IoT',
     port: 8000,
     basicAuthUsers: {
         'admin': 'admin'
