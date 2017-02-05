@@ -1,6 +1,6 @@
 FROM node:6
 
-ENV WORKDIR /usr/src/node_mongo
+ENV WORKDIR /usr/src/iot_backend
 ENV PORT 8080
 
 RUN mkdir ${WORKDIR}

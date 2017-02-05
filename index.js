@@ -12,7 +12,7 @@ mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } }, fun
 });
 
 redis.on("connect", function(){
-    console.log(`Connected to redis ${config.redis}`);
+    console.log(`Connected to redis ${config.redis_host}:${config.redis_port}`);
 });
 
 app.listen(config.port, () => {
