@@ -10,6 +10,7 @@ const router = express.Router();
 router
     .route('/')
         .post(expressBasicAuth({ users: config.basicAuthUsers}), expressValidation(paramValidation.createUser), userController.createIfNotExists);
+
 router
     .route('/logIn')
         .post(userController.logIn);

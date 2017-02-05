@@ -8,8 +8,11 @@ import config from '../../config/env';
 const router = express.Router();
 
 router
+    .route('*')
+        .all(expressJwt({ secret: config.jwtSecret }));
+
+router
     .route('/')
-        .post(expressJwt({ secret: config.jwtSecret }), expressValidation(paramValidation.createEvent),
-            eventController.createEvent);
+        .post(expressValidation(paramValidation.createEvent), eventController.createEvent);
 
 export default router;
