@@ -1,6 +1,6 @@
 export default {
     env: 'production',
-    port: 8080,
+    port: process.env.PORT || 8080,
     db: 'mongodb://mongo_docker:27017/IoT',
     redis_port: '6379',
     redis_host: 'redis_docker',
