@@ -26,9 +26,24 @@ MeasurementSchema.statics.getStats = function (type){
     pipeline.push({
         "$group": {
             "_id": "$type",
-            "average": {
+            "avg": {
                 "$avg": "$value"
+            },
+            "max": {
+                "$max": "$value"
+            },
+            "min": {
+                "$min": "$value"
             }
+        }
+    });
+    pipeline.push({
+        "$project": {
+            "_id": 0,
+            "type": "$_id",
+            "avg": 1,
+            "max": 1,
+            "min": 1
         }
     });
     return this.aggregate(pipeline)
