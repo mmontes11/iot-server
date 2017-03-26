@@ -3,10 +3,9 @@ import { TimePeriod, CustomTimePeriod} from "../models/timePeriod"
 import httpStatus from 'http-status';
 
 function validateGetStats(req, res, next) {
-    const lastTimePeriodString = req.query.lastTimePeriod;
-    if (!_.isUndefined(lastTimePeriodString)) {
-        const lastTimePeriod = new TimePeriod(lastTimePeriodString);
-        if (!lastTimePeriod.isValidTimePeriod()) {
+    if (!_.isUndefined(req.query.lastTimePeriod)) {
+        const lastTimePeriod = new TimePeriod(req.query.lastTimePeriod);
+        if (!lastTimePeriod.isValid()) {
             return res.sendStatus(httpStatus.BAD_REQUEST)
         }
     }

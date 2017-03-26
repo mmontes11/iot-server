@@ -42,7 +42,7 @@ function getStats(req, res) {
     const type = req.params.type;
     var lastTimePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
-        lastTimePeriod = new TimePeriod(req.query.lastTimePeriod)
+        lastTimePeriod = new TimePeriod(req.query.lastTimePeriod);
     }
     statsCache
         .getStatsCache(type, lastTimePeriod)
@@ -51,7 +51,7 @@ function getStats(req, res) {
                 getStatsSuccess(res, cachedStats)
             } else {
                 MeasurementModel
-                    .getStats(type)
+                    .getStats(type, lastTimePeriod)
                     .then( stats => {
                         statsCache.setStatsCache(type, lastTimePeriod, stats);
                         getStatsSuccess(res, stats)

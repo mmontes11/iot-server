@@ -1,6 +1,6 @@
-import _ from 'underscore';
-import mongoose from '../../config/mongoose';
-import observation from './observation';
+import _ from "underscore";
+import mongoose from "../../config/mongoose";
+import observation from "./observation";
 
 
 const MeasurementSchema = observation.ObservationSchema.extend({
@@ -14,14 +14,36 @@ const MeasurementSchema = observation.ObservationSchema.extend({
     }
 });
 
-MeasurementSchema.statics.getStats = function (type){
+MeasurementSchema.statics.getStats = function (type, timePeriod){
     const pipeline = [];
+    const matchConditions = [];
     if (!_.isUndefined(type)) {
+        matchConditions.push({
+            "type": type
+        });
+    }
+    if (!_.isUndefined(timePeriod)) {
+        if (!_.isUndefined(timePeriod.startDate)) {
+            matchConditions.push({
+                "phenomenonTime": {
+                    "$gte": timePeriod.startDate
+                }
+            });
+        }
+        if (!_.isUndefined(timePeriod.endDate)) {
+            matchConditions.push({
+                "phenomenonTime": {
+                    "$lte": timePeriod.endDate
+                }
+            });
+        }
+    }
+    if (!_.isEmpty(matchConditions)) {
         pipeline.push({
             "$match": {
-                "type": type
+                "$and": matchConditions
             }
-        });
+        })
     }
     pipeline.push({
         "$group": {
@@ -46,6 +68,8 @@ MeasurementSchema.statics.getStats = function (type){
             "min": 1
         }
     });
+    console.log("MongoDB query");
+    console.log(JSON.stringify(pipeline));
     return this.aggregate(pipeline)
 };
 

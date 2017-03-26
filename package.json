@@ -47,6 +47,7 @@
     "joi": "^9.0.4",
     "jsonwebtoken": "^7.2.1",
     "method-override": "^2.3.5",
+    "moment": "^2.18.1",
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
     "mongoose-schema-extend": "^0.2.2",
