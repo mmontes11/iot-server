@@ -1,10 +1,12 @@
 import Enum from "es6-enum";
+import _ from "underscore";
 
 const dayString = "day", weekString = "week", monthString = "month", yearString = "year";
 const TIME_PERIOD = Enum(dayString, weekString, monthString, yearString);
 
 class TimePeriod {
     constructor(timePeriodString){
+        this.name = timePeriodString;
         this.value = this.stringToEnum(timePeriodString)
     }
     stringToEnum(timePeriodString) {
@@ -21,9 +23,15 @@ class TimePeriod {
                 return undefined
         }
     }
-    isValid() {
-        return this.value != undefined
+    isValidTimePeriod() {
+        return !_.isUndefined(this.name) && !_.isUndefined(this.value)
     }
 }
 
-export default TimePeriod;
+class CustomTimePeriod extends TimePeriod {
+    constructor(startDate, endDate) {
+        super()
+    }
+}
+
+export default { TimePeriod, CustomTimePeriod };

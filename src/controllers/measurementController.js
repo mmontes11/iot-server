@@ -1,13 +1,14 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
-import measurement from '../models/measurement';
+import { MeasurementSchema, MeasurementModel } from '../models/measurement';
+import { TimePeriod } from '../models/timePeriod'
 import requestUtils from '../utils/requestUtils';
 import statsCache from '../cache/statsCache';
 
 
 function createMeasurement(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
-    const newMeasurement = new measurement.MeasurementModel({
+    const newMeasurement = new MeasurementModel({
         creator: {
             userName: userName,
             device: req.body.device
@@ -27,7 +28,7 @@ function createMeasurement(req, res) {
 
 function getLastMeasurement(req, res) {
     const type = req.params.type;
-    measurement.MeasurementModel.last(type)
+    MeasurementModel.last(type)
         .then( lastMeasurement => {
             if (_.isNull(lastMeasurement)) {
                 res.sendStatus(httpStatus.NOT_FOUND)
@@ -39,16 +40,20 @@ function getLastMeasurement(req, res) {
 
 function getStats(req, res) {
     const type = req.params.type;
+    var lastTimePeriod = undefined;
+    if (!_.isUndefined(req.query.lastTimePeriod)) {
+        lastTimePeriod = new TimePeriod(req.query.lastTimePeriod)
+    }
     statsCache
-        .getStatsCache(type)
+        .getStatsCache(type, lastTimePeriod)
         .then( cachedStats => {
             if (cachedStats){
                 getStatsSuccess(res, cachedStats)
             } else {
-                measurement.MeasurementModel
+                MeasurementModel
                     .getStats(type)
                     .then( stats => {
-                        statsCache.setStatsCache(type, stats);
+                        statsCache.setStatsCache(type, lastTimePeriod, stats);
                         getStatsSuccess(res, stats)
                     })
             }
