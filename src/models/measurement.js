@@ -56,6 +56,9 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
             },
             "min": {
                 "$min": "$value"
+            },
+            "stdDev": {
+                "$stdDevPop": "$value"
             }
         }
     });
@@ -65,7 +68,8 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
             "type": "$_id",
             "avg": 1,
             "max": 1,
-            "min": 1
+            "min": 1,
+            "stdDev": 1
         }
     });
     console.log("MongoDB aggregation pipeline");
