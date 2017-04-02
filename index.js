@@ -1,7 +1,15 @@
 import mongoose from './config/mongoose';
 import redis from './config/redis';
 import app from './config/express';
-import config from './config/env'
+import { Server } from 'http';
+import SocketIO from 'socket.io';
+import SocketController from './src/socket/socketController';
+import config from './config/env';
+
+const server = new Server(app);
+const io = new SocketIO(server);
+const socketController = new SocketController(io);
+socketController.listen();
 
 mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } }, function(err) {
 	if (err) {
@@ -19,4 +27,4 @@ app.listen(config.port, () => {
     console.log(`Server started on port ${config.port}`);
 });
 
-export default app;
+export default { server, app, socketController };
