@@ -48,7 +48,7 @@ class CustomTimePeriod extends TimePeriod {
         if (!_.isUndefined(this.startDate) && !this.startDate.isValid()) {
             return false
         }
-        if (!_.isUndefined(this.endMoment) && !this.endDate.isValid()) {
+        if (!_.isUndefined(this.endDate) && !this.endDate.isValid()) {
             return false
         }
         if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
