@@ -4,13 +4,16 @@ import _ from "underscore";
 
 const dayString = "day", weekString = "week", monthString = "month", yearString = "year";
 const TIME_PERIOD = Enum(dayString, weekString, monthString, yearString);
+const supportedDateFormats = [moment.ISO_8601, "MM-DD-YYYY"];
 
 class TimePeriod {
     constructor(timePeriodString){
-        this.name = timePeriodString;
-        this.value = this.stringToEnum(timePeriodString);
-        this.startDate = this.getStartDate();
-        this.endDate = moment().utc().toDate();
+        if (!_.isUndefined(timePeriodString)) {
+            this.name = timePeriodString;
+            this.value = this.stringToEnum(timePeriodString);
+            this.startDate = moment().utc().subtract(1, this.name);
+        }
+        this.endDate = moment().utc();
     }
     stringToEnum(timePeriodString) {
         switch (timePeriodString) {
@@ -29,19 +32,29 @@ class TimePeriod {
     isValid() {
         return !_.isUndefined(this.name) && !_.isUndefined(this.value)
     }
-    getStartDate() {
-        return moment().utc().subtract(1, this.name).toDate();
-    }
 }
 
 class CustomTimePeriod extends TimePeriod {
     constructor(startDate, endDate) {
         super();
-        this.startDate = startDate;
-        this.endDate = endDate;
+        if (!_.isUndefined(startDate)) {
+            this.startDate = moment(startDate, supportedDateFormats).utc();
+        }
+        if (!_.isUndefined(endDate)) {
+            this.endDate = moment(endDate, supportedDateFormats).utc();
+        }
     }
     isValid() {
-        return false
+        if (!_.isUndefined(this.startDate) && !this.startDate.isValid()) {
+            return false
+        }
+        if (!_.isUndefined(this.endMoment) && !this.endDate.isValid()) {
+            return false
+        }
+        if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
+            return this.endDate.isAfter(this.startDate)
+        }
+        return true;
     }
 }
 

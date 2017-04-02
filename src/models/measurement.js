@@ -26,14 +26,14 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
         if (!_.isUndefined(timePeriod.startDate)) {
             matchConditions.push({
                 "phenomenonTime": {
-                    "$gte": timePeriod.startDate
+                    "$gte": timePeriod.startDate.toDate()
                 }
             });
         }
         if (!_.isUndefined(timePeriod.endDate)) {
             matchConditions.push({
                 "phenomenonTime": {
-                    "$lte": timePeriod.endDate
+                    "$lte": timePeriod.endDate.toDate()
                 }
             });
         }

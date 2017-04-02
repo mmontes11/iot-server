@@ -5,14 +5,18 @@ import { TimePeriod, CustomTimePeriod } from '../models/timePeriod'
 
 const statsCacheKey = "stats";
 
-function getStatsCacheKey(type, timePeriod) {
+function cachePolicy(timePeriod) {
+    return !(timePeriod instanceof CustomTimePeriod)
+}
+
+function getStatsCacheKey(type, lastTimePeriod) {
     var cacheKey = statsCacheKey;
     const elementsCacheKey = [];
     if (!_.isUndefined(type)) {
         elementsCacheKey.push(type)
     }
-    if (!_.isUndefined(timePeriod) && !(timePeriod instanceof CustomTimePeriod) && !_.isUndefined(timePeriod.name)) {
-        elementsCacheKey.push(timePeriod.name)
+    if (!_.isUndefined(lastTimePeriod) && lastTimePeriod.isValid()) {
+        elementsCacheKey.push(lastTimePeriod.name)
     }
 
     elementsCacheKey
@@ -31,4 +35,4 @@ function getStatsCache(type, lastTimePeriod) {
     return cacheHandler.getObjectCache(getStatsCacheKey(type, lastTimePeriod))
 }
 
-export default { setStatsCache, getStatsCache }
+export default { cachePolicy, setStatsCache, getStatsCache }

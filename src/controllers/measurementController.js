@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import { MeasurementSchema, MeasurementModel } from '../models/measurement';
-import { TimePeriod } from '../models/timePeriod'
+import { TimePeriod, CustomTimePeriod } from '../models/timePeriod'
 import requestUtils from '../utils/requestUtils';
 import statsCache from '../cache/statsCache';
 
@@ -40,24 +40,38 @@ function getLastMeasurement(req, res) {
 
 function getStats(req, res) {
     const type = req.params.type;
-    var lastTimePeriod = undefined;
+    var timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
-        lastTimePeriod = new TimePeriod(req.query.lastTimePeriod);
+        timePeriod = new TimePeriod(req.query.lastTimePeriod);
     }
-    statsCache
-        .getStatsCache(type, lastTimePeriod)
-        .then( cachedStats => {
-            if (cachedStats){
-                getStatsSuccess(res, cachedStats)
-            } else {
-                MeasurementModel
-                    .getStats(type, lastTimePeriod)
-                    .then( stats => {
-                        statsCache.setStatsCache(type, lastTimePeriod, stats);
-                        getStatsSuccess(res, stats)
-                    })
-            }
-        });
+    if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
+        timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
+    }
+
+    if (statsCache.cachePolicy(timePeriod)) {
+        statsCache
+            .getStatsCache(type, timePeriod)
+            .then( cachedStats => {
+                if (cachedStats){
+                    getStatsSuccess(res, cachedStats)
+                } else {
+                    MeasurementModel
+                        .getStats(type, timePeriod)
+                        .then( stats => {
+                            statsCache.setStatsCache(type, timePeriod, stats);
+                            getStatsSuccess(res, stats)
+                        })
+                }
+            });
+    } else {
+        MeasurementModel
+            .getStats(type, timePeriod)
+            .then( stats => {
+                getStatsSuccess(res, stats)
+            })
+    }
+
+
 }
 
 function getStatsSuccess(res, stats) {
