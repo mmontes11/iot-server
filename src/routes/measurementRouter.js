@@ -17,6 +17,10 @@ router
         .post(expressValidation(paramValidation.createMeasurement), measurementController.createMeasurement);
 
 router
+    .route('/types')
+        .get(measurementController.getTypes);
+
+router
     .route('/last')
         .get(measurementController.getLastMeasurement);
 

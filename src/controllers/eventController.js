@@ -1,10 +1,11 @@
 import httpStatus from 'http-status';
-import event from '../models/event';
+import _ from 'underscore';
+import { EventSchema, EventModel } from '../models/event';
 import requestUtils from '../utils/requestUtils'
 
 function createEvent(req, res, next) {
     const userName = requestUtils.extractUserNameFromRequest(req);
-    const newEvent = new event.EventModel({
+    const newEvent = new EventModel({
         creator: {
             userName: userName,
             device: req.body.device
@@ -21,4 +22,15 @@ function createEvent(req, res, next) {
         })
 }
 
-export default { createEvent };
+function getTypes(req, res) {
+    EventModel.types()
+        .then( types => {
+            if (_.isNull(types)) {
+                res.sendStatus(httpStatus.NOT_FOUND)
+            } else {
+                res.json(types)
+            }
+        })
+}
+
+export default { createEvent, getTypes };

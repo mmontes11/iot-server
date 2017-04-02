@@ -18,6 +18,10 @@ const ObservationSchema = new mongoose.Schema({
     }
 });
 
+ObservationSchema.statics.types = function() {
+    return this.distinct("type")
+};
+
 ObservationSchema.statics.last = function(type) {
     let query;
     if (_.isUndefined(type)){

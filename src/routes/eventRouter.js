@@ -15,4 +15,8 @@ router
     .route('/')
         .post(expressValidation(paramValidation.createEvent), eventController.createEvent);
 
+router
+    .route('/types')
+        .get(eventController.getTypes);
+
 export default router;

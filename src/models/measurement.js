@@ -68,7 +68,7 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
             "min": 1
         }
     });
-    console.log("MongoDB query");
+    console.log("MongoDB aggregation pipeline");
     console.log(JSON.stringify(pipeline));
     return this.aggregate(pipeline)
 };

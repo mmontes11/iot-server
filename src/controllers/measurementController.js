@@ -26,6 +26,17 @@ function createMeasurement(req, res) {
         })
 }
 
+function getTypes(req, res) {
+    MeasurementModel.types()
+        .then( types => {
+            if (_.isNull(types)) {
+                res.sendStatus(httpStatus.NOT_FOUND)
+            } else {
+                res.json(types)
+            }
+        })
+}
+
 function getLastMeasurement(req, res) {
     const type = req.params.type;
     MeasurementModel.last(type)
@@ -82,4 +93,4 @@ function getStatsSuccess(res, stats) {
     }
 }
 
-export default { createMeasurement, getLastMeasurement, getStats };
+export default { createMeasurement, getTypes, getLastMeasurement, getStats };
