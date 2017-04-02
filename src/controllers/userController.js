@@ -1,25 +1,27 @@
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
-import user from '../models/user';
+import _ from 'underscore';
+import requestUtils from '../utils/requestUtils';
+import { UserSchema, UserModel } from '../models/user';
 import config from '../../config/env';
 
 function createIfNotExists(req, res) {
-    const query = user.UserModel.where({ userName: req.body.userName });
+    const query = UserModel.where({ userName: req.body.userName });
     query.findOne( (err, userFound) => {
         if (err) {
-            handleError(res, err)
+            requestUtils.handleError(res, err)
         } else {
             if (userFound) {
                 res.sendStatus(httpStatus.CONFLICT)
             } else {
-                const newUser = new user.UserModel({
+                const newUser = new UserModel({
                     userName: req.body.userName,
                     password: req.body.password
                 });
                 newUser.save()
                     .then( savedUser => res.json(savedUser))
                     .catch( err => {
-                        handleError(res, err);
+                        requestUtils.handleError(res, err);
                     });
             }
         }
@@ -27,12 +29,12 @@ function createIfNotExists(req, res) {
 }
 
 function logIn(req, res) {
-    const query = user.UserModel.where({ userName: req.body.userName, password: req.body.password });
+    const query = UserModel.where({ userName: req.body.userName, password: req.body.password });
     query.findOne( (err, user) => {
         if (err) {
-            handleError(res, err)
+            requestUtils.handleError(res, err)
         } else {
-            if (!user) {
+            if (_.isUndefined(user)) {
                 res.sendStatus(httpStatus.UNAUTHORIZED)
             } else {
                 const token = jwt.sign({ userName: req.body.userName }, config.jwtSecret);
@@ -43,10 +45,6 @@ function logIn(req, res) {
             }
         }
     })
-}
-
-function handleError(res, err) {
-    res.status(httpStatus.BAD_REQUEST).json(err);
 }
 
 export default { createIfNotExists, logIn };

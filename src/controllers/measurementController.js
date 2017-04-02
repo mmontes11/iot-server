@@ -29,11 +29,7 @@ function createMeasurement(req, res) {
 function getTypes(req, res) {
     MeasurementModel.types()
         .then( types => {
-            if (_.isNull(types)) {
-                res.sendStatus(httpStatus.NOT_FOUND)
-            } else {
-                res.json(types)
-            }
+            requestUtils.handleResults(res, types)
         })
 }
 
@@ -41,11 +37,7 @@ function getLastMeasurement(req, res) {
     const type = req.params.type;
     MeasurementModel.last(type)
         .then( lastMeasurement => {
-            if (_.isNull(lastMeasurement)) {
-                res.sendStatus(httpStatus.NOT_FOUND)
-            } else {
-                res.json(lastMeasurement)
-            }
+            requestUtils.handleResults(res, lastMeasurement)
         })
 }
 
@@ -64,13 +56,13 @@ function getStats(req, res) {
             .getStatsCache(type, timePeriod)
             .then( cachedStats => {
                 if (cachedStats){
-                    getStatsSuccess(res, cachedStats)
+                    requestUtils.handleResults(res, cachedStats)
                 } else {
                     MeasurementModel
                         .getStats(type, timePeriod)
                         .then( stats => {
                             statsCache.setStatsCache(type, timePeriod, stats);
-                            getStatsSuccess(res, stats)
+                            requestUtils.handleResults(res, stats)
                         })
                 }
             });
@@ -78,19 +70,11 @@ function getStats(req, res) {
         MeasurementModel
             .getStats(type, timePeriod)
             .then( stats => {
-                getStatsSuccess(res, stats)
+                requestUtils.handleResults(res, stats)
             })
     }
 
 
-}
-
-function getStatsSuccess(res, stats) {
-    if (_.isEmpty(stats)) {
-        res.sendStatus(httpStatus.NOT_FOUND)
-    } else {
-        res.json(stats)
-    }
 }
 
 export default { createMeasurement, getTypes, getLastMeasurement, getStats };

@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import { EventSchema, EventModel } from '../models/event';
-import requestUtils from '../utils/requestUtils'
+import requestUtils from '../utils/requestUtils';
 
 function createEvent(req, res, next) {
     const userName = requestUtils.extractUserNameFromRequest(req);
@@ -25,12 +25,16 @@ function createEvent(req, res, next) {
 function getTypes(req, res) {
     EventModel.types()
         .then( types => {
-            if (_.isNull(types)) {
-                res.sendStatus(httpStatus.NOT_FOUND)
-            } else {
-                res.json(types)
-            }
+            res.json(types)
         })
 }
 
-export default { createEvent, getTypes };
+function getLastEvent(req, res) {
+    const type = req.params.type;
+    EventModel.last(type)
+        .then( lastEvent => {
+            requestUtils.handleResults(res, lastEvent)
+        })
+}
+
+export default { createEvent, getTypes, getLastEvent };

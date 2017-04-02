@@ -19,4 +19,12 @@ router
     .route('/types')
         .get(eventController.getTypes);
 
+router
+    .route('/last')
+        .get(eventController.getLastEvent);
+
+router
+    .route('/:type/last')
+        .get(eventController.getLastEvent);
+
 export default router;
