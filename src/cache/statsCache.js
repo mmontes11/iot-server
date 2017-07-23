@@ -6,11 +6,11 @@ import { TimePeriod, CustomTimePeriod } from '../models/timePeriod'
 const statsCacheKey = "stats";
 
 function cachePolicy(timePeriod) {
-    return !(timePeriod instanceof CustomTimePeriod)
+    return _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod)
 }
 
 function getStatsCacheKey(type, lastTimePeriod) {
-    var cacheKey = statsCacheKey;
+    let cacheKey = statsCacheKey;
     const elementsCacheKey = [];
     if (!_.isUndefined(type)) {
         elementsCacheKey.push(type)
