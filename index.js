@@ -11,7 +11,7 @@ const io = new SocketIO(server);
 const socketController = new SocketController(io);
 socketController.listen();
 
-mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } }, function(err) {
+mongoose.createConnection(config.db, err => {
 	if (err) {
 		throw new Error(`Unable to connect to database ${config.db}`);
 	} else {
