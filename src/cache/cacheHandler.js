@@ -1,4 +1,3 @@
-import Promise from 'bluebird'
 import redis from '../../config/redis'
 
 function setObjectCache(key, objectValue, expireTime) {
@@ -8,16 +7,15 @@ function setObjectCache(key, objectValue, expireTime) {
     redis.expire(key, expireTime)
 }
 
-function getObjectCache(key) {
-    return new Promise ( (resolve, reject) => {
-        redis.getAsync(key)
-            .then( cachedStats => {
-                console.log(`Redis: Getting '${key}' key `);
-                console.log(cachedStats);
-                return resolve(JSON.parse(cachedStats));
-            })
-            .catch( err => reject(err))
-    })
+async function getObjectCache(key) {
+    const cachedRawObject = await redis.getAsync(key);
+    if (cachedRawObject) {
+        console.log(`Redis: Getting '${key}' key `);
+        console.log(cachedRawObject);
+        return JSON.parse(cachedRawObject);
+    } else {
+        return undefined;
+    }
 }
 
 export default { setObjectCache, getObjectCache }

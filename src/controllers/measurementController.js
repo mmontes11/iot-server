@@ -41,9 +41,9 @@ function getLastMeasurement(req, res) {
         })
 }
 
-function getStats(req, res) {
+async function getStats(req, res) {
     const type = req.params.type;
-    var timePeriod = undefined;
+    let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
         timePeriod = new TimePeriod(req.query.lastTimePeriod);
     }
@@ -52,20 +52,17 @@ function getStats(req, res) {
     }
 
     if (statsCache.cachePolicy(timePeriod)) {
-        statsCache
-            .getStatsCache(type, timePeriod)
-            .then( cachedStats => {
-                if (cachedStats){
-                    requestUtils.handleResults(res, cachedStats)
-                } else {
-                    MeasurementModel
-                        .getStats(type, timePeriod)
-                        .then( stats => {
-                            statsCache.setStatsCache(type, timePeriod, stats);
-                            requestUtils.handleResults(res, stats)
-                        })
-                }
-            });
+        const cachedStats = await statsCache.getStatsCache(type, timePeriod);
+        if (cachedStats) {
+            requestUtils.handleResults(res, cachedStats)
+        } else {
+            MeasurementModel
+                .getStats(type, timePeriod)
+                .then( stats => {
+                    statsCache.setStatsCache(type, timePeriod, stats);
+                    requestUtils.handleResults(res, stats)
+                })
+        }
     } else {
         MeasurementModel
             .getStats(type, timePeriod)
