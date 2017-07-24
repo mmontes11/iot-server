@@ -1,5 +1,6 @@
-import { EventSchema, EventModel } from '../models/event';
-import requestUtils from '../utils/requestUtils';
+import { EventSchema, EventModel } from '../models/db/event';
+import requestUtils from '../helpers/requestUtils';
+import responseHandler from '../helpers/responseHandler';
 
 async function createEvent(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
@@ -14,30 +15,29 @@ async function createEvent(req, res) {
     });
 
     try {
-        const event = await newEvent.save();
-        res.json(event)
+        const savedEvent = await newEvent.save();
+        responseHandler.handleResponse(res, savedEvent);
     } catch (err) {
-        requestUtils.handleError(res, err);
+        responseHandler.handleError(res, err);
     }
 }
 
 async function getTypes(req, res) {
     try {
         const types = await EventModel.types();
-        res.json(types);
+        responseHandler.handleResponse(res, types);
     } catch (err) {
-        requestUtils.handleError(err);
+        responseHandler.handleError(res, err);
     }
 }
 
 async function getLastEvent(req, res) {
     const type = req.params.type;
-
     try {
         const lastEvent = await EventModel.last(type);
-        res.json(lastEvent);
+        responseHandler.handleResponse(res, lastEvent);
     } catch (err) {
-        requestUtils.handleError(err);
+        responseHandler.handleError(res, err);
     }
 }
 

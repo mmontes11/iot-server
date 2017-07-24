@@ -1,12 +1,11 @@
-import httpStatus from 'http-status';
 import _ from 'underscore';
-import { MeasurementSchema, MeasurementModel } from '../models/measurement';
-import { TimePeriod, CustomTimePeriod } from '../models/timePeriod'
-import requestUtils from '../utils/requestUtils';
+import { MeasurementSchema, MeasurementModel } from '../models/db/measurement';
+import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
 import statsCache from '../cache/statsCache';
+import requestUtils from '../helpers/requestUtils';
+import responseHandler from '../helpers/responseHandler';
 
-
-function createMeasurement(req, res) {
+async function createMeasurement(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
     const newMeasurement = new MeasurementModel({
         creator: {
@@ -19,26 +18,31 @@ function createMeasurement(req, res) {
         value: req.body.value
     });
 
-    newMeasurement.save()
-        .then( savedMeasurement => res.json(savedMeasurement) )
-        .catch( err => {
-            res.status(httpStatus.BAD_REQUEST).json(err);
-        })
+    try {
+        const savedMeasurement = await newMeasurement.save();
+        responseHandler.handleResponse(res, savedMeasurement);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
-function getTypes(req, res) {
-    MeasurementModel.types()
-        .then( types => {
-            requestUtils.handleResults(res, types)
-        })
+async function getTypes(req, res) {
+    try {
+        const types = await MeasurementModel.types();
+        responseHandler.handleResponse(res, types);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
-function getLastMeasurement(req, res) {
+async function getLastMeasurement(req, res) {
     const type = req.params.type;
-    MeasurementModel.last(type)
-        .then( lastMeasurement => {
-            requestUtils.handleResults(res, lastMeasurement)
-        })
+    try {
+       const lastMeasurement = await MeasurementModel.last(type);
+       responseHandler.handleResponse(res, lastMeasurement);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
 async function getStats(req, res) {
@@ -51,27 +55,31 @@ async function getStats(req, res) {
         timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
     }
 
-    if (statsCache.cachePolicy(timePeriod)) {
-        const cachedStats = await statsCache.getStatsCache(type, timePeriod);
-        if (cachedStats) {
-            requestUtils.handleResults(res, cachedStats)
+    try {
+        if (statsCache.cachePolicy(timePeriod)) {
+            const statsFromCache = await statsCache.getStatsCache(type, timePeriod);
+            if (!_.isNull(statsFromCache)) {
+                responseHandler.handleResponse(res, statsFromCache)
+            } else {
+                const statsFromDB = await getStatsFromDB(type, timePeriod);
+                statsCache.setStatsCache(type, timePeriod, statsFromDB);
+                responseHandler.handleResponse(res, statsFromDB);
+            }
         } else {
-            MeasurementModel
-                .getStats(type, timePeriod)
-                .then( stats => {
-                    statsCache.setStatsCache(type, timePeriod, stats);
-                    requestUtils.handleResults(res, stats)
-                })
+            const statsFromDB = await getStatsFromDB(type, timePeriod);
+            responseHandler.handleResponse(res, statsFromDB);
         }
-    } else {
-        MeasurementModel
-            .getStats(type, timePeriod)
-            .then( stats => {
-                requestUtils.handleResults(res, stats)
-            })
+    } catch (err) {
+        responseHandler.handleError(err);
     }
+}
 
-
+async function getStatsFromDB(type, timePeriod) {
+    try {
+        return await MeasurementModel.getStats(type, timePeriod);
+    } catch (err) {
+        throw err;
+    }
 }
 
 export default { createMeasurement, getTypes, getLastMeasurement, getStats };

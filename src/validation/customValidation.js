@@ -1,5 +1,5 @@
 import _ from "underscore";
-import { TimePeriod, CustomTimePeriod } from "../models/timePeriod"
+import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod"
 import httpStatus from 'http-status';
 
 function validateGetStats(req, res, next) {

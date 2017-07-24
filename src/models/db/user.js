@@ -1,5 +1,5 @@
-import mongoose from '../../config/mongoose';
-import regex from '../validation/regex'
+import mongoose from '../../../config/mongoose';
+import regex from '../../validation/regex'
 
 const UserSchema = new mongoose.Schema({
     userName: {

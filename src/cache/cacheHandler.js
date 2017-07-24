@@ -16,7 +16,7 @@ async function getObjectCache(key) {
     } catch (err) {
         console.log(`Redis: Error getting key '${key}' key `);
         console.log(err);
-        return undefined;
+        throw err;
     }
 }
 

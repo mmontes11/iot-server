@@ -1,4 +1,4 @@
-import mongoose from '../../config/mongoose';
+import mongoose from '../../../config/mongoose';
 
 const RelatedEntitySchema = new mongoose.Schema({
     name: String,
