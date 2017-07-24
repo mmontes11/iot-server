@@ -5,9 +5,9 @@ import compress from 'compression';
 import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
-import httpStatus from 'http-status';
+import winston from 'winston';
+import expressWinston from 'express-winston';
 import routes from '../src/routes/indexRouter';
-import config from '../';
 
 const app = express();
 
@@ -19,12 +19,24 @@ app.use(methodOverride());
 app.use(cors());
 app.use(helmet());
 
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console({
+            json: true,
+            colorize: true
+        }),
+        new winston.transports.File({
+            json: true,
+            colorize: true,
+            filename: './express.log'
+        })
+    ],
+    meta: true,
+    msg: "HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms",
+    expressFormat: true,
+    colorize: false,
+}));
+
 app.use('/api', routes);
-
-
-app.use((err, req, res, next) => {
-    console.log(`Express error: ${err}`);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err)
-});
 
 export default app;
