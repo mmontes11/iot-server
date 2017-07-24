@@ -8,12 +8,14 @@ function setObjectCache(key, objectValue, expireTime) {
 }
 
 async function getObjectCache(key) {
-    const cachedRawObject = await redis.getAsync(key);
-    if (cachedRawObject) {
-        console.log(`Redis: Getting '${key}' key `);
+    try {
+        console.log(`Redis: Getting key '${key}' `);
+        const cachedRawObject = await redis.getAsync(key);
         console.log(cachedRawObject);
         return JSON.parse(cachedRawObject);
-    } else {
+    } catch (err) {
+        console.log(`Redis: Error getting key '${key}' key `);
+        console.log(err);
         return undefined;
     }
 }
