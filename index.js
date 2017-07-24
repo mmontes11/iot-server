@@ -19,12 +19,10 @@ mongoose.connect(config.db, {useMongoClient: true}, err => {
 	}
 });
 
-redis.on("connect", function(){
-    console.log(`Connected to redis ${config.redis_host}:${config.redis_port}`);
-});
+redis.on("connect", () =>
+    console.log(`Connected to redis ${config.redis_host}:${config.redis_port}`)
+);
 
-app.listen(config.port, () => {
+server.listen(config.port, () => {
     console.log(`Server started on port ${config.port}`);
 });
-
-export default { server, app, socketController };
