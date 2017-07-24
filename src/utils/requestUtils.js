@@ -20,7 +20,7 @@ function handleResults(res, results) {
 }
 
 function handleError(res, err) {
-    res.status(httpStatus.BAD_REQUEST).json(err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
 }
 
 export default { extractUserNameFromRequest, handleResults, handleError };
