@@ -1,9 +1,8 @@
-import httpStatus from 'http-status';
-import _ from 'underscore';
-import { EventSchema, EventModel } from '../models/event';
-import requestUtils from '../utils/requestUtils';
+import { EventSchema, EventModel } from '../models/db/event';
+import requestUtils from '../helpers/requestUtils';
+import responseHandler from '../helpers/responseHandler';
 
-function createEvent(req, res, next) {
+async function createEvent(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
     const newEvent = new EventModel({
         creator: {
@@ -15,26 +14,31 @@ function createEvent(req, res, next) {
         duration: req.body.duration,
     });
 
-    newEvent.save()
-        .then( savedEvent => res.json(savedEvent) )
-        .catch( err => {
-            res.status(httpStatus.BAD_REQUEST).json(err)
-        })
+    try {
+        const savedEvent = await newEvent.save();
+        responseHandler.handleResponse(res, savedEvent);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
-function getTypes(req, res) {
-    EventModel.types()
-        .then( types => {
-            res.json(types)
-        })
+async function getTypes(req, res) {
+    try {
+        const types = await EventModel.types();
+        responseHandler.handleResponse(res, types);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
-function getLastEvent(req, res) {
+async function getLastEvent(req, res) {
     const type = req.params.type;
-    EventModel.last(type)
-        .then( lastEvent => {
-            requestUtils.handleResults(res, lastEvent)
-        })
+    try {
+        const lastEvent = await EventModel.last(type);
+        responseHandler.handleResponse(res, lastEvent);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
 }
 
 export default { createEvent, getTypes, getLastEvent };
