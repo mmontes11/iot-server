@@ -5,7 +5,7 @@ import compress from 'compression';
 import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
-import winston from 'winston';
+import winston from './winston';
 import expressWinston from 'express-winston';
 import routes from '../src/routes/indexRouter';
 import config from './env';
@@ -27,10 +27,11 @@ if (config.debug) {
                 json: true,
                 colorize: true
             }),
-            new winston.transports.File({
+            new winston.transports.MongoDB({
                 json: true,
                 colorize: true,
-                filename: './express.log'
+                db: config.db,
+                collection: 'express-log'
             })
         ],
         meta: true,
