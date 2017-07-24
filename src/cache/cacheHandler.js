@@ -1,21 +1,24 @@
 import redis from '../../config/redis'
+import config from '../../config/env'
 
 function setObjectCache(key, objectValue, expireTime) {
-    console.log(`Redis: Setting '${key}' key`);
-    console.log(JSON.stringify(objectValue));
+    if (config.debug) {
+        console.log(`Redis: Setting '${key}' key`);
+        console.log(`Redis: ${JSON.stringify(objectValue)}`);
+    }
     redis.set(key, JSON.stringify(objectValue));
     redis.expire(key, expireTime)
 }
 
 async function getObjectCache(key) {
     try {
-        console.log(`Redis: Getting key '${key}' `);
         const cachedRawObject = await redis.getAsync(key);
-        console.log(cachedRawObject);
+        if (config.debug) {
+            console.log(`Redis: Getting key '${key}'`);
+            console.log(`Redis: ${cachedRawObject}`);
+        }
         return JSON.parse(cachedRawObject);
     } catch (err) {
-        console.log(`Redis: Error getting key '${key}' key `);
-        console.log(err);
         throw err;
     }
 }

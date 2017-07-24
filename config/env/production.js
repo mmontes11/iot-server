@@ -8,5 +8,6 @@ export default {
         'admin': 'admin'
     },
     jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
-    statsCacheInSeconds: 30
+    statsCacheInSeconds: 30,
+    debug: true
 };

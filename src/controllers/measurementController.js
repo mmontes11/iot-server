@@ -70,7 +70,7 @@ async function getStats(req, res) {
             responseHandler.handleResponse(res, statsFromDB);
         }
     } catch (err) {
-        responseHandler.handleError(err);
+        responseHandler.handleError(res, err);
     }
 }
 

@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
+import config from '../../config/env';
 
 function handleResponse(res, response) {
     if (_.isEmpty(response) || _.isNull(response)) {
@@ -10,6 +11,9 @@ function handleResponse(res, response) {
 }
 
 function handleError(res, err) {
+    if (config.debug) {
+        console.log(`Error: ${err}`)
+    }
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
 }
 
