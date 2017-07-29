@@ -9,5 +9,6 @@ export default {
     },
     jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
     statsCacheInSeconds: 5,
-    debug: true
+    debug: true,
+    debug_express_meta: false
 };

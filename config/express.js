@@ -24,20 +24,25 @@ if (config.debug) {
     app.use(expressWinston.logger({
         transports: [
             new winston.transports.Console({
-                json: true,
+                json: false,
                 colorize: true
+            }),
+            new winston.transports.File({
+                json: false,
+                colorize: true,
+                filename: 'log_iot_express.log'
             }),
             new winston.transports.MongoDB({
                 json: true,
                 colorize: true,
                 db: config.db,
-                collection: 'express-log'
+                collection: 'log_iot_express'
             })
         ],
         meta: true,
         msg: "HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms",
         expressFormat: true,
-        colorize: true,
+        colorize: true
     }));
 }
 
