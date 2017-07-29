@@ -1,5 +1,5 @@
 import { EventSchema, EventModel } from '../models/db/event';
-import requestUtils from '../helpers/requestUtils';
+import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 
 async function createEvent(req, res) {

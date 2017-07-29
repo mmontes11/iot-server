@@ -2,7 +2,7 @@ import _ from 'underscore';
 import { MeasurementSchema, MeasurementModel } from '../models/db/measurement';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
 import statsCache from '../cache/statsCache';
-import requestUtils from '../helpers/requestUtils';
+import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 
 async function createMeasurement(req, res) {

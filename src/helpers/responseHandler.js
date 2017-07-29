@@ -11,9 +11,6 @@ function handleResponse(res, response) {
 }
 
 function handleError(res, err) {
-    if (config.debug) {
-        console.log(`Error: ${err}`)
-    }
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
 }
 
