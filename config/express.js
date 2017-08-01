@@ -38,7 +38,7 @@ if (config.debug) {
                 timestamp: true,
                 json: true,
                 colorize: true,
-                db: config.db,
+                db: config.mongoUrl,
                 collection: 'log_iot_express'
             })
         ],

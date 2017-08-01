@@ -12,27 +12,27 @@ const io = new SocketIO(server);
 const socketController = new SocketController(io);
 socketController.listen();
 
-mongoose.connect(config.db, {useMongoClient: true}, err => {
+mongoose.connect(config.mongoUrl, {useMongoClient: true}, err => {
 	if (err) {
-	    logger.logError(`Unable to connect to database ${config.db}`);
+	    logger.logError(`Unable to connect to database ${config.mongoUrl}`);
 	    throw err;
 	} else {
-        logger.logInfo(`Connected to MongoDB ${config.db}`);
+        logger.logInfo(`Connected to MongoDB ${config.mongoUrl}`);
 	}
 });
 
 redis.on("connect", () =>
-    logger.logInfo(`Connected to Redis ${config.redis_host}:${config.redis_port}`)
+    logger.logInfo(`Connected to Redis ${config.redisUrl}`)
 );
 redis.on("error", () =>
-    logger.logError(`Error connecting to Redis ${config.redis_host}:${config.redis_port}`)
+    logger.logError(`Error connecting to Redis ${config.redisUrl}`)
 );
 
-server.listen(config.port, err => {
+server.listen(config.nodePort, err => {
     if (err) {
-        logger.logError(`Error starting NodeJS server on port ${config.db}`);
+        logger.logError(`Error starting NodeJS server on port ${config.nodePort}`);
         throw err;
     } else {
-        logger.logInfo(`NodeJS server started on port ${config.port}`);
+        logger.logInfo(`NodeJS server started on port ${config.nodePort}`);
     }
 });

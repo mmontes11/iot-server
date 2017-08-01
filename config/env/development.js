@@ -1,14 +1,12 @@
 export default {
     env: 'development',
-    port: 8000,
-    db: 'mongodb://localhost:27017/IoT',
-    redis_port: '6379',
-    redis_host: 'localhost',
+    nodePort: 8000,
+    mongoUrl: 'mongodb://localhost:27017/IoT',
+    redisUrl: 'redis://localhost:6379',
+    statsCacheInSeconds: 5,
     basicAuthUsers: {
         'admin': 'admin'
     },
     jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
-    statsCacheInSeconds: 5,
-    debug: true,
-    debug_express_meta: false
+    debug: true
 };

@@ -5,6 +5,6 @@ import config from './env';
 Promise.promisifyAll(redis.RedisClient.prototype);
 Promise.promisifyAll(redis.Multi.prototype);
 
-const redisClient = redis.createClient(config.redis_port, config.redis_host);
+const redisClient = redis.createClient(config.redisUrl);
 
 export default redisClient;

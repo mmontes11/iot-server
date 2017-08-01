@@ -11,8 +11,8 @@
     "npm": ">=5.0.0"
   },
   "scripts": {
-    "start": "gulp serve",
-    "build": "gulp"
+    "build": "gulp",
+    "start": "gulp serve"
   },
   "repository": {
     "type": "git",
