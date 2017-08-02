@@ -8,8 +8,8 @@ export default {
     redisUrl: redisUrl,
     statsCacheInSeconds: 30,
     basicAuthUsers: {
-        'YOUR_USER_HERE': 'YOUR_PASSWORD_HERE'
+        'admin': 'admin'
     },
-    jwtSecret: 'YOUR_JWT_SECRET_HERE',
-    debug: false
+    jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
+    debug: true
 };
