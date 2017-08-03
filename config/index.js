@@ -1,7 +1,6 @@
 import path from 'path';
 
-const env = process.env.NODE_ENV || 'development';
-const config = require(`./${env}`);
+const config = require(`./${process.env.NODE_ENV}`);
 
 const defaults = {
     root: path.join(__dirname, '/..')

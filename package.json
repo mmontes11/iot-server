@@ -11,8 +11,8 @@
     "npm": ">=5.0.0"
   },
   "scripts": {
-    "build": "gulp",
-    "start": "gulp serve"
+    "start": "export NODE_ENV=development && gulp serve",
+    "test": "gulp && export NODE_ENV=test &&mocha --reporter spec dist/test"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,8 @@
     "babel-runtime": "^6.23.0",
     "bluebird": "^3.4.7",
     "body-parser": "1.15.2",
+    "chai": "^4.1.0",
+    "chai-http": "^3.0.0",
     "compression": "1.6.2",
     "cookie-parser": "1.4.3",
     "cors": "2.8.1",
@@ -49,6 +51,7 @@
     "joi": "^9.0.4",
     "jsonwebtoken": "^7.2.1",
     "method-override": "^2.3.5",
+    "mocha": "^3.5.0",
     "moment": "^2.18.1",
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
