@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import _ from 'underscore';
 import { UserSchema, UserModel } from '../models/db/user';
-import config from '../../config/env';
+import config from '../../config/index';
 import responseHandler from '../helpers/responseHandler';
 
 async function createIfNotExists(req, res) {

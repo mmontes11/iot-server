@@ -1,4 +1,4 @@
-import mongoose from '../../../config/mongoose';
+import mongoose from '../../../lib/mongoose';
 import regex from '../../validation/regex'
 
 const UserSchema = new mongoose.Schema({

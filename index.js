@@ -1,10 +1,10 @@
-import mongoose from './config/mongoose';
-import redis from './config/redis';
-import app from './config/express';
+import mongoose from './lib/mongoose';
+import redis from './lib/redis';
+import app from './lib/express';
 import { Server } from 'http';
 import SocketIO from 'socket.io';
 import SocketController from './src/socket/socketController';
-import config from './config/env';
+import config from './config/index';
 import logger from './src/utils/logger';
 
 const server = new Server(app);

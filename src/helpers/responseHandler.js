@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
-import config from '../../config/env';
+import config from '../../config/index';
 
 function handleResponse(res, response) {
     if (_.isEmpty(response) || _.isNull(response)) {

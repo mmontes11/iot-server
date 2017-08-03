@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import mongoose from '../../../config/mongoose';
+import mongoose from '../../../lib/mongoose';
 import relatedEntity from './relatedEntity';
 
 const ObservationSchema = new mongoose.Schema({

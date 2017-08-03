@@ -1,4 +1,4 @@
-import redis from '../../config/redis'
+import redis from '../../lib/redis'
 import logger from '../utils/logger';
 
 function setObjectCache(key, objectValue, expireTime) {

@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import cacheHandler from './cacheHandler'
-import config from '../../config/env'
+import config from '../../config/index'
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
 
 const statsCacheKey = "stats";

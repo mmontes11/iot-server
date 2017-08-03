@@ -3,7 +3,7 @@ import expressBasicAuth from 'express-basic-auth';
 import expressValidation from 'express-validation';
 import paramValidation from '../validation/paramValidation';
 import userController from '../controllers/userController';
-import config from '../../config/env';
+import config from '../../config/index';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import winston from '../../config/winston';
-import config from '../../config/env';
+import winston from '../../lib/winston';
+import config from '../../config/index';
 
 function logInfo(message) {
     if (config.debug) {

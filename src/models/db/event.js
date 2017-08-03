@@ -1,4 +1,4 @@
-import mongoose from '../../../config/mongoose';
+import mongoose from '../../../lib/mongoose';
 import observation from './observation';
 
 const EventSchema = observation.ObservationSchema.extend({

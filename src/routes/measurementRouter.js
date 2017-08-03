@@ -4,7 +4,7 @@ import expressValidation from 'express-validation';
 import paramValidation from '../validation/paramValidation';
 import customValidation from '../validation/customValidation';
 import measurementController from '../controllers/measurementController';
-import config from '../../config/env';
+import config from '../../config/index';
 
 const router = express.Router();
 
