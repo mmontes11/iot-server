@@ -2,4 +2,4 @@
 
 [![Build Status](https://travis-ci.org/mmontes11/iot_backend.svg?branch=test)](https://travis-ci.org/mmontes11/iot_backend)
 
-ES6 NodeJS + MongoDB IoT backend
+ES6 IoT backend
