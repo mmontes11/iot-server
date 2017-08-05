@@ -17,7 +17,8 @@ const userWithWeakPassword = {
 describe('User', () => {
 
     beforeEach((done) => {
-        UserModel.remove({}, () => {
+        UserModel.remove({}, (err) => {
+            chai.assert(err !== undefined, 'Error cleaning MongoDB for tests');
             done();
         });
     });
@@ -101,6 +102,5 @@ describe('User', () => {
                 });
         });
     });
-
 
 });
