@@ -5,7 +5,7 @@ export default {
         "userName": "testUser",
         "password": "aA12345678&"
     },
-    "invalidUserPayload": {
+    "invalidUser": {
         "password": "aA12345678&"
     },
     "userWithWeakPassword": {
@@ -13,7 +13,7 @@ export default {
         "password": "1234"
     },
     "validEvent": {
-        "device": "raspberrri",
+        "device": "raspberry",
         "relatedEntities": [
             {
                 "name": "Martin's House",
@@ -29,5 +29,9 @@ export default {
             "units": "s",
             "value": 2.4
         }
+    },
+    "inValidEvent": {
+        "device": "raspberry",
+        "relatedEntities": []
     }
 }

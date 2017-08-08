@@ -35,7 +35,7 @@ describe('User', () => {
             chai.request(server)
                 .post('/api/user')
                 .set('Authorization', constants.validAuthHeader)
-                .send(constants.invalidUserPayload)
+                .send(constants.invalidUser)
                 .end((err,res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
