@@ -1,3 +1,4 @@
+import httpStatus from 'http-status';
 import { EventSchema, EventModel } from '../models/db/event';
 import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
@@ -16,7 +17,7 @@ async function createEvent(req, res) {
 
     try {
         const savedEvent = await newEvent.save();
-        responseHandler.handleResponse(res, savedEvent);
+        res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {
         responseHandler.handleError(res, err);
     }

@@ -2,23 +2,16 @@ import chai from '../lib/chai';
 import httpStatus from 'http-status';
 import { UserSchema, UserModel } from '../src/models/db/user';
 import server from '../index';
+import constants from './constants';
 
-const validAuthHeader = "Basic YWRtaW46YWRtaW4=";
-const invalidAuthHeader = "Whatever";
-const validUser = {
-    "userName": "testUser",
-    "password": "aA12345678&"
-};
-const userWithWeakPassword = {
-    "userName": "testUser",
-    "password": "1234"
-};
+const assert = chai.assert;
+const should = chai.should();
 
 describe('User', () => {
 
     beforeEach((done) => {
         UserModel.remove({}, (err) => {
-            chai.assert(err !== undefined, 'Error cleaning MongoDB for tests');
+            assert(err !== undefined, 'Error cleaning MongoDB for tests');
             done();
         });
     });
@@ -27,10 +20,25 @@ describe('User', () => {
         it('it should try to create a user with invalid credentials', (done) => {
             chai.request(server)
                 .post('/api/user')
-                .set('Authorization', invalidAuthHeader)
-                .send(invalidAuthHeader)
+                .set('Authorization', constants.invalidAuthHeader)
+                .send(constants.validUser)
                 .end((err,res) => {
+                    should.exist(err);
                     res.should.have.status(httpStatus.UNAUTHORIZED);
+                    done();
+                });
+        });
+    });
+
+    describe('POST /user', () => {
+        it('it should try to create a user with an invalid payload', (done) => {
+            chai.request(server)
+                .post('/api/user')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.invalidUserPayload)
+                .end((err,res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
         });
@@ -40,9 +48,10 @@ describe('User', () => {
         it('it should try to create a user with weak password', (done) => {
             chai.request(server)
                 .post('/api/user')
-                .set('Authorization', validAuthHeader)
-                .send(userWithWeakPassword)
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.userWithWeakPassword)
                 .end((err,res) => {
+                    should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -53,17 +62,19 @@ describe('User', () => {
         it('it should create a user and log in', (done) => {
             chai.request(server)
                 .post('/api/user')
-                .set('Authorization', validAuthHeader)
-                .send(validUser)
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
                 .end((err, res) => {
+                    should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
                     chai.request(server)
                         .post('/api/user/logIn')
-                        .set('Authorization', validAuthHeader)
-                        .send(validUser)
+                        .set('Authorization', constants.validAuthHeader)
+                        .send(constants.validUser)
                         .end((err, res) => {
+                            should.not.exist(err);
+                            should.exist(res.body.token);
                             res.should.have.status(httpStatus.OK);
-                            res.body.token.should.not.be.undefined;
                             done();
                         });
                 });
@@ -74,15 +85,16 @@ describe('User', () => {
         it('it should create the same user twice', (done) => {
             chai.request(server)
                 .post('/api/user')
-                .set('Authorization', validAuthHeader)
-                .send(validUser)
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
                 .end((err, res) => {
                     res.should.have.status(httpStatus.CREATED);
                     chai.request(server)
                         .post('/api/user')
-                        .set('Authorization', validAuthHeader)
-                        .send(validUser)
+                        .set('Authorization', constants.validAuthHeader)
+                        .send(constants.validUser)
                         .end((err, res) => {
+                            should.exist(err);
                             res.should.have.status(httpStatus.CONFLICT);
                             done();
                         })
@@ -94,9 +106,10 @@ describe('User', () => {
         it('it should try to log in with a non existing user', (done) => {
             chai.request(server)
                 .post('/api/user/logIn')
-                .set('Authorization', validAuthHeader)
-                .send(validUser)
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
                 .end((err, res) => {
+                    should.exist(err);
                     res.should.have.status(httpStatus.UNAUTHORIZED);
                     done();
                 });
