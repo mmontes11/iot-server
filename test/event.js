@@ -1,5 +1,6 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
+import Promise from 'bluebird';
 import { EventSchema, EventModel } from '../src/models/db/event';
 import server from '../index';
 import constants from './constants';
@@ -7,8 +8,19 @@ import constants from './constants';
 const assert = chai.assert;
 const should = chai.should();
 let token = null;
-const auth = function() {
+const auth = () => {
     return `Bearer ${token}`;
+};
+const createEvents = (events, done) => {
+    const promises = [];
+    for (const event of events) {
+        const newEvent = new EventModel(event);
+        promises.push(newEvent.save());
+    }
+    Promise.all(promises)
+        .then(() => {
+            done();
+        })
 };
 
 describe('Event', () => {
@@ -63,6 +75,25 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+    });
+
+    describe('POST /event/types', () => {
+        beforeEach((done) => {
+            const events = [constants.validEvent, constants.validEvent2, constants.validEvent3];
+            createEvents(events, done);
+        });
+        it('it should get all event types', (done) => {
+            chai.request(server)
+                .get('/api/event/types')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(3);
                     done();
                 });
         });

@@ -30,6 +30,42 @@ export default {
             "value": 2.4
         }
     },
+    "validEvent2": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "door_closed",
+        "duration": {
+            "units": "s",
+            "value": 2.4
+        }
+    },
+    "validEvent3": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "window_opened",
+        "duration": {
+            "units": "s",
+            "value": 2.4
+        }
+    },
     "inValidEvent": {
         "device": "raspberry",
         "relatedEntities": []
