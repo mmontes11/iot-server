@@ -17,7 +17,7 @@ async function createEvent(req, res) {
     });
 
     try {
-        const savedEvent = await newEvent.save(
+        const savedEvent = await newEvent.save();
         res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {
         responseHandler.handleError(res, err);
