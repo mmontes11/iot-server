@@ -12,6 +12,7 @@ async function createMeasurement(req, res) {
             userName: userName,
             device: req.body.device
         },
+        phenomenonTime: new Date(),
         type: req.body.type,
         relatedEntities: req.body.relatedEntities,
         units: req.body.units,

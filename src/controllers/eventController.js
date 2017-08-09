@@ -10,13 +10,14 @@ async function createEvent(req, res) {
             userName: userName,
             device: req.body.device
         },
+        phenomenonTime: new Date(),
         type: req.body.type,
         relatedEntities: req.body.relatedEntities,
         duration: req.body.duration,
     });
 
     try {
-        const savedEvent = await newEvent.save();
+        const savedEvent = await newEvent.save(
         res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {
         responseHandler.handleError(res, err);

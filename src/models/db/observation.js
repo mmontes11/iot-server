@@ -9,7 +9,7 @@ const ObservationSchema = new mongoose.Schema({
     },
     phenomenonTime: {
         type: Date,
-        default: Date.now()
+        default: new Date()
     },
     relatedEntities: [ relatedEntity.RelatedEntitySchema ],
     type: {
