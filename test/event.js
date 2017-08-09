@@ -21,6 +21,9 @@ const createEvents = (events, done) => {
         .then(() => {
             done();
         })
+        .catch((err) => {
+            done(err);
+        });
 };
 
 describe('Event', () => {
@@ -92,8 +95,8 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body.should.be.a('array');
-                    res.body.length.should.be.eql(3);
+                    res.body.types.should.be.a('array');
+                    res.body.types.length.should.be.eql(3);
                     done();
                 });
         });

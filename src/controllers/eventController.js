@@ -26,7 +26,7 @@ async function createEvent(req, res) {
 async function getTypes(req, res) {
     try {
         const types = await EventModel.types();
-        responseHandler.handleResponse(res, types);
+        responseHandler.handleResponse(res, types, "types");
     } catch (err) {
         responseHandler.handleError(res, err);
     }
