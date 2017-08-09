@@ -18,17 +18,16 @@ const ObservationSchema = new mongoose.Schema({
     }
 });
 
-ObservationSchema.statics.types = function() {
-    return this.distinct("type")
+ObservationSchema.statics.types = function(){
+    return this.distinct("type");
 };
 
-ObservationSchema.statics.last = function(type) {
+ObservationSchema.statics.last = function(type){
     let findCriteria = undefined;
     if (!_.isUndefined(type)) {
         findCriteria = { type : type };
     }
-    const sortCriteria = { "phenomenonTime" : -1 };
-    return this.find(findCriteria).sort(sortCriteria).limit(1)
+    return this.findOne(findCriteria, undefined, { sort: { "phenomenonTime" : -1 }});
 };
 
 const ObservationModel = mongoose.model('Observation', ObservationSchema);
