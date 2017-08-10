@@ -31,7 +31,7 @@ describe('User', () => {
     });
 
     describe('POST /user', () => {
-        it('it should try to create a user with an invalid payload', (done) => {
+        it('it should try to create an invalid user', (done) => {
             chai.request(server)
                 .post('/api/user')
                 .set('Authorization', constants.validAuthHeader)
@@ -115,5 +115,4 @@ describe('User', () => {
                 });
         });
     });
-
 });

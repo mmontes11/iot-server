@@ -22,12 +22,12 @@ ObservationSchema.statics.types = function(){
     return this.distinct("type");
 };
 
-ObservationSchema.statics.last = function(type){
+ObservationSchema.statics.findLastN = function(n = 10, type){
     let findCriteria = undefined;
     if (!_.isUndefined(type)) {
         findCriteria = { type : type };
     }
-    return this.findOne(findCriteria, undefined, { sort: { "phenomenonTime" : -1 }});
+    return this.find(findCriteria).sort({'phenomenonTime': -1}).limit(n);
 };
 
 const ObservationModel = mongoose.model('Observation', ObservationSchema);

@@ -12,18 +12,15 @@ const auth = () => {
     return `Bearer ${token}`;
 };
 const createEvents = (events, done) => {
-    const promises = [];
-    for (const event of events) {
+    Promise.each(events, (event) => {
+        event.phenomenonTime = new Date();
         const newEvent = new EventModel(event);
-        promises.push(newEvent.save());
-    }
-    Promise.all(promises)
-        .then(() => {
-            done();
-        })
-        .catch((err) => {
-            done(err);
-        });
+        return newEvent.save();
+    }).then(() => {
+        done();
+    }).catch((err) => {
+        done(err);
+    });
 };
 
 describe('Event', () => {
@@ -56,20 +53,6 @@ describe('Event', () => {
     });
 
     describe('POST /event', () => {
-        it('it should create an event', (done) => {
-            chai.request(server)
-                .post('/api/event')
-                .set('Authorization', auth())
-                .send(constants.validEvent)
-                .end((err, res) => {
-                    should.not.exist(err);
-                    res.should.have.status(httpStatus.CREATED);
-                    done();
-                });
-        });
-    });
-
-    describe('POST /event', () => {
         it('it should try to create an invalid event', (done) => {
             chai.request(server)
                 .post('/api/event')
@@ -83,7 +66,34 @@ describe('Event', () => {
         });
     });
 
-    describe('POST /event/types', () => {
+    describe('POST /event', () => {
+        it('it should create an event', (done) => {
+            chai.request(server)
+                .post('/api/event')
+                .set('Authorization', auth())
+                .send(constants.validEvent)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.CREATED);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /event/types 404', () => {
+        it('it should get all types but no one has been created yet', (done) => {
+            chai.request(server)
+                .get('/api/event/types')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /event/types', () => {
         beforeEach((done) => {
             const events = [constants.validEvent, constants.validEvent2, constants.validEvent3];
             createEvents(events, done);
@@ -101,4 +111,37 @@ describe('Event', () => {
                 });
         });
     });
+
+    describe('GET /event/last 404', () => {
+        it('it should get the last event but no one has been created yet', (done) => {
+            chai.request(server)
+                .get('/api/event/last')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /event/last', () => {
+        beforeEach((done) => {
+            const events = [constants.validEvent, constants.validEvent2, constants.validEvent3];
+            createEvents(events, done);
+        });
+        it('it should get the last event', (done) => {
+            chai.request(server)
+                .get('/api/event/last')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.type.should.be.a('string');
+                    res.body.type.should.equal('window_opened');
+                    done();
+                });
+        });
+    });
+
 });

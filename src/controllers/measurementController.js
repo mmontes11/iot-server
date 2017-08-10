@@ -39,8 +39,8 @@ async function getTypes(req, res) {
 async function getLastMeasurement(req, res) {
     const type = req.params.type;
     try {
-       const lastMeasurement = await MeasurementModel.last(type);
-       responseHandler.handleResponse(res, lastMeasurement);
+       const lastMeasurements = await MeasurementModel.findLastN(1, type);
+       responseHandler.handleResponse(res, _.first(lastMeasurements));
     } catch (err) {
         responseHandler.handleError(res, err);
     }

@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import logger from '../utils/logger';
 
 function handleResponse(res, response, arrayName = "result") {
-    if (_.isEmpty(response) || _.isNull(response)) {
+    if (_.isEmpty(response) || _.isNull(response) || _.isUndefined(response)) {
         res.sendStatus(httpStatus.NOT_FOUND)
     } else if (_.isArray(response)) {
         const responseObject = {

@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import _ from 'underscore';
 import { EventSchema, EventModel } from '../models/db/event';
 import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
@@ -36,8 +37,8 @@ async function getTypes(req, res) {
 async function getLastEvent(req, res) {
     const type = req.params.type;
     try {
-        const lastEvent = await EventModel.last(type);
-        responseHandler.handleResponse(res, lastEvent);
+        const lastEvents = await EventModel.findLastN(1, type);
+        responseHandler.handleResponse(res, _.first(lastEvents));
     } catch (err) {
         responseHandler.handleError(res, err);
     }
