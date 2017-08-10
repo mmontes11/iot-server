@@ -53,7 +53,7 @@ describe('Event', () => {
     });
 
     describe('POST /event', () => {
-        it('it should try to create an invalid event', (done) => {
+        it('tries to create an invalid event', (done) => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
@@ -67,7 +67,7 @@ describe('Event', () => {
     });
 
     describe('POST /event', () => {
-        it('it should create an event', (done) => {
+        it('creates an event', (done) => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
@@ -81,7 +81,7 @@ describe('Event', () => {
     });
 
     describe('GET /event/types 404', () => {
-        it('it should get all types but no one has been created yet', (done) => {
+        it('gets all types but no one has been created yet', (done) => {
             chai.request(server)
                 .get('/api/event/types')
                 .set('Authorization', auth())
@@ -98,7 +98,7 @@ describe('Event', () => {
             const events = [constants.validEvent, constants.validEvent2, constants.validEvent3];
             createEvents(events, done);
         });
-        it('it should get all event types', (done) => {
+        it('gets all event types', (done) => {
             chai.request(server)
                 .get('/api/event/types')
                 .set('Authorization', auth())
@@ -113,7 +113,7 @@ describe('Event', () => {
     });
 
     describe('GET /event/last 404', () => {
-        it('it should get the last event but no one has been created yet', (done) => {
+        it('gets the last event but no one has been created yet', (done) => {
             chai.request(server)
                 .get('/api/event/last')
                 .set('Authorization', auth())
@@ -130,7 +130,7 @@ describe('Event', () => {
             const events = [constants.validEvent, constants.validEvent2, constants.validEvent3];
             createEvents(events, done);
         });
-        it('it should get the last event', (done) => {
+        it('gets the last event', (done) => {
             chai.request(server)
                 .get('/api/event/last')
                 .set('Authorization', auth())
