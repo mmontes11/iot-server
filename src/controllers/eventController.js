@@ -3,6 +3,7 @@ import _ from 'underscore';
 import { EventSchema, EventModel } from '../models/db/event';
 import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
+import constants from '../utils/constants';
 
 async function createEvent(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
@@ -28,7 +29,7 @@ async function createEvent(req, res) {
 async function getTypes(req, res) {
     try {
         const types = await EventModel.types();
-        responseHandler.handleResponse(res, types, "types");
+        responseHandler.handleResponse(res, types, constants.typesArrayName);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
