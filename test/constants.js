@@ -13,7 +13,10 @@ export default {
         "password": "1234"
     },
     "validEvent": {
-        "device": "raspberry",
+        "creator": {
+            "userName": "mmontes",
+            "device": "raspberry"
+        },
         "relatedEntities": [
             {
                 "name": "Martin's House",
@@ -31,7 +34,10 @@ export default {
         }
     },
     "validEvent2": {
-        "device": "raspberry",
+        "creator": {
+            "userName": "mmontes",
+            "device": "raspberry"
+        },
         "relatedEntities": [
             {
                 "name": "Martin's House",
@@ -49,7 +55,10 @@ export default {
         }
     },
     "validEvent3": {
-        "device": "raspberry",
+        "creator": {
+            "userName": "mmontes",
+            "device": "raspberry"
+        },
         "relatedEntities": [
             {
                 "name": "Martin's House",
@@ -61,6 +70,27 @@ export default {
             }
         ],
         "type": "window_opened",
+        "duration": {
+            "units": "s",
+            "value": 2.4
+        }
+    },
+    "validEvent4": {
+        "creator": {
+            "userName": "mmontes",
+            "device": "arduino"
+        },
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "door_closed",
         "duration": {
             "units": "s",
             "value": 2.4

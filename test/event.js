@@ -144,4 +144,39 @@ describe('Event', () => {
         });
     });
 
+    describe('GET /event/:type/last 404', () => {
+        it('gets the last event of a non existing type', (done) => {
+            chai.request(server)
+                .get('/api/event/whatever/last')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /event/:type/last', () => {
+        beforeEach((done) => {
+            const events = [constants.validEvent, constants.validEvent2,  constants.validEvent3, constants.validEvent4];
+            createEvents(events, done);
+        });
+        it('gets the last event', (done) => {
+            chai.request(server)
+                .get('/api/event/door_closed/last')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                console.log(res.body);
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.type.should.be.a('string');
+                    res.body.type.should.equal('door_closed');
+                    res.body.creator.device.should.be.a('string');
+                    res.body.creator.device.should.equal('arduino');
+                    done();
+                });
+        });
+    });
+
 });
