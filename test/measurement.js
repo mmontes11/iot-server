@@ -47,8 +47,8 @@ const testCachedStats = (type, lastTimePeriod, res, done) => {
                 });
             }, config.statsCacheInSeconds * 1000 + 1);
         }).catch((err) => {
-        done(err);
-    });
+            done(err);
+        });
 };
 
 describe('Measurement', () => {
