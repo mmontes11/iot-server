@@ -12,4 +12,4 @@ RUN npm install
 
 COPY . ${WORKDIR}
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "production"]

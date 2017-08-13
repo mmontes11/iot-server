@@ -12,7 +12,8 @@
   },
   "scripts": {
     "start": "export NODE_ENV=development && gulp serve",
-    "test": "gulp && export NODE_ENV=test && mocha --reporter spec --timeout 5000 dist/test"
+    "test": "gulp && export NODE_ENV=test && mocha --reporter spec --timeout 5000 dist/test",
+    "production": "gulp serve"
   },
   "repository": {
     "type": "git",
