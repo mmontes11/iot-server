@@ -1,7 +1,7 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import { MeasurementSchema, MeasurementModel } from '../models/db/measurement';
-import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
+import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
 import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
@@ -70,7 +70,7 @@ async function getStats(req, res) {
             }
         } else {
             const statsFromDB = await getStatsFromDB(type, timePeriod);
-            responseHandler.handleResponse(res, statsFromDB);
+            responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
         }
     } catch (err) {
         responseHandler.handleError(res, err);
