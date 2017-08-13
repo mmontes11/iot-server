@@ -1,9 +1,11 @@
 import _ from 'underscore';
+import httpStatus from 'http-status';
 import { MeasurementSchema, MeasurementModel } from '../models/db/measurement';
-import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
+import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
 import requestUtils from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
+import constants from '../utils/constants';
 
 async function createMeasurement(req, res) {
     const userName = requestUtils.extractUserNameFromRequest(req);
@@ -12,6 +14,7 @@ async function createMeasurement(req, res) {
             userName: userName,
             device: req.body.device
         },
+        phenomenonTime: new Date(),
         type: req.body.type,
         relatedEntities: req.body.relatedEntities,
         units: req.body.units,
@@ -20,7 +23,7 @@ async function createMeasurement(req, res) {
 
     try {
         const savedMeasurement = await newMeasurement.save();
-        responseHandler.handleResponse(res, savedMeasurement);
+        res.status(httpStatus.CREATED).json(savedMeasurement);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
@@ -29,7 +32,7 @@ async function createMeasurement(req, res) {
 async function getTypes(req, res) {
     try {
         const types = await MeasurementModel.types();
-        responseHandler.handleResponse(res, types);
+        responseHandler.handleResponse(res, types, constants.typesArrayName);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
@@ -38,8 +41,8 @@ async function getTypes(req, res) {
 async function getLastMeasurement(req, res) {
     const type = req.params.type;
     try {
-       const lastMeasurement = await MeasurementModel.last(type);
-       responseHandler.handleResponse(res, lastMeasurement);
+       const lastMeasurements = await MeasurementModel.findLastN(1, type);
+       responseHandler.handleResponse(res, _.first(lastMeasurements));
     } catch (err) {
         responseHandler.handleError(res, err);
     }
@@ -59,15 +62,15 @@ async function getStats(req, res) {
         if (statsCache.cachePolicy(timePeriod)) {
             const statsFromCache = await statsCache.getStatsCache(type, timePeriod);
             if (!_.isNull(statsFromCache)) {
-                responseHandler.handleResponse(res, statsFromCache)
+                responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
             } else {
                 const statsFromDB = await getStatsFromDB(type, timePeriod);
                 statsCache.setStatsCache(type, timePeriod, statsFromDB);
-                responseHandler.handleResponse(res, statsFromDB);
+                responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
             }
         } else {
             const statsFromDB = await getStatsFromDB(type, timePeriod);
-            responseHandler.handleResponse(res, statsFromDB);
+            responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
         }
     } catch (err) {
         responseHandler.handleError(res, err);

@@ -36,3 +36,5 @@ server.listen(config.nodePort, err => {
         logger.logInfo(`NodeJS server started on port ${config.nodePort}`);
     }
 });
+
+export default server;

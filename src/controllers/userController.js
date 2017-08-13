@@ -8,25 +8,25 @@ import responseHandler from '../helpers/responseHandler';
 async function createIfNotExists(req, res) {
     const user = await UserModel.where({ userName: req.body.userName }).findOne();
     try {
-        if (!_.isUndefined(user)) {
+        if (!_.isNull(user)) {
             res.sendStatus(httpStatus.CONFLICT);
         } else {
             const newUser = new UserModel({
                 userName: req.body.userName,
                 password: req.body.password
             });
-            const savedUser = await newUser.save();
-            responseHandler.handleResponse(res, savedUser);
+            await newUser.save();
+            res.sendStatus(httpStatus.CREATED);
         }
     } catch (err) {
         responseHandler.handleError(res, err);
     }
 }
 
-function logIn(req, res) {
-    const user = UserModel.where({ userName: req.body.userName, password: req.body.password }).findOne();
+async function logIn(req, res) {
+    const user = await UserModel.where({ userName: req.body.userName, password: req.body.password }).findOne();
     try {
-        if (_.isUndefined(user)) {
+        if (_.isNull(user)) {
             res.sendStatus(httpStatus.UNAUTHORIZED)
         } else {
             const userName = req.body.userName;
