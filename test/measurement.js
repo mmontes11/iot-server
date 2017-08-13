@@ -1,11 +1,14 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
+import moment from 'moment';
 import { MeasurementSchema, MeasurementModel } from '../src/models/db/measurement';
+import { TimePeriod, CustomTimePeriod } from '../src/models/request/timePeriod';
 import statsCache from '../src/cache/statsCache';
 import redisClient from '../lib/redis';
 import server from '../index';
 import constants from './constants';
+import config from '../config/index';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -21,6 +24,29 @@ const createMeasurements = (measurements, done) => {
     }).then(() => {
         done();
     }).catch((err) => {
+        done(err);
+    });
+};
+const testCachedStats = (type, lastTimePeriod, res, done) => {
+    statsCache.getStatsCache(type, lastTimePeriod)
+        .then((cachedStats) => {
+            res.body.stats.should.be.eql(cachedStats);
+            setTimeout(() => {
+                statsCache.getStatsCache(type, lastTimePeriod)
+                    .then((cachedStats) => {
+                        should.not.exist(cachedStats);
+                        MeasurementModel.getStats(type, lastTimePeriod)
+                            .then((statsFromDB) => {
+                                res.body.stats.should.be.eql(statsFromDB);
+                                done();
+                            }).catch((err) => {
+                            done(err);
+                        });
+                    }).catch((err) => {
+                    done(err);
+                });
+            }, config.statsCacheInSeconds * 1000 + 1);
+        }).catch((err) => {
         done(err);
     });
 };
@@ -57,7 +83,7 @@ describe('Measurement', () => {
             });
     });
 
-    describe('POST /measurement', () => {
+    describe('POST /measurement 400', () => {
         it('tries to create a invalid measurement', (done) => {
             chai.request(server)
                 .post('/api/measurement')
@@ -178,6 +204,196 @@ describe('Measurement', () => {
                     res.body.type.should.equal('temperature');
                     res.body.value.should.be.a('number');
                     res.body.value.should.equal(15);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats 404', () => {
+        it('gets measurement stats but no measurement has been created', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats 400', () => {
+        it('gets measurement stats of a non valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'lastTimePeriod': 'whatever'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('gets measurement stats of a non valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'startDate': '2016-01-01T01:00:00.000Z',
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('gets measurement stats of a non valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'endDate': '2016-01-01T01:00:00.000Z',
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('gets measurement stats of a non valid custom time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'startDate': '2016-01-01T01:00:00.000Z',
+                    'endDate': '2015-01-01T01:00:00.000Z'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats', () => {
+        beforeEach((done) => {
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            createMeasurements(measurements, done);
+        });
+        it('gets measurement stats', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(2);
+                    testCachedStats(undefined, undefined, res, done);
+                });
+        });
+        it('gets measurement stats of a valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(2);
+                    testCachedStats(undefined, new TimePeriod('month'), res, done);
+                });
+        });
+        it('gets measurement stats of a valid custom time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'startDate': moment().utc().subtract(1, 'minute').toISOString(),
+                    'endDate': moment().utc().add(1, 'minute').toISOString()
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(2);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/:type/stats 404', () => {
+        it('gets measurement stats by type but no measurement has been created', (done) => {
+            chai.request(server)
+                .get('/api/measurement/whatever/stats')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/:type/stats', () => {
+        beforeEach((done) => {
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            createMeasurements(measurements, done);
+        });
+        it('gets temperature measurement stats', (done) => {
+            chai.request(server)
+                .get('/api/measurement/temperature/stats')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    testCachedStats('temperature', undefined, res, done);
+                });
+        });
+        it('gets temperature measurement stats of a valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/temperature/stats')
+                .query({
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    testCachedStats('temperature', new TimePeriod('month'), res, done);
+                });
+        });
+        it('gets temperature measurement stats of a valid custom time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/temperature/stats')
+                .query({
+                    'startDate': moment().utc().subtract(1, 'minute').toISOString(),
+                    'endDate': moment().utc().add(1, 'minute').toISOString()
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
                     done();
                 });
         });

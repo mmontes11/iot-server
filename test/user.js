@@ -16,7 +16,7 @@ describe('User', () => {
         });
     });
 
-    describe('POST /user', () => {
+    describe('POST /user 401', () => {
         it('tries to create a user with invalid credentials', (done) => {
             chai.request(server)
                 .post('/api/user')
@@ -30,7 +30,7 @@ describe('User', () => {
         });
     });
 
-    describe('POST /user', () => {
+    describe('POST /user 400', () => {
         it('tries to create an invalid user', (done) => {
             chai.request(server)
                 .post('/api/user')
@@ -44,7 +44,7 @@ describe('User', () => {
         });
     });
 
-    describe('POST /user', () => {
+    describe('POST /user 400', () => {
         it('tries to create a user with weak password', (done) => {
             chai.request(server)
                 .post('/api/user')
@@ -54,6 +54,27 @@ describe('User', () => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
+                });
+        });
+    });
+
+    describe('POST /user && POST /user', () => {
+        it('creates the same user twice', (done) => {
+            chai.request(server)
+                .post('/api/user')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
+                .end((err, res) => {
+                    res.should.have.status(httpStatus.CREATED);
+                    chai.request(server)
+                        .post('/api/user')
+                        .set('Authorization', constants.validAuthHeader)
+                        .send(constants.validUser)
+                        .end((err, res) => {
+                            should.exist(err);
+                            res.should.have.status(httpStatus.CONFLICT);
+                            done();
+                        })
                 });
         });
     });
@@ -77,27 +98,6 @@ describe('User', () => {
                             res.should.have.status(httpStatus.OK);
                             done();
                         });
-                });
-        });
-    });
-
-    describe('POST /user && POST /user', () => {
-        it('creates the same user twice', (done) => {
-            chai.request(server)
-                .post('/api/user')
-                .set('Authorization', constants.validAuthHeader)
-                .send(constants.validUser)
-                .end((err, res) => {
-                    res.should.have.status(httpStatus.CREATED);
-                    chai.request(server)
-                        .post('/api/user')
-                        .set('Authorization', constants.validAuthHeader)
-                        .send(constants.validUser)
-                        .end((err, res) => {
-                            should.exist(err);
-                            res.should.have.status(httpStatus.CONFLICT);
-                            done();
-                        })
                 });
         });
     });

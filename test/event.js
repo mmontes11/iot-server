@@ -52,7 +52,7 @@ describe('Event', () => {
         });
     });
 
-    describe('POST /event', () => {
+    describe('POST /event 400', () => {
         it('tries to create an invalid event', (done) => {
             chai.request(server)
                 .post('/api/event')
