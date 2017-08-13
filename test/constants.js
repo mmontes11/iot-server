@@ -12,7 +12,7 @@ export default {
         "userName": "testUser",
         "password": "1234"
     },
-    "validEvent": {
+    "doorOpenedEvent": {
         "creator": {
             "userName": "mmontes",
             "device": "raspberry"
@@ -33,7 +33,7 @@ export default {
             "value": 2.4
         }
     },
-    "validEvent2": {
+    "doorClosedEvent": {
         "creator": {
             "userName": "mmontes",
             "device": "raspberry"
@@ -54,28 +54,7 @@ export default {
             "value": 2.4
         }
     },
-    "validEvent3": {
-        "creator": {
-            "userName": "mmontes",
-            "device": "raspberry"
-        },
-        "relatedEntities": [
-            {
-                "name": "Martin's House",
-                "type": "building",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [125.6, 10.1]
-                }
-            }
-        ],
-        "type": "window_opened",
-        "duration": {
-            "units": "s",
-            "value": 2.4
-        }
-    },
-    "validEvent4": {
+    "doorClosedEvent2": {
         "creator": {
             "userName": "mmontes",
             "device": "arduino"
@@ -96,8 +75,97 @@ export default {
             "value": 2.4
         }
     },
+    "windowOpenedEvent": {
+        "creator": {
+            "userName": "mmontes",
+            "device": "raspberry"
+        },
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "window_opened",
+        "duration": {
+            "units": "s",
+            "value": 2.4
+        }
+    },
     "inValidEvent": {
         "device": "raspberry",
         "relatedEntities": []
-    }
+    },
+    "temperatureMeasurement": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "temperature",
+        "units": "degrees",
+        "value": 10
+    },
+    "temperatureMeasurement2": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "temperature",
+        "units": "degrees",
+        "value": 15
+    },
+    "humidityMeasurement": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "humidity",
+        "units": "relative",
+        "value": 0.3
+    },
+    "humidityMeasurement2": {
+        "device": "raspberry",
+        "relatedEntities": [
+            {
+                "name": "Martin's House",
+                "type": "building",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [125.6, 10.1]
+                }
+            }
+        ],
+        "type": "humidity",
+        "units": "relative",
+        "value": 0.6
+    },
+    "inValidMeasurement": {
+        "device": "raspberry",
+        "relatedEntities": []
+    },
 }

@@ -1,7 +1,9 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
-import { EventSchema, EventModel } from '../src/models/db/event';
+import { MeasurementSchema, MeasurementModel } from '../src/models/db/measurement';
+import statsCache from '../src/cache/statsCache';
+import redisClient from '../lib/redis';
 import server from '../index';
 import constants from './constants';
 
@@ -11,11 +13,11 @@ let token = null;
 const auth = () => {
     return `Bearer ${token}`;
 };
-const createEvents = (events, done) => {
-    Promise.each(events, (event) => {
-        event.phenomenonTime = new Date();
-        const newEvent = new EventModel(event);
-        return newEvent.save();
+const createMeasurements = (measurements, done) => {
+    Promise.each(measurements, (measurement) => {
+        measurement.phenomenonTime = new Date();
+        const newMeasurement = new MeasurementModel(measurement);
+        return newMeasurement.save();
     }).then(() => {
         done();
     }).catch((err) => {
@@ -23,7 +25,7 @@ const createEvents = (events, done) => {
     });
 };
 
-describe('Event', () => {
+describe('Measurement', () => {
 
     before((done) => {
         chai.request(server)
@@ -46,18 +48,21 @@ describe('Event', () => {
     });
 
     beforeEach((done) => {
-        EventModel.remove({}, (err) => {
-            assert(err !== undefined, 'Error cleaning MongoDB for tests');
-            done();
-        });
+        const promises = [MeasurementModel.remove({}), redisClient.flushall()];
+        Promise.all(promises)
+            .then(() => {
+                done();
+            }).catch((err) => {
+                done(err);
+            });
     });
 
-    describe('POST /event', () => {
-        it('tries to create an invalid event', (done) => {
+    describe('POST /measurement', () => {
+        it('tries to create a invalid measurement', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.inValidEvent)
+                .send(constants.inValidMeasurement)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
@@ -66,12 +71,12 @@ describe('Event', () => {
         });
     });
 
-    describe('POST /event', () => {
-        it('creates an event', (done) => {
+    describe('POST /measurement', () => {
+        it('creates a measurement', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.doorOpenedEvent)
+                .send(constants.temperatureMeasurement)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
@@ -80,10 +85,10 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/types 404', () => {
-        it('gets all event types but no one has been created yet', (done) => {
+    describe('GET /measurement/types 404', () => {
+        it('gets all measurement types but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/event/types')
+                .get('/api/measurement/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -93,29 +98,29 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/types', () => {
+    describe('GET /measurement/types', () => {
         beforeEach((done) => {
-            const events = [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent];
-            createEvents(events, done);
+            const measurements = [constants.temperatureMeasurement, constants.humidityMeasurement];
+            createMeasurements(measurements, done);
         });
-        it('gets all event types', (done) => {
+        it('gets all measurement types', (done) => {
             chai.request(server)
-                .get('/api/event/types')
+                .get('/api/measurement/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
                     res.body.types.should.be.a('array');
-                    res.body.types.length.should.be.eql(3);
+                    res.body.types.length.should.be.eql(2);
                     done();
                 });
         });
     });
 
-    describe('GET /event/last 404', () => {
-        it('gets the last event but no one has been created yet', (done) => {
+    describe('GET /measurement/last 404', () => {
+        it('gets the last measurement but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/api/measurement/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -127,27 +132,27 @@ describe('Event', () => {
 
     describe('GET /event/last', () => {
         beforeEach((done) => {
-            const events = [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent];
-            createEvents(events, done);
+            const events = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            createMeasurements(events, done);
         });
-        it('gets the last event', (done) => {
+        it('gets the last measurement', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/api/measurement/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
                     res.body.type.should.be.a('string');
-                    res.body.type.should.equal('window_opened');
+                    res.body.type.should.equal('humidity');
                     done();
                 });
         });
     });
 
-    describe('GET /event/:type/last 404', () => {
-        it('gets the last event of a non existing type', (done) => {
+    describe('GET /measurement/:type/last 404', () => {
+        it('gets the last measurement of a non existing type', (done) => {
             chai.request(server)
-                .get('/api/event/whatever/last')
+                .get('/api/measurement/whatever/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -157,25 +162,24 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/:type/last', () => {
+    describe('GET /measurement/:type/last', () => {
         beforeEach((done) => {
-            const events = [constants.doorOpenedEvent, constants.doorClosedEvent,  constants.windowOpenedEvent, constants.doorClosedEvent2];
-            createEvents(events, done);
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            createMeasurements(measurements, done);
         });
-        it('gets the last door closed event', (done) => {
+        it('gets the last temperature measurement', (done) => {
             chai.request(server)
-                .get('/api/event/door_closed/last')
+                .get('/api/measurement/temperature/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
                     res.body.type.should.be.a('string');
-                    res.body.type.should.equal('door_closed');
-                    res.body.creator.device.should.be.a('string');
-                    res.body.creator.device.should.equal('arduino');
+                    res.body.type.should.equal('temperature');
+                    res.body.value.should.be.a('number');
+                    res.body.value.should.equal(15);
                     done();
                 });
         });
     });
-
 });
