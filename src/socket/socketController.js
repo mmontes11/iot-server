@@ -1,4 +1,4 @@
-import logger from '../utils/logger';
+import { logInfo } from '../utils/log';
 
 class SocketController {
     constructor (io) {
@@ -6,8 +6,9 @@ class SocketController {
     }
     listen () {
         this.io.on("connection", (socket) => {
-            logger.logInfo(`Socket.io: New socket connection ${socket.id}`)
+            logInfo(`Socket.io: New socket connection ${socket.id}`)
         })
     }
 }
-export default SocketController;
+
+export { SocketController };

@@ -13,5 +13,5 @@ function logError(message) {
     }
 }
 
-export default { logInfo, logError };
+export { logInfo, logError };
 

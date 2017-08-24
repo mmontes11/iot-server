@@ -1,7 +1,7 @@
 import mongoose from '../../../lib/mongoose';
-import observation from './observation';
+import { ObservationSchema } from "./observation";
 
-const EventSchema = observation.ObservationSchema.extend({
+const EventSchema = ObservationSchema.extend({
     duration: {
         units: String,
         value: Number
@@ -9,4 +9,4 @@ const EventSchema = observation.ObservationSchema.extend({
 });
 const EventModel = mongoose.model('Event', EventSchema);
 
-export default  { EventSchema, EventModel };
+export { EventSchema, EventModel };

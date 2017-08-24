@@ -9,4 +9,4 @@ function extractUserNameFromRequest(req) {
     }
 }
 
-export default { extractUserNameFromRequest };
+export { extractUserNameFromRequest };

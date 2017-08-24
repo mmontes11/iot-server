@@ -58,4 +58,4 @@ class CustomTimePeriod extends TimePeriod {
     }
 }
 
-export default { TimePeriod, CustomTimePeriod };
+export { TimePeriod, CustomTimePeriod };

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
-import logger from '../utils/logger';
+import { logError } from '../utils/log';
 
 function handleResponse(res, response, arrayName = "result") {
     if (_.isEmpty(response) || _.isNull(response) || _.isUndefined(response)) {
@@ -16,7 +16,7 @@ function handleResponse(res, response, arrayName = "result") {
 }
 
 function handleError(res, err) {
-    logger.logError(err);
+    logError(err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
 }
 

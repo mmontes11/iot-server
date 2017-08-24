@@ -1,14 +1,14 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
-import { MeasurementSchema, MeasurementModel } from '../models/db/measurement';
+import { MeasurementModel } from '../models/db/measurement';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
-import statsCache from '../cache/statsCache';
-import requestUtils from '../utils/requestUtils';
+import { cachePolicy, setStatsCache, getStatsCache } from '../cache/statsCache';
+import { extractUserNameFromRequest } from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
 async function createMeasurement(req, res) {
-    const userName = requestUtils.extractUserNameFromRequest(req);
+    const userName = extractUserNameFromRequest(req);
     const newMeasurement = new MeasurementModel({
         creator: {
             userName: userName,
@@ -59,13 +59,13 @@ async function getStats(req, res) {
     }
 
     try {
-        if (statsCache.cachePolicy(timePeriod)) {
-            const statsFromCache = await statsCache.getStatsCache(type, timePeriod);
+        if (cachePolicy(timePeriod)) {
+            const statsFromCache = await getStatsCache(type, timePeriod);
             if (!_.isNull(statsFromCache)) {
                 responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
             } else {
                 const statsFromDB = await getStatsFromDB(type, timePeriod);
-                statsCache.setStatsCache(type, timePeriod, statsFromDB);
+                setStatsCache(type, timePeriod, statsFromDB);
                 responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
             }
         } else {

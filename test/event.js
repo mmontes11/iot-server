@@ -1,7 +1,7 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
-import { EventSchema, EventModel } from '../src/models/db/event';
+import { EventModel } from '../src/models/db/event';
 import server from '../index';
 import constants from './constants';
 

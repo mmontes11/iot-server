@@ -1,9 +1,8 @@
 import _ from "underscore";
 import mongoose from "../../../lib/mongoose";
-import observation from "./observation";
+import { ObservationSchema } from "./observation";
 
-
-const MeasurementSchema = observation.ObservationSchema.extend({
+const MeasurementSchema = ObservationSchema.extend({
     units: {
         type: String,
         required: true
@@ -80,4 +79,4 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
 
 const MeasurementModel = mongoose.model('Measurement', MeasurementSchema);
 
-export default { MeasurementSchema, MeasurementModel };
+export { MeasurementSchema, MeasurementModel };

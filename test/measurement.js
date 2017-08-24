@@ -2,9 +2,9 @@ import chai from '../lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import moment from 'moment';
-import { MeasurementSchema, MeasurementModel } from '../src/models/db/measurement';
-import { TimePeriod, CustomTimePeriod } from '../src/models/request/timePeriod';
-import statsCache from '../src/cache/statsCache';
+import { MeasurementModel } from '../src/models/db/measurement';
+import { TimePeriod } from '../src/models/request/timePeriod';
+import {getStatsCache} from '../src/cache/statsCache';
 import redisClient from '../lib/redis';
 import server from '../index';
 import constants from './constants';
@@ -28,11 +28,11 @@ const createMeasurements = (measurements, done) => {
     });
 };
 const testCachedStats = (type, lastTimePeriod, res, done) => {
-    statsCache.getStatsCache(type, lastTimePeriod)
+    getStatsCache(type, lastTimePeriod)
         .then((cachedStats) => {
             res.body.stats.should.be.eql(cachedStats);
             setTimeout(() => {
-                statsCache.getStatsCache(type, lastTimePeriod)
+                getStatsCache(type, lastTimePeriod)
                     .then((cachedStats) => {
                         should.not.exist(cachedStats);
                         MeasurementModel.getStats(type, lastTimePeriod)
