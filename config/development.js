@@ -6,7 +6,7 @@ export default {
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 5,
     basicAuthUsers: {
-        'admin': 'admin'
+        admin: 'admin'
     },
     jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
     debug: true
