@@ -43,8 +43,8 @@ const testCachedStats = (type, lastTimePeriod, res, done) => {
                             done(err);
                         });
                     }).catch((err) => {
-                    done(err);
-                });
+                        done(err);
+                    });
             }, config.statsCacheInSeconds * 1000 + 1);
         }).catch((err) => {
             done(err);
