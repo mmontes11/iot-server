@@ -20,7 +20,7 @@ function getStatsCacheKey(type, lastTimePeriod) {
     }
 
     elementsCacheKey
-        .map(filteredElement => {
+        .map((filteredElement) => {
             cacheKey = cacheKey.concat(`_${filteredElement}`)
         });
 

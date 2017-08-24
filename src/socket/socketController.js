@@ -5,7 +5,7 @@ class SocketController {
         this.io = io
     }
     listen () {
-        this.io.on("connection", socket => {
+        this.io.on("connection", (socket) => {
             logger.logInfo(`Socket.io: New socket connection ${socket.id}`)
         })
     }
