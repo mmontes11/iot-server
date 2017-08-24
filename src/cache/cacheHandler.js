@@ -1,12 +1,13 @@
 import redis from '../../lib/redis'
 import logger from '../utils/logger';
+import config from '../../config'
 
-function setObjectCache(key, objectValue, expireTime) {
+function setObjectCache(key, objectValue, expireTimeInSeconds = config.defaultCacheInSeconds) {
     const objectString = JSON.stringify(objectValue);
     logger.logInfo(`Redis set key '${key}': ${objectString}`);
     redis.set(key, objectString);
-    logger.logInfo(`Redis expire '${key}': ${expireTime}`);
-    redis.expire(key, expireTime)
+    logger.logInfo(`Redis expire '${key}': ${expireTimeInSeconds}`);
+    redis.expire(key, expireTimeInSeconds)
 }
 
 async function getObjectCache(key) {

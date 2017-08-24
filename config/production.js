@@ -6,6 +6,7 @@ export default {
     nodePort: process.env.NODE_PORT,
     mongoUrl: mongoUrl,
     redisUrl: redisUrl,
+    defaultCacheInSeconds: 10,
     statsCacheInSeconds: 30,
     basicAuthUsers: {
         'admin': 'admin'
