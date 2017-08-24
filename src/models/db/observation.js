@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import mongoose from '../../../lib/mongoose';
-import relatedEntity from './relatedEntity';
+import { RelatedEntitySchema } from './relatedEntity';
 
 const ObservationSchema = new mongoose.Schema({
     creator: {
@@ -11,7 +11,7 @@ const ObservationSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    relatedEntities: [ relatedEntity.RelatedEntitySchema ],
+    relatedEntities: [ RelatedEntitySchema ],
     type: {
         type: String,
         required: true
@@ -32,4 +32,4 @@ ObservationSchema.statics.findLastN = function(n = 10, type){
 
 const ObservationModel = mongoose.model('Observation', ObservationSchema);
 
-export default { ObservationSchema, ObservationModel };
+export { ObservationSchema, ObservationModel };

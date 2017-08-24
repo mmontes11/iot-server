@@ -10,12 +10,12 @@ class TimePeriod {
     constructor(timePeriodString){
         if (!_.isUndefined(timePeriodString)) {
             this.name = timePeriodString;
-            this.value = this.stringToEnum(timePeriodString);
+            this.value = TimePeriod._stringToEnum(timePeriodString);
             this.startDate = moment().utc().subtract(1, this.name);
         }
         this.endDate = moment().utc();
     }
-    stringToEnum(timePeriodString) {
+    static _stringToEnum(timePeriodString) {
         switch (timePeriodString) {
             case dayString:
                 return TIME_PERIOD.day;
@@ -58,4 +58,4 @@ class CustomTimePeriod extends TimePeriod {
     }
 }
 
-export default { TimePeriod, CustomTimePeriod };
+export { TimePeriod, CustomTimePeriod };

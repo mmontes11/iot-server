@@ -1,6 +1,6 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
-import { UserSchema, UserModel } from '../src/models/db/user';
+import { UserModel } from '../src/models/db/user';
 import server from '../index';
 import constants from './constants';
 

@@ -1,5 +1,3 @@
-const regex = {
+export default {
     passwordRegex: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$&*,;.:\-\"\(\)\[\]]).{6,20})/
 };
-
-export default regex;

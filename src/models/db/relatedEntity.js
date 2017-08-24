@@ -7,4 +7,4 @@ const RelatedEntitySchema = new mongoose.Schema({
 });
 const RelatedEntity = mongoose.model('RelatedEntity', RelatedEntitySchema);
 
-export default { RelatedEntitySchema, RelatedEntity };
+export { RelatedEntitySchema, RelatedEntity };

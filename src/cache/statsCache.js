@@ -1,7 +1,7 @@
 import _ from 'underscore'
-import cacheHandler from './cacheHandler'
+import { getObjectCache, setObjectCache} from './cacheHandler'
 import config from '../../config/index'
-import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod'
+import { CustomTimePeriod } from '../models/request/timePeriod'
 
 const statsCacheKey = "stats";
 
@@ -20,7 +20,7 @@ function getStatsCacheKey(type, lastTimePeriod) {
     }
 
     elementsCacheKey
-        .map(filteredElement => {
+        .map((filteredElement) => {
             cacheKey = cacheKey.concat(`_${filteredElement}`)
         });
 
@@ -28,11 +28,11 @@ function getStatsCacheKey(type, lastTimePeriod) {
 }
 
 function setStatsCache(type, lastTimePeriod, stats) {
-    cacheHandler.setObjectCache(getStatsCacheKey(type, lastTimePeriod), stats, config.statsCacheInSeconds)
+    setObjectCache(getStatsCacheKey(type, lastTimePeriod), stats, config.statsCacheInSeconds)
 }
 
 function getStatsCache(type, lastTimePeriod) {
-    return cacheHandler.getObjectCache(getStatsCacheKey(type, lastTimePeriod))
+    return getObjectCache(getStatsCacheKey(type, lastTimePeriod))
 }
 
-export default { cachePolicy, setStatsCache, getStatsCache }
+export { cachePolicy, setStatsCache, getStatsCache };

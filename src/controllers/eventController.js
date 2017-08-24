@@ -1,12 +1,12 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
-import { EventSchema, EventModel } from '../models/db/event';
-import requestUtils from '../utils/requestUtils';
+import { EventModel } from '../models/db/event';
+import { extractUserNameFromRequest } from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
 async function createEvent(req, res) {
-    const userName = requestUtils.extractUserNameFromRequest(req);
+    const userName = extractUserNameFromRequest(req);
     const newEvent = new EventModel({
         creator: {
             userName: userName,
