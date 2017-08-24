@@ -18,58 +18,58 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
     const matchConditions = [];
     if (!_.isUndefined(type)) {
         matchConditions.push({
-            "type": type
+            type
         });
     }
     if (!_.isUndefined(timePeriod)) {
         if (!_.isUndefined(timePeriod.startDate)) {
             matchConditions.push({
-                "phenomenonTime": {
-                    "$gte": timePeriod.startDate.toDate()
+                phenomenonTime: {
+                    $gte: timePeriod.startDate.toDate()
                 }
             });
         }
         if (!_.isUndefined(timePeriod.endDate)) {
             matchConditions.push({
-                "phenomenonTime": {
-                    "$lte": timePeriod.endDate.toDate()
+                phenomenonTime: {
+                    $lte: timePeriod.endDate.toDate()
                 }
             });
         }
     }
     if (!_.isEmpty(matchConditions)) {
         match.push({
-            "$match": {
-                "$and": matchConditions
+            $match: {
+                $and: matchConditions
             }
         })
     }
     const pipeline = [
         {
-            "$group": {
-                "_id": "$type",
-                "avg": {
-                    "$avg": "$value"
+            $group: {
+                _id: '$type',
+                avg: {
+                    $avg: '$value'
                 },
-                "max": {
-                    "$max": "$value"
+                max: {
+                    $max: '$value'
                 },
-                "min": {
-                    "$min": "$value"
+                min: {
+                    $min: '$value'
                 },
-                "stdDev": {
-                    "$stdDevPop": "$value"
+                stdDev: {
+                    $stdDevPop: '$value'
                 },
             }
         },
         {
-            "$project": {
-                "_id": 0,
-                "type": "$_id",
-                "avg": 1,
-                "max": 1,
-                "min": 1,
-                "stdDev": 1
+            $project: {
+                _id: 0,
+                type: '$_id',
+                avg: 1,
+                max: 1,
+                min: 1,
+                stdDev: 1
 
             }
         }
