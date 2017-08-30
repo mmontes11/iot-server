@@ -36,5 +36,17 @@ server.listen(config.nodePort, (err) => {
         logInfo(`NodeJS server started on port ${config.nodePort}`);
     }
 });
+server.on('close', (err) => {
+    if (err) {
+        logError(`Error stopping NodeJS server on port ${config.nodePort}`);
+        throw err;
+    } else {
+        logInfo(`Stopping NodeJS on port ${config.nodePort}`);
+    }
+});
+
+process.on('SIGINT', function() {
+    server.close();
+});
 
 export default server;

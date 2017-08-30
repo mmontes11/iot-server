@@ -7,8 +7,8 @@ import runSequence from 'run-sequence';
 const plugins = gulpLoadPlugins();
 
 const paths = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**', '!coverage/**'],
-  nonJs: ['./package.json', './.gitignore', './.dockerignore']
+  js: ['./**/*.js', '!dist/**', '!node_modules/**'],
+  nonJs: ['./package.json']
 };
 
 gulp.task('clean', () =>
@@ -34,7 +34,6 @@ gulp.task('babel', () =>
     }))
     .pipe(gulp.dest('dist'))
 );
-
 
 gulp.task('nodemon', ['copy', 'babel'], () =>
   plugins.nodemon({
