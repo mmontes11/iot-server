@@ -41,7 +41,7 @@ server.on('close', (err) => {
         logError(`Error stopping NodeJS server on port ${config.nodePort}`);
         throw err;
     } else {
-        logInfo(`Stopping NodeJS server on port ${config.nodePort}`);
+        logInfo(`Stopped NodeJS server on port ${config.nodePort}`);
     }
 });
 
