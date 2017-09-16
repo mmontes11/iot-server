@@ -4,7 +4,7 @@ import { RelatedEntitySchema } from './relatedEntity';
 
 const ObservationSchema = new mongoose.Schema({
     creator: {
-        userName: String,
+        username: String,
         device: String
     },
     phenomenonTime: {

@@ -80,7 +80,7 @@ describe('User', () => {
     });
 
     describe('POST /user && POST /user/logIn', () => {
-        it('creates a user and log in', (done) => {
+        it('creates a user and logs in', (done) => {
             chai.request(server)
                 .post('/api/user')
                 .set('Authorization', constants.validAuthHeader)

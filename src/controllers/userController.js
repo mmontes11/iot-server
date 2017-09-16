@@ -6,13 +6,13 @@ import config from '../../config/index';
 import responseHandler from '../helpers/responseHandler';
 
 async function createIfNotExists(req, res) {
-    const user = await UserModel.where({ userName: req.body.userName }).findOne();
+    const user = await UserModel.where({ username: req.body.username }).findOne();
     try {
         if (!_.isNull(user)) {
             res.sendStatus(httpStatus.CONFLICT);
         } else {
             const newUser = new UserModel({
-                userName: req.body.userName,
+                username: req.body.username,
                 password: req.body.password
             });
             await newUser.save();
@@ -24,15 +24,15 @@ async function createIfNotExists(req, res) {
 }
 
 async function logIn(req, res) {
-    const user = await UserModel.where({ userName: req.body.userName, password: req.body.password }).findOne();
+    const user = await UserModel.where({ username: req.body.username, password: req.body.password }).findOne();
     try {
         if (_.isNull(user)) {
             res.sendStatus(httpStatus.UNAUTHORIZED)
         } else {
-            const userName = req.body.userName;
-            const token = jwt.sign({ userName: userName }, config.jwtSecret);
+            const username = req.body.username;
+            const token = jwt.sign({ username: username }, config.jwtSecret);
             const loginResponse = {
-                userName: userName,
+                username: username,
                 token: token
             };
             responseHandler.handleResponse(res, loginResponse)

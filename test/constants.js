@@ -2,19 +2,19 @@ export default {
     validAuthHeader: 'Basic YWRtaW46YWRtaW4=',
     invalidAuthHeader: 'Whatever',
     validUser: {
-        userName: 'testUser',
+        username: 'testUser',
         password: 'aA12345678&'
     },
     invalidUser: {
         password: 'aA12345678&'
     },
     userWithWeakPassword: {
-        userName: 'testUser',
+        username: 'testUser',
         password: '1234'
     },
     doorOpenedEvent: {
         creator: {
-            userName: 'mmontes',
+            username: 'mmontes',
             device: 'raspberry'
         },
         relatedEntities: [
@@ -35,7 +35,7 @@ export default {
     },
     doorClosedEvent: {
         creator: {
-            userName: 'mmontes',
+            username: 'mmontes',
             device: 'raspberry'
         },
         relatedEntities: [
@@ -56,7 +56,7 @@ export default {
     },
     doorClosedEvent2: {
         creator: {
-            userName: 'mmontes',
+            username: 'mmontes',
             device: 'arduino'
         },
         relatedEntities: [
@@ -77,7 +77,7 @@ export default {
     },
     windowOpenedEvent: {
         creator: {
-            userName: 'mmontes',
+            username: 'mmontes',
             device: 'raspberry'
         },
         relatedEntities: [
