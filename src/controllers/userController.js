@@ -32,7 +32,6 @@ async function logIn(req, res) {
             const username = req.body.username;
             const token = jwt.sign({ username: username }, config.jwtSecret);
             const loginResponse = {
-                username: username,
                 token: token
             };
             responseHandler.handleResponse(res, loginResponse)
