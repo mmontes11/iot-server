@@ -25,14 +25,11 @@ const createObservations = async (req, res, next) => {
 
     await Promise.all(saveToDBPromises.map((promise) => {
         return promise.reflect();
-    })).each((inspection) => {
+    })).each((inspection, index) => {
         if (inspection.isFulfilled()) {
             createdObservations.push(inspection.value());
         } else {
-            const indexOfInvalidObservation = _.indexOf(observations, inspection.value());
-            if (indexOfInvalidObservation !== -1) {
-                invalidObservations.push(observations[indexOfInvalidObservation])
-            }
+            invalidObservations.push(observations[index])
         }
     });
     handleResponse(res, createdObservations, invalidObservations);
