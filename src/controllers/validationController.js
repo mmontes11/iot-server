@@ -2,6 +2,7 @@ import _ from "underscore";
 import httpStatus from 'http-status';
 import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
+import constants from '../utils/constants';
 
 const validateCreateUser = (req, res, next) => {
     validateBody(req, res, next, requestValidator.validateUser);
@@ -37,6 +38,17 @@ const validateMeasurementStats = (req, res, next) => {
     next();
 };
 
+const validateCreateObservations = (req, res, next) => {
+    const observations = req.body[constants.observationsArrayName];
+    if (_.isUndefined(observations) || !_.isArray(observations)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
+    if (_.isEmpty(observations)) {
+        return res.sendStatus(httpStatus.NOT_MODIFIED);
+    }
+    next();
+};
+
 const validateBody = (req, res, next, isValid) => {
     if (isValid(req.body)) {
         next();
@@ -45,4 +57,4 @@ const validateBody = (req, res, next, isValid) => {
     }
 };
 
-export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats };
+export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations };

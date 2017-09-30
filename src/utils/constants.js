@@ -1,4 +1,7 @@
 export default {
     typesArrayName: "types",
-    statsArrayName: "stats"
+    statsArrayName: "stats",
+    observationsArrayName: "observations",
+    createdObservationsArrayName: "createdObservations",
+    invalidObservationsArrayName: "invalidObservations"
 };
