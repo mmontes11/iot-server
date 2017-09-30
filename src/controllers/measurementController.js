@@ -8,10 +8,10 @@ import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
 async function createMeasurement(req, res) {
-    const userName = extractUserNameFromRequest(req);
+    const username = extractUserNameFromRequest(req);
     const newMeasurement = new MeasurementModel({
         creator: {
-            userName: userName,
+            username: username,
             device: req.body.device
         },
         phenomenonTime: new Date(),
