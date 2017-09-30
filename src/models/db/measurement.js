@@ -1,10 +1,11 @@
 import _ from "underscore";
 import mongoose from "../../../lib/mongoose";
 import { ObservationSchema } from "./observation";
+import { UnitSchema } from './unit';
 
 const MeasurementSchema = ObservationSchema.extend({
-    units: {
-        type: String,
+    unit: {
+        type: UnitSchema,
         required: true
     },
     value: {

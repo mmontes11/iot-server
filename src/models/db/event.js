@@ -1,10 +1,19 @@
 import mongoose from '../../../lib/mongoose';
 import { ObservationSchema } from "./observation";
+import { UnitSchema } from './unit';
+
 
 const EventSchema = ObservationSchema.extend({
     duration: {
-        units: String,
-        value: Number
+        unit: {
+            type: UnitSchema,
+            required: false
+        },
+        value: {
+            type: Number,
+            required: false
+        },
+        required: false
     }
 });
 const EventModel = mongoose.model('Event', EventSchema);

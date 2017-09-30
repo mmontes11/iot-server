@@ -1,9 +1,7 @@
 import express from 'express';
 import expressJwt from 'express-jwt';
-import expressValidation from 'express-validation';
-import paramValidation from '../validation/paramValidation';
-import customValidation from '../validation/customValidation';
 import measurementController from '../controllers/measurementController';
+import validationController from '../controllers/validationController';
 import config from '../../config/index';
 
 const router = express.Router();
@@ -14,7 +12,7 @@ router
 
 router
     .route('/')
-        .post(expressValidation(paramValidation.createMeasurement), measurementController.createMeasurement);
+        .post(validationController.validateCreateMeasurement, measurementController.createMeasurement);
 
 router
     .route('/types')
@@ -30,10 +28,10 @@ router
 
 router
     .route('/stats')
-        .get(customValidation.validateGetStats, measurementController.getStats);
+        .get(validationController.validateMeasurementStats, measurementController.getStats);
 
 router
     .route('/:type/stats')
-        .get(customValidation.validateGetStats, measurementController.getStats);
+        .get(validationController.validateMeasurementStats, measurementController.getStats);
 
 export default router;

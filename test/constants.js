@@ -29,7 +29,10 @@ export default {
         ],
         type: 'door_opened',
         duration: {
-            units: 's',
+            unit: {
+                name: 'seconds',
+                symbol: 's'
+            },
             value: 2.4
         }
     },
@@ -50,7 +53,10 @@ export default {
         ],
         type: 'door_closed',
         duration: {
-            units: 's',
+            unit:  {
+                name: 'seconds',
+                symbol: 's'
+            },
             value: 2.4
         }
     },
@@ -71,7 +77,10 @@ export default {
         ],
         type: 'door_closed',
         duration: {
-            units: 's',
+            unit:  {
+                name: 'seconds',
+                symbol: 's'
+            },
             value: 2.4
         }
     },
@@ -92,7 +101,10 @@ export default {
         ],
         type: 'window_opened',
         duration: {
-            units: 's',
+            unit:  {
+                name: 'seconds',
+                symbol: 's'
+            },
             value: 2.4
         }
     },
@@ -113,7 +125,10 @@ export default {
             }
         ],
         type: 'temperature',
-        units: 'degrees',
+        unit: {
+            name: 'degrees',
+            symbol: '°C'
+        },
         value: 10
     },
     temperatureMeasurement2: {
@@ -129,7 +144,10 @@ export default {
             }
         ],
         type: 'temperature',
-        units: 'degrees',
+        unit: {
+            name: 'degrees',
+            symbol: '°C'
+        },
         value: 15
     },
     humidityMeasurement: {
@@ -145,7 +163,10 @@ export default {
             }
         ],
         type: 'humidity',
-        units: 'relative',
+        unit: {
+            name: 'relative',
+            symbol: '%'
+        },
         value: 0.3
     },
     humidityMeasurement2: {
@@ -161,7 +182,10 @@ export default {
             }
         ],
         type: 'humidity',
-        units: 'relative',
+        unit:  {
+            name: 'relative',
+            symbol: '%'
+        },
         value: 0.6
     },
     inValidMeasurement: {

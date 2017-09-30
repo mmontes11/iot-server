@@ -1,8 +1,7 @@
 import express from 'express';
 import expressJwt from 'express-jwt';
-import expressValidation from 'express-validation';
-import paramValidation from '../validation/paramValidation';
 import eventController from '../controllers/eventController';
+import validationController from '../controllers/validationController';
 import config from '../../config/index';
 
 const router = express.Router();
@@ -13,7 +12,7 @@ router
 
 router
     .route('/')
-        .post(expressValidation(paramValidation.createEvent), eventController.createEvent);
+        .post(validationController.validateCreateEvent, eventController.createEvent);
 
 router
     .route('/types')
