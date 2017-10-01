@@ -7,7 +7,7 @@ import { extractUserNameFromRequest } from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
-async function createMeasurement(req, res) {
+ const createMeasurement = async (req, res) => {
     const username = extractUserNameFromRequest(req);
     const newMeasurement = new MeasurementModel({
         creator: {
@@ -27,18 +27,18 @@ async function createMeasurement(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getTypes(req, res) {
+ const getTypes = async (req, res) => {
     try {
         const types = await MeasurementModel.types();
         responseHandler.handleResponse(res, types, constants.typesArrayName);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getLastMeasurement(req, res) {
+ const getLastMeasurement = async (req, res) => {
     const type = req.params.type;
     try {
        const lastMeasurements = await MeasurementModel.findLastN(1, type);
@@ -46,9 +46,9 @@ async function getLastMeasurement(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getStats(req, res) {
+ const getStats = async (req, res) => {
     const type = req.params.type;
     let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
@@ -75,14 +75,14 @@ async function getStats(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getStatsFromDB(type, timePeriod) {
+ const getStatsFromDB = async (type, timePeriod) => {
     try {
         return await MeasurementModel.getStats(type, timePeriod);
     } catch (err) {
         throw err;
     }
-}
+};
 
 export default { createMeasurement, getTypes, getLastMeasurement, getStats };

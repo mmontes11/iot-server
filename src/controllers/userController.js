@@ -5,7 +5,7 @@ import { UserModel } from '../models/db/user';
 import config from '../../config/index';
 import responseHandler from '../helpers/responseHandler';
 
-async function createIfNotExists(req, res) {
+ const createIfNotExists = async (req, res) => {
     const user = await UserModel.where({ username: req.body.username }).findOne();
     try {
         if (!_.isNull(user)) {
@@ -21,9 +21,9 @@ async function createIfNotExists(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function logIn(req, res) {
+ const logIn = async (req, res) => {
     const user = await UserModel.where({ username: req.body.username, password: req.body.password }).findOne();
     try {
         if (_.isNull(user)) {
@@ -39,6 +39,6 @@ async function logIn(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
 export default { createIfNotExists, logIn };

@@ -5,11 +5,11 @@ import { CustomTimePeriod } from '../models/request/timePeriod'
 
 const statsCacheKey = "stats";
 
-function cachePolicy(timePeriod) {
+const cachePolicy = (timePeriod) => {
     return _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod)
-}
+};
 
-function getStatsCacheKey(type, lastTimePeriod) {
+const getStatsCacheKey = (type, lastTimePeriod) => {
     let cacheKey = statsCacheKey;
     const elementsCacheKey = [];
     if (!_.isUndefined(type)) {
@@ -25,14 +25,14 @@ function getStatsCacheKey(type, lastTimePeriod) {
         });
 
     return cacheKey
-}
+};
 
-function setStatsCache(type, lastTimePeriod, stats) {
+const setStatsCache = (type, lastTimePeriod, stats) => {
     setObjectCache(getStatsCacheKey(type, lastTimePeriod), stats, config.statsCacheInSeconds)
-}
+};
 
-function getStatsCache(type, lastTimePeriod) {
+const getStatsCache = (type, lastTimePeriod) => {
     return getObjectCache(getStatsCacheKey(type, lastTimePeriod))
-}
+};
 
 export { cachePolicy, setStatsCache, getStatsCache };

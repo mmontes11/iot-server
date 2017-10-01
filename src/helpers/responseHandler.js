@@ -2,7 +2,7 @@ import _ from 'underscore';
 import httpStatus from 'http-status';
 import { logError } from '../utils/log';
 
-function handleResponse(res, response, arrayName = "result") {
+const handleResponse = (res, response, arrayName = "result") => {
     if (_.isEmpty(response) || _.isNull(response) || _.isUndefined(response)) {
         res.sendStatus(httpStatus.NOT_FOUND)
     } else if (_.isArray(response)) {
@@ -13,11 +13,11 @@ function handleResponse(res, response, arrayName = "result") {
     } else {
         res.json(response)
     }
-}
+};
 
-function handleError(res, err) {
+const handleError = (res, err) => {
     logError(err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
-}
+};
 
 export default { handleResponse, handleError };

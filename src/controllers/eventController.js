@@ -5,7 +5,7 @@ import { extractUserNameFromRequest } from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
-async function createEvent(req, res) {
+ const createEvent = async (req, res) =>{
     const userName = extractUserNameFromRequest(req);
     const newEvent = new EventModel({
         creator: {
@@ -24,18 +24,18 @@ async function createEvent(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getTypes(req, res) {
+const getTypes = async (req, res) => {
     try {
         const types = await EventModel.types();
         responseHandler.handleResponse(res, types, constants.typesArrayName);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
-async function getLastEvent(req, res) {
+ const getLastEvent = async (req, res) => {
     const type = req.params.type;
     try {
         const lastEvents = await EventModel.findLastN(1, type);
@@ -43,6 +43,6 @@ async function getLastEvent(req, res) {
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-}
+};
 
 export default { createEvent, getTypes, getLastEvent };

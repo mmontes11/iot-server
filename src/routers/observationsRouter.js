@@ -8,10 +8,10 @@ const router = express.Router();
 
 router
     .route('*')
-    .all(expressJwt({ secret: config.jwtSecret }));
+        .all(expressJwt({ secret: config.jwtSecret }));
 
 router
     .route('/')
-    .post(validationController.validateCreateObservations, observationsController.createObservations);
+        .post(validationController.validateCreateObservations, observationsController.createObservations);
 
 export default router;
