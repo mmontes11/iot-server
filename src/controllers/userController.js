@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import _ from 'underscore';
 import { UserModel } from '../models/db/user';
+import modelFactory from '../models/db/modelFactory';
 import config from '../../config/index';
 import responseHandler from '../helpers/responseHandler';
 
@@ -11,10 +12,7 @@ import responseHandler from '../helpers/responseHandler';
         if (!_.isNull(user)) {
             res.sendStatus(httpStatus.CONFLICT);
         } else {
-            const newUser = new UserModel({
-                username: req.body.username,
-                password: req.body.password
-            });
+            const newUser = modelFactory.createUser(req.body);
             await newUser.save();
             res.sendStatus(httpStatus.CREATED);
         }

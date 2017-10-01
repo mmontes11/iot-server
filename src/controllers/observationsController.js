@@ -3,7 +3,7 @@ import _ from 'underscore';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import requestValidator from '../helpers/requestValidator';
-import observationFactory from '../models/db/observationFactory';
+import modelFactory from '../models/db/modelFactory';
 
 const createObservations = async (req, res, next) => {
     const observations = req.body[constants.observationsArrayName];
@@ -13,7 +13,7 @@ const createObservations = async (req, res, next) => {
 
     for (const observation of observations) {
         try {
-            const newObservation = observationFactory.createObservation(observation);
+            const newObservation = modelFactory.createObservationUsingKind(observation, req);
             saveToDBPromises.push(newObservation.save());
         } catch (err) {
             invalidObservations.push(observation);

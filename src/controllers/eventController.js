@@ -1,24 +1,13 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import { EventModel } from '../models/db/event';
-import { extractUserNameFromRequest } from '../utils/requestUtils';
+import modelFactory from '../models/db/modelFactory';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
  const createEvent = async (req, res) =>{
-    const userName = extractUserNameFromRequest(req);
-    const newEvent = new EventModel({
-        creator: {
-            userName: userName,
-            device: req.body.device
-        },
-        phenomenonTime: new Date(),
-        type: req.body.type,
-        relatedEntities: req.body.relatedEntities,
-        duration: req.body.duration,
-    });
-
     try {
+        const newEvent = modelFactory.createEvent(req.body, req);
         const savedEvent = await newEvent.save();
         res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {

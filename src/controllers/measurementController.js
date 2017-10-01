@@ -1,27 +1,15 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import { MeasurementModel } from '../models/db/measurement';
+import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import { cachePolicy, setStatsCache, getStatsCache } from '../cache/statsCache';
-import { extractUserNameFromRequest } from '../utils/requestUtils';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
  const createMeasurement = async (req, res) => {
-    const username = extractUserNameFromRequest(req);
-    const newMeasurement = new MeasurementModel({
-        creator: {
-            username: username,
-            device: req.body.device
-        },
-        phenomenonTime: new Date(),
-        type: req.body.type,
-        relatedEntities: req.body.relatedEntities,
-        unit: req.body.unit,
-        value: req.body.value
-    });
-
     try {
+        const newMeasurement = modelFactory.createMeasurement(req.body, req);
         const savedMeasurement = await newMeasurement.save();
         res.status(httpStatus.CREATED).json(savedMeasurement);
     } catch (err) {
