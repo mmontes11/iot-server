@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import moment from 'moment';
 import { MeasurementModel } from '../src/models/db/measurement';
 import { TimePeriod } from '../src/models/request/timePeriod';
-import {getStatsCache} from '../src/cache/statsCache';
+import statsCache from '../src/cache/statsCache';
 import redisClient from '../lib/redis';
 import server from '../index';
 import constants from './constants';
@@ -28,11 +28,11 @@ const createMeasurements = (measurements, done) => {
     });
 };
 const testCachedStats = (type, lastTimePeriod, res, done) => {
-    getStatsCache(type, lastTimePeriod)
+    statsCache.getStatsCache(type, lastTimePeriod)
         .then((cachedStats) => {
             res.body.stats.should.be.eql(cachedStats);
             setTimeout(() => {
-                getStatsCache(type, lastTimePeriod)
+                statsCache.getStatsCache(type, lastTimePeriod)
                     .then((cachedStats) => {
                         should.not.exist(cachedStats);
                         MeasurementModel.getStats(type, lastTimePeriod)
