@@ -12,14 +12,10 @@ const createObservations = async (req, res, next) => {
     let saveToDBPromises = [];
 
     for (const observation of observations) {
-        if (requestValidator.validateObservation(observation)) {
-            try {
-                const newObservation = observationFactory.createObservation(observation);
-                saveToDBPromises.push(newObservation.save());
-            } catch (err) {
-                invalidObservations.push(observation);
-            }
-        } else {
+        try {
+            const newObservation = observationFactory.createObservation(observation);
+            saveToDBPromises.push(newObservation.save());
+        } catch (err) {
             invalidObservations.push(observation);
         }
     }
