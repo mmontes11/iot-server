@@ -103,7 +103,7 @@ describe('Observations', () => {
     });
 
     describe('POST /observations 207', () => {
-        it('creates observations and also invalid ones', (done) => {
+        it('creates observations and also tries to create invalid ones', (done) => {
             const measurements = [
                 constants.validMeasurementWithKind,
                 constants.validMeasurementWithInvalidKind,
