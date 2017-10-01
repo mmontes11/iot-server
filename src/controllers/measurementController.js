@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import { MeasurementModel } from '../models/db/measurement';
 import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
-import { cachePolicy, setStatsCache, getStatsCache } from '../cache/statsCache';
+import statsCache from '../cache/statsCache';
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 
@@ -47,13 +47,13 @@ import constants from '../utils/constants';
     }
 
     try {
-        if (cachePolicy(timePeriod)) {
-            const statsFromCache = await getStatsCache(type, timePeriod);
+        if (statsCache.cachePolicy(timePeriod)) {
+            const statsFromCache = await statsCache.getStatsCache(type, timePeriod);
             if (!_.isNull(statsFromCache)) {
                 responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
             } else {
                 const statsFromDB = await getStatsFromDB(type, timePeriod);
-                setStatsCache(type, timePeriod, statsFromDB);
+                statsCache.setStatsCache(type, timePeriod, statsFromDB);
                 responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
             }
         } else {

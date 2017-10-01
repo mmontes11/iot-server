@@ -1,5 +1,5 @@
 import _ from 'underscore'
-import { getObjectCache, setObjectCache} from './cacheHandler'
+import cacheHandler from './cacheHandler'
 import config from '../../config/index'
 import { CustomTimePeriod } from '../models/request/timePeriod'
 
@@ -28,11 +28,11 @@ const getStatsCacheKey = (type, lastTimePeriod) => {
 };
 
 const setStatsCache = (type, lastTimePeriod, stats) => {
-    setObjectCache(getStatsCacheKey(type, lastTimePeriod), stats, config.statsCacheInSeconds)
+    cacheHandler.setObjectCache(getStatsCacheKey(type, lastTimePeriod), stats, config.statsCacheInSeconds)
 };
 
 const getStatsCache = (type, lastTimePeriod) => {
-    return getObjectCache(getStatsCacheKey(type, lastTimePeriod))
+    return cacheHandler.getObjectCache(getStatsCacheKey(type, lastTimePeriod))
 };
 
-export { cachePolicy, setStatsCache, getStatsCache };
+export default { cachePolicy, setStatsCache, getStatsCache };

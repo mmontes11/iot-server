@@ -20,4 +20,4 @@ const getObjectCache = async (key) => {
     }
 };
 
-export { setObjectCache, getObjectCache };
+export default { setObjectCache, getObjectCache };

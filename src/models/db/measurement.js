@@ -77,7 +77,6 @@ MeasurementSchema.statics.getStats = function (type, timePeriod){
     ];
     return this.aggregate([...match, ...pipeline]);
 };
-
 const MeasurementModel = mongoose.model('Measurement', MeasurementSchema);
 
 export { MeasurementSchema, MeasurementModel };
