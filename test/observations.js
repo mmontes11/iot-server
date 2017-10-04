@@ -136,7 +136,7 @@ describe('Observations', () => {
         });
     });
 
-    describe('POST /observations 200', () => {
+    describe('POST /observations 201', () => {
         it('creates observations', (done) => {
             const validObservations = {
                 observations: [
