@@ -6,10 +6,8 @@ RUN mkdir ${WORKDIR}
 
 WORKDIR ${WORKDIR}
 
-COPY package.json ${WORKDIR}
+COPY . ${WORKDIR}
 
 RUN npm install
 
-COPY . ${WORKDIR}
-
-CMD ["npm", "run", "production"]
+CMD npm run production
