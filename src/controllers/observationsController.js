@@ -14,15 +14,13 @@ const createObservations = async (req, res, next) => {
     for (const observation of observations) {
         try {
             const newObservation = modelFactory.createObservationUsingKind(observation, req);
-            saveToDBPromises.push(newObservation.save());
+            saveToDBPromises.push(newObservation.save().reflect());
         } catch (err) {
             invalidObservations.push(observation);
         }
     }
 
-    await Promise.all(saveToDBPromises.map((promise) => {
-        return promise.reflect();
-    })).each((inspection, index) => {
+    await Promise.all(saveToDBPromises).each((inspection, index) => {
         if (inspection.isFulfilled()) {
             createdObservations.push(inspection.value());
         } else {

@@ -1,6 +1,6 @@
 export default {
     env: 'test',
-    nodePort: 8000,
+    nodePort: 9000,
     mongoUrl: 'mongodb://localhost:27017/IoT_test',
     redisUrl: 'redis://localhost:6379',
     defaultCacheInSeconds: 10,
