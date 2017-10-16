@@ -17,10 +17,8 @@ const createUser = (user) => {
 const createMeasurement = (measurement, req) => {
     const username = extractUserNameFromRequest(req);
     return new MeasurementModel({
-        creator: {
-            username: username,
-            device: measurement.device
-        },
+        username: username,
+        device: measurement.device,
         phenomenonTime: new Date(),
         type: measurement.type,
         relatedEntities: measurement.relatedEntities,
@@ -32,10 +30,8 @@ const createMeasurement = (measurement, req) => {
 const createEvent = (event, req) => {
     const username = extractUserNameFromRequest(req);
     return new EventModel({
-        creator: {
-            username: username,
-            device: event.device
-        },
+        username: username,
+        device: event.device,
         phenomenonTime: new Date(),
         type: event.type,
         relatedEntities: event.relatedEntities,

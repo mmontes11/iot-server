@@ -13,10 +13,8 @@ export default {
         password: '1234'
     },
     doorOpenedEvent: {
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',
@@ -37,10 +35,8 @@ export default {
         }
     },
     doorClosedEvent: {
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',
@@ -61,10 +57,8 @@ export default {
         }
     },
     doorClosedEvent2: {
-        creator: {
-            username: 'mmontes',
-            device: 'arduino'
-        },
+        username: 'mmontes',
+        device: 'arduino',
         relatedEntities: [
             {
                 name: 'Home',
@@ -85,10 +79,8 @@ export default {
         }
     },
     windowOpenedEvent: {
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',
@@ -253,10 +245,8 @@ export default {
     },
     validEventWithKind: {
         kind: 'event',
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',
@@ -278,10 +268,8 @@ export default {
     },
     invalidEventWithKind: {
         kind: 'event',
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',
@@ -302,10 +290,8 @@ export default {
     },
     validEventWithInvalidKind: {
         kind: 'bar',
-        creator: {
-            username: 'mmontes',
-            device: 'raspberry'
-        },
+        username: 'mmontes',
+        device: 'raspberry',
         relatedEntities: [
             {
                 name: 'Home',

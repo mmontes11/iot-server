@@ -168,11 +168,12 @@ describe('Event', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
+                    console.log(res.body);
                     res.should.have.status(httpStatus.OK);
                     res.body.type.should.be.a('string');
                     res.body.type.should.equal('door_closed');
-                    res.body.creator.device.should.be.a('string');
-                    res.body.creator.device.should.equal('arduino');
+                    res.body.device.should.be.a('string');
+                    res.body.device.should.equal('arduino');
                     done();
                 });
         });

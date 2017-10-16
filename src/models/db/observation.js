@@ -3,10 +3,8 @@ import mongoose from '../../../lib/mongoose';
 import { RelatedEntitySchema } from './relatedEntity';
 
 const ObservationSchema = new mongoose.Schema({
-    creator: {
-        username: String,
-        device: String
-    },
+    username: String,
+    device: String,
     phenomenonTime: {
         type: Date,
         default: new Date()
