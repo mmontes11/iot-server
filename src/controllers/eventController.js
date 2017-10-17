@@ -25,7 +25,7 @@ const getTypes = async (req, res) => {
 };
 
  const getLastEvent = async (req, res) => {
-    const type = req.params.type;
+    const type = req.query.type;
     try {
         const lastEvents = await EventModel.findLastN(1, type);
         responseHandler.handleResponse(res, _.first(lastEvents));

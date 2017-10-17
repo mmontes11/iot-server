@@ -144,10 +144,10 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/:type/last 404', () => {
+    describe('GET /event/last?type=whatever 404', () => {
         it('gets the last event of a non existing type', (done) => {
             chai.request(server)
-                .get('/api/event/whatever/last')
+                .get('/api/event/last?type=whatever')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -157,14 +157,14 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/:type/last', () => {
+    describe('GET /event/last?type=door_closed', () => {
         beforeEach((done) => {
             const events = [constants.doorOpenedEvent, constants.doorClosedEvent,  constants.windowOpenedEvent, constants.doorClosedEvent2];
             createEvents(events, done);
         });
         it('gets the last door closed event', (done) => {
             chai.request(server)
-                .get('/api/event/door_closed/last')
+                .get('/api/event/last?type=door_closed')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
