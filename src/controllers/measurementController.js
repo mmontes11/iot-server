@@ -27,7 +27,7 @@ import constants from '../utils/constants';
 };
 
  const getLastMeasurement = async (req, res) => {
-    const type = req.params.type;
+    const type = req.query.type;
     try {
        const lastMeasurements = await MeasurementModel.findLastN(1, type);
        responseHandler.handleResponse(res, _.first(lastMeasurements));
@@ -37,7 +37,7 @@ import constants from '../utils/constants';
 };
 
  const getStats = async (req, res) => {
-    const type = req.params.type;
+    const type = req.query.type;
     let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
         timePeriod = new TimePeriod(req.query.lastTimePeriod);

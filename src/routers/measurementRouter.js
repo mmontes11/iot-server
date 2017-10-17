@@ -23,15 +23,7 @@ router
         .get(measurementController.getLastMeasurement);
 
 router
-    .route('/:type/last')
-        .get(measurementController.getLastMeasurement);
-
-router
     .route('/stats')
-        .get(validationController.validateMeasurementStats, measurementController.getStats);
-
-router
-    .route('/:type/stats')
         .get(validationController.validateMeasurementStats, measurementController.getStats);
 
 export default router;
