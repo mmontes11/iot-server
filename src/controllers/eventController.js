@@ -3,12 +3,14 @@ import _ from 'underscore';
 import { EventModel } from '../models/db/event';
 import modelFactory from '../models/db/modelFactory';
 import responseHandler from '../helpers/responseHandler';
+import deviceController from './deviceController';
 import constants from '../utils/constants';
 
  const createEvent = async (req, res) =>{
     try {
         const newEvent = modelFactory.createEvent(req.body, req);
         const savedEvent = await newEvent.save();
+        await deviceController.createOrUpdateDevice(savedEvent, req);
         res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {
         responseHandler.handleError(res, err);

@@ -6,7 +6,7 @@ const validateUser = (user) => {
 };
 
 const validateObservation = (observation) => {
-    return !_.isUndefined(observation) && !_.isUndefined(observation.type);
+    return !_.isUndefined(observation) && !_.isUndefined(observation.type) && !_.isUndefined(observation.device);
 };
 
 const validateUnit = (unit) => {

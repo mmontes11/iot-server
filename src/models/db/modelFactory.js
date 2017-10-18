@@ -2,10 +2,11 @@ import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
 import { ObservationKind } from '../request/observationKind';
+import { DeviceModel } from "./device"
 import { extractUserNameFromRequest } from '../../utils/requestUtils';
 import requestValidator from '../../helpers/requestValidator';
+import geoUtils from '../../utils/geoUtils';
 import _ from 'underscore';
-
 
 const createUser = (user) => {
     return new UserModel({
@@ -67,4 +68,20 @@ const createObservationUsingKind = (observation, req) => {
     }
 };
 
-export default { createUser, createMeasurement, createEvent, createObservationUsingKind };
+const createDevice = async (deviceName, lastObservation, req) => {
+    try {
+        let device = {
+            name: deviceName,
+            lastObservation: lastObservation
+        };
+        const deviceLocationAndIp = await geoUtils.locationAndIpFromRequest(req);
+        if (!_.isUndefined(deviceLocationAndIp)) {
+            device = Object.assign({}, device, deviceLocationAndIp);
+        }
+        return device;
+    } catch(err) {
+        throw err;
+    }
+};
+
+export default { createUser, createMeasurement, createEvent, createObservationUsingKind, createDevice };

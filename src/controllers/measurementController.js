@@ -5,12 +5,14 @@ import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
 import responseHandler from '../helpers/responseHandler';
+import deviceController from './deviceController';
 import constants from '../utils/constants';
 
  const createMeasurement = async (req, res) => {
     try {
         const newMeasurement = modelFactory.createMeasurement(req.body, req);
         const savedMeasurement = await newMeasurement.save();
+        await deviceController.createOrUpdateDevice(savedMeasurement, req);
         res.status(httpStatus.CREATED).json(savedMeasurement);
     } catch (err) {
         responseHandler.handleError(res, err);
