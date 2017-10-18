@@ -67,6 +67,7 @@
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
     "mongoose-schema-extend": "^0.2.2",
+    "public-ip": "^2.3.5",
     "redis": "^2.6.5",
     "request-ip": "^2.0.2",
     "run-sequence": "^1.1.5",
