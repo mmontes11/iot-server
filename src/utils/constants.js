@@ -3,5 +3,6 @@ export default {
     statsArrayName: "stats",
     observationsArrayName: "observations",
     createdObservationsArrayName: "createdObservations",
-    invalidObservationsArrayName: "invalidObservations"
+    invalidObservationsArrayName: "invalidObservations",
+    errorKey: "error"
 };

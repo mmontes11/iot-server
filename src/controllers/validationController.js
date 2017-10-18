@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/constants';
+import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
     validateBody(req, res, next, requestValidator.validateUser);
@@ -45,6 +46,13 @@ const validateCreateObservations = (req, res, next) => {
     }
     if (_.isEmpty(observations)) {
         return res.sendStatus(httpStatus.NOT_MODIFIED);
+    }
+    const firstObservation = _.first(observations);
+    const observationHaveSameDevice = _.every(observations, (observation) => {
+        return _.isEqual(observation.device, firstObservation.device)
+    });
+    if (!observationHaveSameDevice) {
+        return res.status(httpStatus.BAD_REQUEST).json(errors.observationsMustHaveSameDeviceError);
     }
     next();
 };
