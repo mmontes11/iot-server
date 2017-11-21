@@ -40,6 +40,7 @@ import constants from '../utils/constants';
 
  const getStats = async (req, res) => {
     const type = req.query.type;
+    const device = req.query.device;
     let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
         timePeriod = new TimePeriod(req.query.lastTimePeriod);
@@ -50,16 +51,16 @@ import constants from '../utils/constants';
 
     try {
         if (statsCache.cachePolicy(timePeriod)) {
-            const statsFromCache = await statsCache.getStatsCache(type, timePeriod);
+            const statsFromCache = await statsCache.getStatsCache(type, device, timePeriod);
             if (!_.isNull(statsFromCache)) {
                 responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
             } else {
-                const statsFromDB = await getStatsFromDB(type, timePeriod);
-                statsCache.setStatsCache(type, timePeriod, statsFromDB);
+                const statsFromDB = await getStatsFromDB(type, device, timePeriod);
+                statsCache.setStatsCache(type, device, timePeriod, statsFromDB);
                 responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
             }
         } else {
-            const statsFromDB = await getStatsFromDB(type, timePeriod);
+            const statsFromDB = await getStatsFromDB(type, device, timePeriod);
             responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
         }
     } catch (err) {
@@ -67,9 +68,9 @@ import constants from '../utils/constants';
     }
 };
 
- const getStatsFromDB = async (type, timePeriod) => {
+ const getStatsFromDB = async (type, device, timePeriod) => {
     try {
-        return await MeasurementModel.getStats(type, timePeriod);
+        return await MeasurementModel.getStats(type, device, timePeriod);
     } catch (err) {
         throw err;
     }

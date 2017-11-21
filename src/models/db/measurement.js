@@ -14,12 +14,17 @@ const MeasurementSchema = ObservationSchema.extend({
     }
 });
 
-MeasurementSchema.statics.getStats = function (type, timePeriod){
+MeasurementSchema.statics.getStats = function (type, device, timePeriod){
     const match = [];
     const matchConditions = [];
     if (!_.isUndefined(type)) {
         matchConditions.push({
             type
+        });
+    }
+    if (!_.isUndefined(device)) {
+        matchConditions.push({
+            device
         });
     }
     if (!_.isUndefined(timePeriod)) {

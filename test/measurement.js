@@ -27,15 +27,15 @@ const createMeasurements = (measurements, done) => {
         done(err);
     });
 };
-const testCachedStats = (type, lastTimePeriod, res, done) => {
-    statsCache.getStatsCache(type, lastTimePeriod)
+const testCachedStats = (type, device, lastTimePeriod, res, done) => {
+    statsCache.getStatsCache(type, device, lastTimePeriod)
         .then((cachedStats) => {
             res.body.stats.should.be.eql(cachedStats);
             setTimeout(() => {
-                statsCache.getStatsCache(type, lastTimePeriod)
+                statsCache.getStatsCache(type, device, lastTimePeriod)
                     .then((cachedStats) => {
                         should.not.exist(cachedStats);
-                        MeasurementModel.getStats(type, lastTimePeriod)
+                        MeasurementModel.getStats(type, device, lastTimePeriod)
                             .then((statsFromDB) => {
                                 res.body.stats.should.be.eql(statsFromDB);
                                 done();
@@ -295,7 +295,7 @@ describe('Measurement', () => {
                     res.body.should.be.a('object');
                     res.body.stats.should.be.a('array');
                     res.body.stats.length.should.be.equal(2);
-                    testCachedStats(undefined, undefined, res, done);
+                    testCachedStats(undefined, undefined, undefined, res, done);
                 });
         });
         it('gets measurement stats of a valid time period', (done) => {
@@ -311,7 +311,7 @@ describe('Measurement', () => {
                     res.body.should.be.a('object');
                     res.body.stats.should.be.a('array');
                     res.body.stats.length.should.be.equal(2);
-                    testCachedStats(undefined, new TimePeriod('month'), res, done);
+                    testCachedStats(undefined, undefined, new TimePeriod('month'), res, done);
                 });
         });
         it('gets measurement stats of a valid custom time period', (done) => {
@@ -361,7 +361,7 @@ describe('Measurement', () => {
                     res.body.should.be.a('object');
                     res.body.stats.should.be.a('array');
                     res.body.stats.length.should.be.equal(1);
-                    testCachedStats('temperature', undefined, res, done);
+                    testCachedStats('temperature', undefined, undefined, res, done);
                 });
         });
         it('gets temperature measurement stats of a valid time period', (done) => {
@@ -377,7 +377,7 @@ describe('Measurement', () => {
                     res.body.should.be.a('object');
                     res.body.stats.should.be.a('array');
                     res.body.stats.length.should.be.equal(1);
-                    testCachedStats('temperature', new TimePeriod('month'), res, done);
+                    testCachedStats('temperature', undefined, new TimePeriod('month'), res, done);
                 });
         });
         it('gets temperature measurement stats of a valid custom time period', (done) => {
