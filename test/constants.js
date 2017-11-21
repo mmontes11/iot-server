@@ -15,16 +15,6 @@ export default {
     doorOpenedEvent: {
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'door_opened',
         duration: {
             unit: {
@@ -37,16 +27,6 @@ export default {
     doorClosedEvent: {
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'door_closed',
         duration: {
             unit:  {
@@ -59,16 +39,6 @@ export default {
     doorClosedEvent2: {
         username: 'mmontes',
         device: 'arduino',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'door_closed',
         duration: {
             unit:  {
@@ -81,16 +51,6 @@ export default {
     windowOpenedEvent: {
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'window_opened',
         duration: {
             unit:  {
@@ -101,21 +61,10 @@ export default {
         }
     },
     inValidEvent: {
-        device: 'raspberry',
-        relatedEntities: []
+        device: 'raspberry'
     },
     temperatureMeasurement: {
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -125,16 +74,6 @@ export default {
     },
     temperatureMeasurement2: {
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -144,16 +83,6 @@ export default {
     },
     humidityMeasurement: {
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'humidity',
         unit: {
             name: 'relative',
@@ -163,16 +92,6 @@ export default {
     },
     humidityMeasurement2: {
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'humidity',
         unit:  {
             name: 'relative',
@@ -181,22 +100,11 @@ export default {
         value: 0.6
     },
     inValidMeasurement: {
-        device: 'raspberry',
-        relatedEntities: []
+        device: 'raspberry'
     },
     validMeasurementWithKind: {
         kind: 'measurement',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -207,16 +115,6 @@ export default {
     invalidMeasurementWithKind: {
         kind: 'measurement',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -226,16 +124,6 @@ export default {
     validMeasurementWithInvalidKind: {
         kind: 'foo',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -247,16 +135,6 @@ export default {
         kind: 'event',
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'window_opened',
         duration: {
             unit:  {
@@ -270,16 +148,6 @@ export default {
         kind: 'event',
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         duration: {
             unit:  {
                 name: 'seconds',
@@ -292,16 +160,6 @@ export default {
         kind: 'bar',
         username: 'mmontes',
         device: 'raspberry',
-        relatedEntities: [
-            {
-                name: 'Home',
-                type: 'building',
-                geometry: {
-                    type: 'Point',
-                    coordinates: [125.6, 10.1]
-                }
-            }
-        ],
         type: 'window_opened',
         duration: {
             unit:  {

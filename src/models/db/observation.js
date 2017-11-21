@@ -1,12 +1,6 @@
 import _ from 'underscore';
 import mongoose from '../../../lib/mongoose';
 
-const RelatedEntitySchema = new mongoose.Schema({
-    name: String,
-    type: String,
-    geometry: mongoose.Schema.Types.GeoJSON
-});
-
 const ObservationSchema = new mongoose.Schema({
     username: String,
     device: {
@@ -17,7 +11,6 @@ const ObservationSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    relatedEntities: [ RelatedEntitySchema ],
     type: {
         type: String,
         required: true
