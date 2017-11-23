@@ -482,4 +482,66 @@ describe('Measurement', () => {
         });
     });
 
+    describe('GET /measurement/stats?type=temperature&device=raspberry', () => {
+        beforeEach((done) => {
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
+                                    constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
+            createMeasurements(measurements, done);
+        });
+        it('gets temperature raspberry measurement stats', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'type': 'temperature',
+                    'device': 'raspberry'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    testCachedStats('temperature', 'raspberry', undefined, res, done);
+                });
+        });
+        it('gets temperature raspberry measurement stats of a valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'type': 'temperature',
+                    'device': 'raspberry',
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    testCachedStats('temperature', 'raspberry', new TimePeriod('month'), res, done);
+                });
+        });
+        it('gets raspberry measurement stats of a valid custom time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'type': 'temperature',
+                    'device': 'raspberry',
+                    'startDate': moment().utc().subtract(1, 'minute').toISOString(),
+                    'endDate': moment().utc().add(1, 'minute').toISOString()
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    done();
+                });
+        });
+    });
+
 });
