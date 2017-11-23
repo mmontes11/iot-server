@@ -523,7 +523,7 @@ describe('Measurement', () => {
                     testCachedStats('temperature', 'raspberry', new TimePeriod('month'), res, done);
                 });
         });
-        it('gets raspberry measurement stats of a valid custom time period', (done) => {
+        it('gets temperature raspberry measurement stats of a valid custom time period', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
