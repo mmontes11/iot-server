@@ -53,7 +53,10 @@ MeasurementSchema.statics.getStats = function (type, device, timePeriod){
     const pipeline = [
         {
             $group: {
-                _id: '$type',
+                _id: {
+                    type: '$type',
+                    device: '$device'
+                },
                 avg: {
                     $avg: '$value'
                 },
@@ -71,7 +74,7 @@ MeasurementSchema.statics.getStats = function (type, device, timePeriod){
         {
             $project: {
                 _id: 0,
-                type: '$_id',
+                data: '$_id',
                 avg: 1,
                 max: 1,
                 min: 1,
