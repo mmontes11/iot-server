@@ -81,6 +81,15 @@ export default {
         },
         value: 15
     },
+    temperatureMeasurement3: {
+        device: 'raspberry',
+        type: 'arduino',
+        unit: {
+            name: 'degrees',
+            symbol: '°C'
+        },
+        value: 15
+    },
     humidityMeasurement: {
         device: 'raspberry',
         type: 'humidity',
@@ -92,6 +101,15 @@ export default {
     },
     humidityMeasurement2: {
         device: 'raspberry',
+        type: 'humidity',
+        unit:  {
+            name: 'relative',
+            symbol: '%'
+        },
+        value: 0.6
+    },
+    humidityMeasurement3: {
+        device: 'arduino',
         type: 'humidity',
         unit:  {
             name: 'relative',

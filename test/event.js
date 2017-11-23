@@ -147,7 +147,10 @@ describe('Event', () => {
     describe('GET /event/last?type=whatever 404', () => {
         it('gets the last event of a non existing type', (done) => {
             chai.request(server)
-                .get('/api/event/last?type=whatever')
+                .get('/api/event/last')
+                .query({
+                    'type': 'whatever'
+                })
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -164,7 +167,10 @@ describe('Event', () => {
         });
         it('gets the last door closed event', (done) => {
             chai.request(server)
-                .get('/api/event/last?type=door_closed')
+                .get('/api/event/last')
+                .query({
+                    'type': 'door_closed'
+                })
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
