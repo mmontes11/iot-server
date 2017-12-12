@@ -5,7 +5,10 @@ const DeviceLocationSchema = new mongoose.Schema({
     region: String,
     city: String,
     zipCode: String,
-    geometry: mongoose.Schema.Types.GeoJSON
+    geometry: {
+        type: mongoose.Schema.Types.GeoJSON,
+        index: '2dsphere'
+    }
 });
 
 const DeviceSchema = mongoose.Schema({

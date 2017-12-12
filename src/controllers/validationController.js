@@ -4,6 +4,7 @@ import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/constants';
 import errors from '../utils/errors';
+import bool from '../utils/bool';
 
 const validateCreateUser = (req, res, next) => {
     validateBody(req, res, next, requestValidator.validateUser);
@@ -21,6 +22,8 @@ const validateMeasurementStats = (req, res, next) => {
     const lastTimePeriodParam = req.query.lastTimePeriod;
     const startDateParam = req.query.startDate;
     const endDateParam = req.query.endDate;
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
     if (!_.isUndefined(lastTimePeriodParam)) {
         if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
             return res.sendStatus(httpStatus.BAD_REQUEST)
@@ -35,6 +38,9 @@ const validateMeasurementStats = (req, res, next) => {
         if (!timePeriod.isValid()) {
             return res.sendStatus(httpStatus.BAD_REQUEST);
         }
+    }
+    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
 };
