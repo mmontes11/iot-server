@@ -14,6 +14,12 @@ const createOrUpdateDevice = async (observation, req) => {
     }
 };
 
+const getDeviceByName = async (req, res, next) => {
+    const name = req.params.name;
+    const device = await DeviceModel.findDeviceByName(name);
+    responseHandler.handleResponse(res, device);
+};
+
 const getDevices = async (req, res, next) => {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
@@ -22,4 +28,4 @@ const getDevices = async (req, res, next) => {
     responseHandler.handleResponse(res, devices, constants.devicesArrayName);
 };
 
-export default { createOrUpdateDevice, getDevices };
+export default { createOrUpdateDevice, getDeviceByName, getDevices };

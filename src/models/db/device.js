@@ -37,6 +37,10 @@ DeviceSchema.statics.upsertDevice = function(device){
     return this.update({ name: device.name }, device, { upsert: true });
 };
 
+DeviceSchema.statics.findDeviceByName = function (name) {
+    return this.findOne({ name: name });
+};
+
 DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = constants.maxDefaultNearbyDistanceInMeters){
     const query = {};
     if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
