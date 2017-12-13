@@ -4,7 +4,6 @@ import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/constants';
 import errors from '../utils/errors';
-import bool from '../utils/bool';
 
 const validateCreateUser = (req, res, next) => {
     validateBody(req, res, next, requestValidator.validateUser);
