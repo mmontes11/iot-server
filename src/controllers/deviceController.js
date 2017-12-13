@@ -1,7 +1,9 @@
 import _ from 'underscore';
 import requestValidator from '../helpers/requestValidator';
 import modelFactory from '../models/db/modelFactory';
-import { DeviceModel } from "../models/db/device"
+import { DeviceModel } from "../models/db/device";
+import responseHandler from '../helpers/responseHandler';
+import constants from '../utils/constants';
 
 const createOrUpdateDevice = async (observation, req) => {
     if (requestValidator.validateObservation(observation) && !_.isUndefined(observation.phenomenonTime)) {
@@ -12,4 +14,12 @@ const createOrUpdateDevice = async (observation, req) => {
     }
 };
 
-export default { createOrUpdateDevice };
+const getDevices = async (req, res, next) => {
+    const longitude = req.query.longitude;
+    const latitude = req.query.latitude;
+    const maxDistance = req.query.maxDistance;
+    const devices = await DeviceModel.findDevices(longitude, latitude, maxDistance);
+    responseHandler.handleResponse(res, devices, constants.devicesArrayName);
+};
+
+export default { createOrUpdateDevice, getDevices };

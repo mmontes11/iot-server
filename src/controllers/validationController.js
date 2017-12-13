@@ -62,6 +62,19 @@ const validateCreateObservations = (req, res, next) => {
     next();
 };
 
+const validateGetDevices = (req, res, next) => {
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+    const maxDistance = req.query.maxDistance;
+    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
+    if ((_.isUndefined(longitude) || _.isUndefined(latitude) && !_.isUndefined(maxDistance))) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
+    next();
+};
+
 const validateBody = (req, res, next, isValid) => {
     if (isValid(req.body)) {
         next();
@@ -70,4 +83,4 @@ const validateBody = (req, res, next, isValid) => {
     }
 };
 
-export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations };
+export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetDevices };
