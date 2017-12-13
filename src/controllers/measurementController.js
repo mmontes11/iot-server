@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import { MeasurementModel } from '../models/db/measurement';
+import { DeviceModel } from "../models/db/device"
 import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
@@ -40,7 +41,6 @@ import constants from '../utils/constants';
 
  const getStats = async (req, res) => {
     const type = req.query.type;
-    const device = req.query.device;
     let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
         timePeriod = new TimePeriod(req.query.lastTimePeriod);
@@ -48,6 +48,7 @@ import constants from '../utils/constants';
     if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
         timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
     }
+    const device = await deviceController.getDeviceFromRequest(req);
 
     try {
         if (statsCache.cachePolicy(timePeriod)) {

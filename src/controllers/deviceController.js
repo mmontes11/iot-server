@@ -28,4 +28,20 @@ const getDevices = async (req, res, next) => {
     responseHandler.handleResponse(res, devices, constants.devicesArrayName);
 };
 
-export default { createOrUpdateDevice, getDeviceByName, getDevices };
+const getDeviceFromRequest = async (req) => {
+    if (!_.isUndefined(req.query.device)) {
+        return req.query.device;
+    } else {
+        const longitude = req.query.longitude;
+        const latitude = req.query.latitude;
+        const maxDistance = req.query.maxDistance;
+        if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
+            const devices = await DeviceModel.findDevices(longitude, latitude, maxDistance);
+            return _.first(devices).name;
+        } else {
+            return undefined;
+        }
+    }
+};
+
+export default { createOrUpdateDevice, getDeviceByName, getDevices, getDeviceFromRequest };

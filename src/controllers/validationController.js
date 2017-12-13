@@ -23,6 +23,7 @@ const validateMeasurementStats = (req, res, next) => {
     const endDateParam = req.query.endDate;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
+    const maxDistance = req.query.maxDistance;
     if (!_.isUndefined(lastTimePeriodParam)) {
         if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
             return res.sendStatus(httpStatus.BAD_REQUEST)
@@ -38,7 +39,7 @@ const validateMeasurementStats = (req, res, next) => {
             return res.sendStatus(httpStatus.BAD_REQUEST);
         }
     }
-    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
+    if (!validateRegionParams(longitude, latitude, maxDistance)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
@@ -66,13 +67,18 @@ const validateGetDevices = (req, res, next) => {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
     const maxDistance = req.query.maxDistance;
-    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
-        return res.sendStatus(httpStatus.BAD_REQUEST);
-    }
-    if ((_.isUndefined(longitude) || _.isUndefined(latitude) && !_.isUndefined(maxDistance))) {
+    if (!validateRegionParams(longitude, latitude, maxDistance)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
+};
+
+const validateRegionParams = (longitude, latitude, maxDistance) => {
+    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
+        return false;
+    } else {
+        return !((_.isUndefined(longitude) || _.isUndefined(latitude)) && !_.isUndefined(maxDistance));
+    }
 };
 
 const validateBody = (req, res, next, isValid) => {
