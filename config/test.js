@@ -5,9 +5,5 @@ export default {
     redisUrl: 'redis://localhost:6379',
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 1,
-    basicAuthUsers: {
-        admin: 'admin'
-    },
-    jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
     debug: true
 };

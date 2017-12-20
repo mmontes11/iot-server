@@ -5,9 +5,5 @@ export default {
     redisUrl: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 30,
-    basicAuthUsers: {
-        admin: 'admin'
-    },
-    jwtSecret: '2SrZAfNgGhn7eff2P5hvPUdX',
     debug: true
 };
