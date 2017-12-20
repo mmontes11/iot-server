@@ -4,6 +4,7 @@ import modelFactory from '../models/db/modelFactory';
 import { DeviceModel } from "../models/db/device";
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
+import geocoder from '../utils/geocoder';
 
 const createOrUpdateDevice = async (observation, req) => {
     if (requestValidator.validateObservation(observation) && !_.isUndefined(observation.phenomenonTime)) {
@@ -16,32 +17,59 @@ const createOrUpdateDevice = async (observation, req) => {
 
 const getDeviceByName = async (req, res, next) => {
     const name = req.params.name;
-    const device = await DeviceModel.findDeviceByName(name);
-    responseHandler.handleResponse(res, device);
-};
-
-const getDevices = async (req, res, next) => {
-    const longitude = req.query.longitude;
-    const latitude = req.query.latitude;
-    const maxDistance = req.query.maxDistance;
-    const devices = await DeviceModel.findDevices(longitude, latitude, maxDistance);
-    responseHandler.handleResponse(res, devices, constants.devicesArrayName);
-};
-
-const getDeviceFromRequest = async (req) => {
-    if (!_.isUndefined(req.query.device)) {
-        return req.query.device;
-    } else {
-        const longitude = req.query.longitude;
-        const latitude = req.query.latitude;
-        const maxDistance = req.query.maxDistance;
-        if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
-            const devices = await DeviceModel.findDevices(longitude, latitude, maxDistance);
-            return _.first(devices).name;
-        } else {
-            return undefined;
-        }
+    try {
+        const device = await DeviceModel.findDeviceByName(name);
+        responseHandler.handleResponse(res, device);
+    } catch (err) {
+        responseHandler.handleError(res, err);
     }
 };
 
-export default { createOrUpdateDevice, getDeviceByName, getDevices, getDeviceFromRequest };
+const getDevices = async (req, res, next) => {
+    try {
+        const devices = await _getDevices(req);
+        responseHandler.handleResponse(res, devices, constants.devicesArrayName);
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
+};
+
+const getDeviceNameFromRequest = async (req) => {
+    if (!_.isUndefined(req.query.device)) {
+        return req.query.device;
+    } else {
+        let devices;
+        try {
+            devices = await _getDevices(req);
+        } catch (err) {
+            throw err;
+        }
+        const firstDevice = _.first(devices);
+        return _.isUndefined(firstDevice) ? undefined : firstDevice.name;
+    }
+};
+
+const _getDevices = async (req) => {
+    let longitude = req.query.longitude;
+    let latitude = req.query.latitude;
+    const address = req.query.address;
+    const maxDistance = req.query.maxDistance;
+
+    if (!_.isUndefined(address)) {
+        const location = await geocoder.geocode(address);
+        if (!_.isUndefined(location)) {
+            longitude = location.longitude;
+            latitude = location.latitude;
+        } else {
+            return [];
+        }
+    }
+
+    try {
+        return await DeviceModel.findDevices(longitude, latitude, maxDistance);
+    } catch (err) {
+        throw err;
+    }
+};
+
+export default { createOrUpdateDevice, getDeviceByName, getDevices, getDeviceNameFromRequest };

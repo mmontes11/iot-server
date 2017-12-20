@@ -21,14 +21,4 @@ const validateEvent = (event) => {
     return validateObservation(event);
 };
 
-const allDefinedOrUndefined = (...params) => {
-    const allDefined = _.every(params, (param) => {
-        return !_.isUndefined(param)
-    });
-    const allUndefined = _.every(params, (param) => {
-        return _.isUndefined(param);
-    });
-    return allDefined || allUndefined;
-};
-
-export default { validateUser, validateObservation, validateUnit, validateMeasurement, validateEvent, allDefinedOrUndefined }
+export default { validateUser, validateObservation, validateUnit, validateMeasurement, validateEvent }

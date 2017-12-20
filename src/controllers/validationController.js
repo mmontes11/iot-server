@@ -6,15 +6,15 @@ import constants from '../utils/constants';
 import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateUser);
+    validBody(req, res, next, requestValidator.validateUser);
 };
 
 const validateCreateMeasurement = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateMeasurement);
+    validBody(req, res, next, requestValidator.validateMeasurement);
 };
 
 const validateCreateEvent = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateEvent);
+    validBody(req, res, next, requestValidator.validateEvent);
 };
 
 const validateMeasurementStats = (req, res, next) => {
@@ -23,7 +23,7 @@ const validateMeasurementStats = (req, res, next) => {
     const endDateParam = req.query.endDate;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
-    const maxDistance = req.query.maxDistance;
+    const address = req.query.address;
     if (!_.isUndefined(lastTimePeriodParam)) {
         if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
             return res.sendStatus(httpStatus.BAD_REQUEST)
@@ -39,7 +39,7 @@ const validateMeasurementStats = (req, res, next) => {
             return res.sendStatus(httpStatus.BAD_REQUEST);
         }
     }
-    if (!validateRegionParams(longitude, latitude, maxDistance)) {
+    if (!validRegionParams(longitude, latitude, address)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
@@ -66,22 +66,19 @@ const validateCreateObservations = (req, res, next) => {
 const validateGetDevices = (req, res, next) => {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
-    const maxDistance = req.query.maxDistance;
-    if (!validateRegionParams(longitude, latitude, maxDistance)) {
+    const address = req.query.address;
+    if (!validRegionParams(longitude, latitude, address)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
 };
 
-const validateRegionParams = (longitude, latitude, maxDistance) => {
-    if (!requestValidator.allDefinedOrUndefined(longitude, latitude)) {
-        return false;
-    } else {
-        return !((_.isUndefined(longitude) || _.isUndefined(latitude)) && !_.isUndefined(maxDistance));
-    }
+const validRegionParams = (longitude, latitude, address) => {
+    const allRegionParamsUndefined = _.isUndefined(longitude) && _.isUndefined(latitude) && _.isUndefined(address);
+    return  allRegionParamsUndefined || ((!_.isUndefined(longitude) && !_.isUndefined(latitude)) || !_.isUndefined(address));
 };
 
-const validateBody = (req, res, next, isValid) => {
+const validBody = (req, res, next, isValid) => {
     if (isValid(req.body)) {
         next();
     } else {

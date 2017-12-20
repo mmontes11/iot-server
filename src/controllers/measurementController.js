@@ -48,9 +48,18 @@ import constants from '../utils/constants';
     if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
         timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
     }
-    const device = await deviceController.getDeviceFromRequest(req);
 
     try {
+        let device;
+        if (!_.isUndefined(req.query.device) || !_.isUndefined(req.query.address) ||
+                (!_.isUndefined(req.query.longitude) && !_.isUndefined(req.query.latitude))) {
+            
+            device = await deviceController.getDeviceNameFromRequest(req);
+            if (_.isUndefined(device)) {
+                return res.sendStatus(httpStatus.NOT_FOUND);
+            }
+        }
+
         if (statsCache.cachePolicy(timePeriod)) {
             const statsFromCache = await statsCache.getStatsCache(type, device, timePeriod);
             if (!_.isNull(statsFromCache)) {
