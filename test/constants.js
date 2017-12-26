@@ -186,5 +186,60 @@ export default {
             },
             value: 2.4
         }
+    },
+    deviceAtACoruna: {
+        name: 'raspi-coruna',
+        ip: '192.168.0.1',
+        location : {
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.40,
+                    43.37
+                ]
+            },
+            city : 'A Coruña',
+            region : '58',
+            country : 'ES'
+        }
+    },
+    deviceAtACoruna2: {
+        name: 'raspi-coruna2',
+        ip: '192.168.0.1',
+        location : {
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.40,
+                    43.38
+                ]
+            }
+        }
+    },
+    deviceAtNYC: {
+        name: 'raspi-nyc',
+        ip: '192.168.0.1',
+        location : {
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -74.11,
+                    40.697
+                ]
+            }
+        }
+    },
+    deviceAtTokyo: {
+        name: 'raspi-tokyo',
+        ip: '192.168.0.1',
+        location : {
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    139.57,
+                    35.67
+                ]
+            }
+        }
     }
 };
