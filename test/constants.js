@@ -194,8 +194,8 @@ export default {
             geometry : {
                 type : 'Point',
                 coordinates : [
-                    -8.40,
-                    43.37
+                    -8.4065665,
+                    43.3682188
                 ]
             },
             city : 'A Coruña',
