@@ -6,15 +6,31 @@ import constants from '../utils/constants';
 import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
-    validBody(req, res, next, requestValidator.validateUser);
+    if (requestValidator.validateUser(req.body)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateCreateMeasurement = (req, res, next) => {
-    validBody(req, res, next, requestValidator.validateMeasurement);
+    const measurement = req.body.measurement;
+    const device = req.body.device;
+    if (requestValidator.validateMeasurement(measurement) && requestValidator.validateDevice(device)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateCreateEvent = (req, res, next) => {
-    validBody(req, res, next, requestValidator.validateEvent);
+    const event = req.body.measurement;
+    const device = req.body.device;
+    if (requestValidator.validateCreateEvent(event) && requestValidator.validateDevice(device)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateMeasurementStats = (req, res, next) => {
@@ -53,12 +69,9 @@ const validateCreateObservations = (req, res, next) => {
     if (_.isEmpty(observations)) {
         return res.sendStatus(httpStatus.NOT_MODIFIED);
     }
-    const firstObservation = _.first(observations);
-    const observationHaveSameDevice = _.every(observations, (observation) => {
-        return _.isEqual(observation.device, firstObservation.device)
-    });
-    if (!observationHaveSameDevice) {
-        return res.status(httpStatus.BAD_REQUEST).json(errors.observationsMustHaveSameDeviceError);
+    const device = req.body.device;
+    if (!requestValidator.validateDevice(device)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
 };
@@ -76,14 +89,6 @@ const validateGetDevices = (req, res, next) => {
 const validRegionParams = (longitude, latitude, address) => {
     const allRegionParamsUndefined = _.isUndefined(longitude) && _.isUndefined(latitude) && _.isUndefined(address);
     return  allRegionParamsUndefined || ((!_.isUndefined(longitude) && !_.isUndefined(latitude)) || !_.isUndefined(address));
-};
-
-const validBody = (req, res, next, isValid) => {
-    if (isValid(req.body)) {
-        next();
-    } else {
-        return res.sendStatus(httpStatus.BAD_REQUEST);
-    }
 };
 
 export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetDevices };

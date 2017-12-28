@@ -59,7 +59,7 @@ const createOrUpdateDeviceIfNeeded = async (createdObservations, req) => {
         const latestObservation = _.max(createdObservations, (observation) => {
             return observation.phenomenonTime;
         });
-        return deviceController.createOrUpdateDevice(latestObservation, req);
+        return deviceController.createOrUpdateDevice(req.body.device, latestObservation, req);
     } else {
         return undefined;
     }

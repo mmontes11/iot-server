@@ -1,6 +1,7 @@
 import mongoose from '../../../lib/mongoose';
 import constants from '../../utils/constants';
 import _ from 'underscore';
+import regex from '../../utils/regex';
 
 const DeviceLocationSchema = new mongoose.Schema({
     country: String,
@@ -21,11 +22,12 @@ const DeviceSchema = mongoose.Schema({
     },
     ip: {
         type: String,
-        required: false
+        required: true,
+        match: regex.ipRegex
     },
     location: {
         type: DeviceLocationSchema,
-        required: false
+        required: true
     },
     lastObservation: {
         type: Date,

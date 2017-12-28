@@ -2,9 +2,9 @@ import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
 import { ObservationKind } from '../request/observationKind';
-import { extractUserNameFromRequest } from '../../utils/requestUtils';
 import requestValidator from '../../helpers/requestValidator';
-import geoUtils from '../../utils/geoUtils';
+import request from '../../utils/request';
+import ip from '../../utils/ip';
 import _ from 'underscore';
 
 const createUser = (user) => {
@@ -15,7 +15,7 @@ const createUser = (user) => {
 };
 
 const createMeasurement = (measurement, req) => {
-    const username = extractUserNameFromRequest(req);
+    const username = request.extractUserNameFromRequest(req);
     return new MeasurementModel({
         username: username,
         device: measurement.device,
@@ -28,7 +28,7 @@ const createMeasurement = (measurement, req) => {
 };
 
 const createEvent = (event, req) => {
-    const username = extractUserNameFromRequest(req);
+    const username = request.extractUserNameFromRequest(req);
     return new EventModel({
         username: username,
         device: event.device,
@@ -67,17 +67,14 @@ const createObservationUsingKind = (observation, req) => {
     }
 };
 
-const createDevice = async (deviceName, lastObservation, req) => {
+const createDevice = async (device, lastObservation, req) => {
     try {
-        let device = {
-            name: deviceName,
-            lastObservation: lastObservation
+        const ip = ip.extractIPfromRequest(req);
+        let deviceExtraFields = {
+            ip,
+            lastObservation
         };
-        const deviceLocationAndIp = await geoUtils.locationAndIpFromRequest(req);
-        if (!_.isUndefined(deviceLocationAndIp)) {
-            device = Object.assign({}, device, deviceLocationAndIp);
-        }
-        return device;
+        return Object.assign({}, device, deviceExtraFields);
     } catch(err) {
         throw err;
     }

@@ -6,13 +6,9 @@ import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 import geocoder from '../utils/geocoder';
 
-const createOrUpdateDevice = async (observation, req) => {
-    if (requestValidator.validateObservation(observation) && !_.isUndefined(observation.phenomenonTime)) {
-        const device = await modelFactory.createDevice(observation.device, observation.phenomenonTime, req);
-        return DeviceModel.upsertDevice(device);
-    } else {
-        return undefined;
-    }
+const createOrUpdateDevice = async (device, lastObservation, req) => {
+    const deviceToUpsert = modelFactory.createDevice(device, lastObservation, req);
+    return DeviceModel.upsertDevice(deviceToUpsert);
 };
 
 const getDeviceByName = async (req, res, next) => {
