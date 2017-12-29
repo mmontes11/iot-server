@@ -6,8 +6,8 @@ import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 import geocoder from '../utils/geocoder';
 
-const createOrUpdateDevice = async (device, lastObservation, req) => {
-    const deviceToUpsert = modelFactory.createDevice(device, lastObservation, req);
+const createOrUpdateDevice = (req, lastObservation) => {
+    const deviceToUpsert = modelFactory.createDevice(req, lastObservation);
     return DeviceModel.upsertDevice(deviceToUpsert);
 };
 

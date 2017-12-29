@@ -13,55 +13,100 @@ export default {
         password: '1234'
     },
     doorOpenedEvent: {
-        username: 'mmontes',
-        device: 'raspberry',
-        type: 'door_opened',
-        duration: {
-            unit: {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
+        event : {
+            username: 'mmontes',
+            device: 'raspberry',
+            type: 'door_opened',
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: "raspberry",
+            location: {
+                "longitude": -8.40,
+                "latitude": 43.37
+            }
         }
     },
     doorClosedEvent: {
-        username: 'mmontes',
-        device: 'raspberry',
-        type: 'door_closed',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
+        event: {
+            username: 'mmontes',
+            device: 'raspberry',
+            type: 'door_closed',
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: "raspberry",
+            location: {
+                "longitude": -8.40,
+                "latitude": 43.37
+            }
         }
     },
     doorClosedEvent2: {
-        username: 'mmontes',
-        device: 'arduino',
-        type: 'door_closed',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
+        event: {
+            username: 'mmontes',
+            device: 'arduino',
+            type: 'door_closed',
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: '-8.40',
+                latitude: '43.37'
+            }
         }
     },
     windowOpenedEvent: {
-        username: 'mmontes',
-        device: 'raspberry',
-        type: 'window_opened',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
+        event: {
+            username: 'mmontes',
+            device: 'raspberry',
+            type: 'window_opened',
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: "raspberry",
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
         }
     },
     inValidEvent: {
-        device: 'raspberry'
+        event: {
+            name: 'whatever'
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: '-8.40',
+                latitude: '43.37'
+            }
+        }
     },
     temperatureMeasurement: {
         device: 'raspberry',

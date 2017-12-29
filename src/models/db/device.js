@@ -3,17 +3,6 @@ import constants from '../../utils/constants';
 import _ from 'underscore';
 import regex from '../../utils/regex';
 
-const DeviceLocationSchema = new mongoose.Schema({
-    country: String,
-    region: String,
-    city: String,
-    zipCode: String,
-    geometry: {
-        type: mongoose.Schema.Types.GeoJSON,
-        index: '2dsphere'
-    }
-});
-
 const DeviceSchema = mongoose.Schema({
     name: {
         type: String,
@@ -25,9 +14,9 @@ const DeviceSchema = mongoose.Schema({
         required: true,
         match: regex.ipRegex
     },
-    location: {
-        type: DeviceLocationSchema,
-        required: true
+    geometry: {
+        type: mongoose.Schema.Types.GeoJSON,
+        index: '2dsphere'
     },
     lastObservation: {
         type: Date,

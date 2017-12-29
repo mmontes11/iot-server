@@ -24,9 +24,9 @@ const validateCreateMeasurement = (req, res, next) => {
 };
 
 const validateCreateEvent = (req, res, next) => {
-    const event = req.body.measurement;
+    const event = req.body.event;
     const device = req.body.device;
-    if (requestValidator.validateCreateEvent(event) && requestValidator.validateDevice(device)) {
+    if (requestValidator.validateEvent(event) && requestValidator.validateDevice(device)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);

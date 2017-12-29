@@ -5,6 +5,7 @@ import { ObservationKind } from '../request/observationKind';
 import requestValidator from '../../helpers/requestValidator';
 import request from '../../utils/request';
 import ip from '../../utils/ip';
+import geojson from '../../utils/geojson';
 import _ from 'underscore';
 
 const createUser = (user) => {
@@ -27,14 +28,15 @@ const createMeasurement = (measurement, req) => {
     });
 };
 
-const createEvent = (event, req) => {
+const createEvent = (req) => {
     const username = request.extractUserNameFromRequest(req);
+    const event = req.body.event;
+    const device = req.body.device;
     return new EventModel({
         username: username,
-        device: event.device,
+        device: device.name,
         phenomenonTime: new Date(),
         type: event.type,
-        relatedEntities: event.relatedEntities,
         duration: event.duration
     });
 };
@@ -67,12 +69,15 @@ const createObservationUsingKind = (observation, req) => {
     }
 };
 
-const createDevice = async (device, lastObservation, req) => {
+const createDevice = (req, lastObservation) => {
+    const device = req.body.device;
+    const geometry = geojson.longLatToPoint(device.location.longitude, device.location.latitude);
     try {
-        const ip = ip.extractIPfromRequest(req);
+        const deviceIp = ip.extractIPfromRequest(req);
         let deviceExtraFields = {
-            ip,
-            lastObservation
+            ip: deviceIp,
+            lastObservation,
+            geometry
         };
         return Object.assign({}, device, deviceExtraFields);
     } catch(err) {
