@@ -46,7 +46,7 @@ describe('Device', () => {
             });
     });
 
-    before((done) => {
+    beforeEach((done) => {
         DeviceModel.remove({}, (err) => {
             assert(err !== undefined, 'Error cleaning MongoDB for tests');
             const devices = [constants.deviceAtACoruna, constants.deviceAtACoruna2, constants.deviceAtNYC, constants.deviceAtTokyo];
@@ -199,7 +199,7 @@ describe('Device', () => {
             chai.request(server)
                 .get('/api/devices')
                 .query({
-                    address: 'Obelisco, A Coruna'
+                    address: 'A Coruna'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {

@@ -16,6 +16,7 @@ const DeviceSchema = mongoose.Schema({
     },
     geometry: {
         type: mongoose.Schema.Types.GeoJSON,
+        required: true,
         index: '2dsphere'
     },
     lastObservation: {
@@ -33,15 +34,17 @@ DeviceSchema.statics.findDeviceByName = function (name) {
 };
 
 DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = constants.maxDefaultNearbyDistanceInMeters){
-    const query = {};
+    let query;
     if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
-        query['location.geometry'] = {
-            $near: {
-                $geometry: {
-                    type: 'Point',
-                    coordinates: [longitude, latitude]
-                },
-                $maxDistance: maxDistance
+        query = {
+            geometry: {
+                $near: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: [longitude, latitude]
+                    },
+                    $maxDistance: maxDistance
+                }
             }
         };
     }
