@@ -1,4 +1,17 @@
 export default {
+    invalidMeasurementRequest: {
+        measurement: {
+            device: 'raspberry',
+            value: 10
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
+        }
+    },
     validMeasurementRequest: {
         measurement: {
             device: 'raspberry',
