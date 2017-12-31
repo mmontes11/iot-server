@@ -40,8 +40,8 @@ export default {
         device: {
             name: "raspberry",
             location: {
-                "longitude": -8.40,
-                "latitude": 43.37
+                longitude: -8.40,
+                latitude: 43.37
             }
         }
     },
@@ -177,6 +177,13 @@ export default {
             symbol: '%'
         },
         value: 0.6,
+    },
+    validDevice: {
+        name: 'raspberry',
+        location: {
+            longitude: -8.40,
+            latitude: 43.37
+        }
     },
     validMeasurementWithKind: {
         kind: 'measurement',

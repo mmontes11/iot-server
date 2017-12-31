@@ -49,7 +49,8 @@ describe('Observations', () => {
     describe('POST /observations 304', () => {
         it('tries to create observations using an empty array', (done) => {
             const emptyObservations = {
-                observations: []
+                observations: [],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -66,7 +67,8 @@ describe('Observations', () => {
     describe('POST /observations 400', () => {
         it('tries to create observations using an invalid payload', (done) => {
             const invalidPayload = {
-                foo: []
+                foo: [],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -85,7 +87,8 @@ describe('Observations', () => {
                     constants.validMeasurementWithInvalidKind,
                     constants.invalidEventWithKind,
                     constants.validEventWithInvalidKind
-                ]
+                ],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -118,7 +121,8 @@ describe('Observations', () => {
                 observations: [
                     ...measurements,
                     ...events
-                ]
+                ],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -142,7 +146,8 @@ describe('Observations', () => {
                 observations: [
                     constants.validMeasurementWithKind,
                     constants.validEventWithKind
-                ]
+                ],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')

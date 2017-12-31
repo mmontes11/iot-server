@@ -15,9 +15,8 @@ const createUser = (user) => {
     });
 };
 
-const createMeasurement = (req) => {
+const createMeasurement = (req, measurement) => {
     const username = request.extractUserNameFromRequest(req);
-    const measurement = req.body.measurement;
     const device = req.body.device;
     return new MeasurementModel({
         username: username,
@@ -29,9 +28,8 @@ const createMeasurement = (req) => {
     });
 };
 
-const createEvent = (req) => {
+const createEvent = (req, event) => {
     const username = request.extractUserNameFromRequest(req);
-    const event = req.body.event;
     const device = req.body.device;
     return new EventModel({
         username: username,
@@ -42,7 +40,7 @@ const createEvent = (req) => {
     });
 };
 
-const createObservationUsingKind = (observation, req) => {
+const createObservationUsingKind = (req, observation) => {
     const observationKind = observation.kind;
     if (_.isUndefined(observationKind)) {
         throw Error('observation.kind path is undefined');
@@ -52,14 +50,14 @@ const createObservationUsingKind = (observation, req) => {
     switch (observationKind) {
         case ObservationKind.measurementKind: {
             if (requestValidator.validateMeasurement(observation)) {
-                return createMeasurement(observation, req);
+                return createMeasurement(req, observation);
             } else {
                 throw invalidObservationError;
             }
         }
         case ObservationKind.eventKind: {
             if (requestValidator.validateEvent(observation)) {
-                return createEvent(observation, req);
+                return createEvent(req, observation);
             } else {
                 throw invalidObservationError;
             }
@@ -75,7 +73,7 @@ const createDevice = (req, lastObservation) => {
     const geometry = geojson.longLatToPoint(device.location.longitude, device.location.latitude);
     try {
         const deviceIp = ip.extractIPfromRequest(req);
-        let deviceExtraFields = {
+        const deviceExtraFields = {
             ip: deviceIp,
             lastObservation,
             geometry
