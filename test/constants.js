@@ -12,6 +12,18 @@ export default {
         username: 'testUser',
         password: '1234'
     },
+    inValidEventRequest: {
+        event: {
+            name: 'whatever'
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
+        }
+    },
     validEventRequest: {
         event : {
             username: 'mmontes',
@@ -30,18 +42,6 @@ export default {
             location: {
                 "longitude": -8.40,
                 "latitude": 43.37
-            }
-        }
-    },
-    inValidEventRequest: {
-        event: {
-            name: 'whatever'
-        },
-        device: {
-            name: 'raspberry',
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
             }
         }
     },
@@ -93,8 +93,36 @@ export default {
             value: 2.4
         }
     },
-    invalidObsevation: {
-        name: 'whatever'
+    invalidMeasurementRequest: {
+        measurement: {
+            device: 'raspberry',
+            value: 10
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
+        }
+    },
+    validMeasurementRequest: {
+        measurement: {
+            device: 'raspberry',
+            type: 'temperature',
+            unit: {
+                name: 'degrees',
+                symbol: '°C'
+            },
+            value: 10
+        },
+        device: {
+            name: 'raspberry',
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
+        }
     },
     temperatureMeasurement: {
         device: 'raspberry',
@@ -135,7 +163,7 @@ export default {
     humidityMeasurement2: {
         device: 'raspberry',
         type: 'humidity',
-        unit:  {
+        unit: {
             name: 'relative',
             symbol: '%'
         },
@@ -144,14 +172,11 @@ export default {
     humidityMeasurement3: {
         device: 'arduino',
         type: 'humidity',
-        unit:  {
+        unit: {
             name: 'relative',
             symbol: '%'
         },
-        value: 0.6
-    },
-    inValidMeasurement: {
-        device: 'raspberry'
+        value: 0.6,
     },
     validMeasurementWithKind: {
         kind: 'measurement',

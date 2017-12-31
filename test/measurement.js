@@ -88,7 +88,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.inValidMeasurement)
+                .send(constants.invalidMeasurementRequest)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
@@ -102,7 +102,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.temperatureMeasurement)
+                .send(constants.validMeasurementRequest)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
@@ -158,7 +158,8 @@ describe('Measurement', () => {
 
     describe('GET /event/last', () => {
         beforeEach((done) => {
-            const events = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            const events = [constants.temperatureMeasurement, constants.temperatureMeasurement2,
+                constants.humidityMeasurement, constants.humidityMeasurement2];
             createMeasurements(events, done);
         });
         it('gets the last measurement', (done) => {
@@ -193,7 +194,8 @@ describe('Measurement', () => {
 
     describe('GET /measurement/last?type=temperature', () => {
         beforeEach((done) => {
-            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2,
+                constants.humidityMeasurement, constants.humidityMeasurement2];
             createMeasurements(measurements, done);
         });
         it('gets the last temperature measurement', (done) => {
@@ -289,7 +291,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats', () => {
         beforeEach((done) => {
             const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
-                                    constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
+                constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
             createMeasurements(measurements, done);
         });
         it('gets measurement stats', (done) => {
@@ -355,7 +357,8 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?type=temperature', () => {
         beforeEach((done) => {
-            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.humidityMeasurement, constants.humidityMeasurement2];
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2,
+                constants.humidityMeasurement, constants.humidityMeasurement2];
             createMeasurements(measurements, done);
         });
         it('gets temperature measurement stats', (done) => {
@@ -426,7 +429,8 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?device=raspberry', () => {
         beforeEach((done) => {
-            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3, constants.humidityMeasurement3];
+            const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
+                constants.humidityMeasurement3];
             createMeasurements(measurements, done);
         });
         it('gets raspberry measurement stats', (done) => {
@@ -485,7 +489,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats?type=temperature&device=raspberry', () => {
         beforeEach((done) => {
             const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
-                                    constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
+                constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
             createMeasurements(measurements, done);
         });
         it('gets temperature raspberry measurement stats', (done) => {

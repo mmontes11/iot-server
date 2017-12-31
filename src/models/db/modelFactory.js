@@ -15,14 +15,15 @@ const createUser = (user) => {
     });
 };
 
-const createMeasurement = (measurement, req) => {
+const createMeasurement = (req) => {
     const username = request.extractUserNameFromRequest(req);
+    const measurement = req.body.measurement;
+    const device = req.body.device;
     return new MeasurementModel({
         username: username,
-        device: measurement.device,
+        device: device.name,
         phenomenonTime: new Date(),
         type: measurement.type,
-        relatedEntities: measurement.relatedEntities,
         unit: measurement.unit,
         value: measurement.value
     });
