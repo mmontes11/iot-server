@@ -57,7 +57,7 @@ describe('Event', () => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.inValidEvent)
+                .send(constants.inValidEventRequest)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
@@ -71,7 +71,7 @@ describe('Event', () => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.doorOpenedEvent)
+                .send(constants.validEventRequest)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
@@ -174,7 +174,6 @@ describe('Event', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
-                    console.log(res.body);
                     res.should.have.status(httpStatus.OK);
                     res.body.type.should.be.a('string');
                     res.body.type.should.equal('door_closed');
