@@ -3,7 +3,8 @@ import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import { EventModel } from '../src/models/db/event';
 import server from '../index';
-import constants from './constants';
+import constants from './constants/event';
+import userConstants from './constants/user';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -28,14 +29,14 @@ describe('Event', () => {
     before((done) => {
         chai.request(server)
             .post('/api/user')
-            .set('Authorization', constants.validAuthHeader)
-            .send(constants.validUser)
+            .set('Authorization', userConstants.validAuthHeader)
+            .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
                     .post('/api/user/logIn')
-                    .set('Authorization', constants.validAuthHeader)
-                    .send(constants.validUser)
+                    .set('Authorization', userConstants.validAuthHeader)
+                    .send(userConstants.validUser)
                     .end((err, res) => {
                         assert(err !== undefined, 'Error obtaining token');
                         assert(res.body.token !== undefined, 'Error obtaining token');
@@ -66,7 +67,7 @@ describe('Event', () => {
         });
     });
 
-    describe('POST /event', () => {
+    describe('POST /event 200', () => {
         it('creates an event', (done) => {
             chai.request(server)
                 .post('/api/event')
@@ -93,7 +94,7 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/types', () => {
+    describe('GET /event/types 200', () => {
         beforeEach((done) => {
             const events = [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent];
             createEvents(events, done);
@@ -125,7 +126,7 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/last', () => {
+    describe('GET /event/last 200', () => {
         beforeEach((done) => {
             const events = [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent];
             createEvents(events, done);
@@ -144,7 +145,7 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/last?type=whatever 404', () => {
+    describe('GET /event/last?type=X 404', () => {
         it('gets the last event of a non existing type', (done) => {
             chai.request(server)
                 .get('/api/event/last')
@@ -160,7 +161,7 @@ describe('Event', () => {
         });
     });
 
-    describe('GET /event/last?type=door_closed', () => {
+    describe('GET /event/last?type=X 200', () => {
         beforeEach((done) => {
             const events = [constants.doorOpenedEvent, constants.doorClosedEvent,  constants.windowOpenedEvent, constants.doorClosedEvent2];
             createEvents(events, done);

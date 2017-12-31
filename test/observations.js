@@ -5,7 +5,8 @@ import Promise from 'bluebird';
 import { MeasurementModel } from '../src/models/db/measurement';
 import { EventModel } from '../src/models/db/event';
 import server from '../index';
-import constants from './constants';
+import constants from './constants/observations';
+import userConstants from './constants/user';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -19,14 +20,14 @@ describe('Observations', () => {
     before((done) => {
         chai.request(server)
             .post('/api/user')
-            .set('Authorization', constants.validAuthHeader)
-            .send(constants.validUser)
+            .set('Authorization', userConstants.validAuthHeader)
+            .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
                     .post('/api/user/logIn')
-                    .set('Authorization', constants.validAuthHeader)
-                    .send(constants.validUser)
+                    .set('Authorization', userConstants.validAuthHeader)
+                    .send(userConstants.validUser)
                     .end((err, res) => {
                         assert(err !== undefined, 'Error obtaining token');
                         assert(res.body.token !== undefined, 'Error obtaining token');

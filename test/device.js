@@ -3,7 +3,8 @@ import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import { DeviceModel } from '../src/models/db/device';
 import server from '../index';
-import constants from './constants';
+import constants from './constants/device';
+import userConstants from './constants/user';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -29,14 +30,14 @@ describe('Device', () => {
     before((done) => {
         chai.request(server)
             .post('/api/user')
-            .set('Authorization', constants.validAuthHeader)
-            .send(constants.validUser)
+            .set('Authorization', userConstants.validAuthHeader)
+            .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
                     .post('/api/user/logIn')
-                    .set('Authorization', constants.validAuthHeader)
-                    .send(constants.validUser)
+                    .set('Authorization', userConstants.validAuthHeader)
+                    .send(userConstants.validUser)
                     .end((err, res) => {
                         assert(err !== undefined, 'Error obtaining token');
                         assert(res.body.token !== undefined, 'Error obtaining token');
@@ -54,7 +55,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /device/whatever 404', () => {
+    describe('GET /device/X 404', () => {
         it('tries to get a non existing device', (done) => {
             chai.request(server)
                 .get('/api/device/whatever')
@@ -67,7 +68,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /device/raspi-coruna 200', () => {
+    describe('GET /device/X 200', () => {
         it('gets an existing device', (done) => {
             chai.request(server)
                 .get('/api/device/raspi-coruna')
@@ -94,7 +95,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?latitude=42.08 400', () => {
+    describe('GET /devices?latitude=X 400', () => {
         it('tries to get devices using invalid coordinates', (done) => {
             chai.request(server)
                 .get('/api/devices')
@@ -110,7 +111,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?longitude=-18.40&latitude=43.37 404', () => {
+    describe('GET /devices?longitude=X&latitude=X 404', () => {
         it('gets devices by Madagascar coordinates', (done) => {
             chai.request(server)
                 .get('/api/devices')
@@ -127,7 +128,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?longitude=-8.4065665&latitude=43.3682188 200', () => {
+    describe('GET /devices?longitude=X&latitude=X 200', () => {
         it('gets devices by A Coruna coordinates', (done) => {
             chai.request(server)
                 .get('/api/devices')
@@ -162,7 +163,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?address=foo 404', () => {
+    describe('GET /devices?address=X 404', () => {
         it('tries to get devices using an invalid address', (done) => {
             chai.request(server)
                 .get('/api/devices')
@@ -176,9 +177,6 @@ describe('Device', () => {
                     done();
                 });
         });
-    });
-
-    describe('GET /devices?address=Madagascar 404', () => {
         it('gets devices by Madagascar address', (done) => {
             chai.request(server)
                 .get('/api/devices')
@@ -194,7 +192,7 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?address=A Coruña 200', () => {
+    describe('GET /devices?address=X 200', () => {
         it('gets devices by A Coruna address', (done) => {
             chai.request(server)
                 .get('/api/devices')
