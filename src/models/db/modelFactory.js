@@ -49,14 +49,14 @@ const createObservationUsingKind = (req, observation) => {
     const invalidObservationError = Error('Invalid observation');
     switch (observationKind) {
         case ObservationKind.measurementKind: {
-            if (requestValidator.validateMeasurement(observation)) {
+            if (requestValidator.validMeasurement(observation)) {
                 return createMeasurement(req, observation);
             } else {
                 throw invalidObservationError;
             }
         }
         case ObservationKind.eventKind: {
-            if (requestValidator.validateEvent(observation)) {
+            if (requestValidator.validEvent(observation)) {
                 return createEvent(req, observation);
             } else {
                 throw invalidObservationError;

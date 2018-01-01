@@ -6,7 +6,7 @@ import constants from '../utils/constants';
 import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
-    if (requestValidator.validateUser(req.body)) {
+    if (requestValidator.validUser(req.body)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -16,7 +16,7 @@ const validateCreateUser = (req, res, next) => {
 const validateCreateMeasurement = (req, res, next) => {
     const measurement = req.body.measurement;
     const device = req.body.device;
-    if (requestValidator.validateMeasurement(measurement) && requestValidator.validateDevice(device)) {
+    if (requestValidator.validMeasurement(measurement) && requestValidator.validDevice(device)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -26,7 +26,7 @@ const validateCreateMeasurement = (req, res, next) => {
 const validateCreateEvent = (req, res, next) => {
     const event = req.body.event;
     const device = req.body.device;
-    if (requestValidator.validateEvent(event) && requestValidator.validateDevice(device)) {
+    if (requestValidator.validEvent(event) && requestValidator.validDevice(device)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -70,7 +70,7 @@ const validateCreateObservations = (req, res, next) => {
         return res.sendStatus(httpStatus.NOT_MODIFIED);
     }
     const device = req.body.device;
-    if (!requestValidator.validateDevice(device)) {
+    if (!requestValidator.validDevice(device)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
