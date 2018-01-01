@@ -58,7 +58,18 @@ describe('Event', () => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.inValidEventRequest)
+                .send(constants.eventRequestWithInvalidEvent)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('tries to create an event with an invalid device', (done) => {
+            chai.request(server)
+                .post('/api/event')
+                .set('Authorization', auth())
+                .send(constants.eventRequestWithInvalidDevice)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);

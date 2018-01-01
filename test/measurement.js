@@ -86,11 +86,22 @@ describe('Measurement', () => {
     });
 
     describe('POST /measurement 400', () => {
-        it('tries to create a invalid measurement', (done) => {
+        it('tries to create an invalid measurement', (done) => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.invalidMeasurementRequest)
+                .send(constants.measurementRequestWithInvalidMeasurement)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('tries to create a measurement with an invalid device', (done) => {
+            chai.request(server)
+                .post('/api/measurement')
+                .set('Authorization', auth())
+                .send(constants.measurementRequestWithInvalidDevice)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);

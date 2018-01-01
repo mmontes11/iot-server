@@ -6,6 +6,13 @@ export default {
             latitude: 43.37
         }
     },
+    invalidDevice:  {
+        name: 'raspberry',
+        location: {
+            longitude: -8.40,
+            latitude: 43.37
+        }
+    },
     validMeasurementWithKind: {
         kind: 'measurement',
         device: 'raspberry',

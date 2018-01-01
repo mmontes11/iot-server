@@ -1,11 +1,28 @@
 export default {
-    invalidMeasurementRequest: {
+    measurementRequestWithInvalidMeasurement: {
         measurement: {
             device: 'raspberry',
             value: 10
         },
         device: {
             name: 'raspberry',
+            location: {
+                longitude: -8.40,
+                latitude: 43.37
+            }
+        }
+    },
+    measurementRequestWithInvalidDevice: {
+        measurement: {
+            device: 'raspberry',
+            type: 'temperature',
+            unit: {
+                name: 'degrees',
+                symbol: '°C'
+            },
+            value: 10
+        },
+        device: {
             location: {
                 longitude: -8.40,
                 latitude: 43.37

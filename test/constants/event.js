@@ -1,5 +1,22 @@
 export default {
-    inValidEventRequest: {
+    eventRequestWithInvalidEvent: {
+        event : {
+            username: 'mmontes',
+            device: 'raspberry',
+            type: 'door_opened',
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: 'raspberry'
+        }
+    },
+    eventRequestWithInvalidDevice: {
         event: {
             name: 'whatever'
         },

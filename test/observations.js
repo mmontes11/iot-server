@@ -104,6 +104,27 @@ describe('Observations', () => {
                     done();
                 });
         });
+        it('tries to create observations with an invalid device', (done) => {
+            const invalidObservations = {
+                observations: [
+                    constants.validMeasurementWithInvalidKind,
+                    constants.validEventWithInvalidKind
+                ],
+                device: constants.invalidDevice
+            };
+            chai.request(server)
+                .post('/api/observations')
+                .set('Authorization', auth())
+                .send(invalidObservations)
+                .end((err, res) => {
+                    should.exist(err);
+                    should.exist(res.body.invalidObservations);
+                    should.not.exist(res.body.createdObservations);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
+                    done();
+                });
+        });
     });
 
     describe('POST /observations 207', () => {
