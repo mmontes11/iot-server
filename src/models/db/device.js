@@ -3,6 +3,15 @@ import constants from '../../utils/constants';
 import _ from 'underscore';
 import regex from '../../utils/regex';
 
+const SupportedObservationTypesSchema = mongoose.Schema({
+    measurement: [{
+        type: String
+    }],
+    event: [{
+        type: String
+    }]
+});
+
 const DeviceSchema = mongoose.Schema({
     name: {
         type: String,
@@ -21,7 +30,9 @@ const DeviceSchema = mongoose.Schema({
     },
     lastObservation: {
         type: Date,
-        required: true
+    },
+    supportedObservationTypes: {
+        type: SupportedObservationTypesSchema,
     }
 });
 

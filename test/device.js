@@ -14,7 +14,6 @@ const auth = () => {
 };
 const createDevices = (devices, done) => {
     Promise.each(devices, (device) => {
-        device.lastObservation = new Date();
         const newDevice = new DeviceModel(device);
         return newDevice.save();
     }).then(() => {
