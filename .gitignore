@@ -28,3 +28,9 @@ dist
 node_modules
 package-lock.json
 npm-debug.log*
+
+# config
+config/productionPrivate.js
+
+# other
+*.rdb

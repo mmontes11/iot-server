@@ -4,6 +4,8 @@ import userRouter from './userRouter'
 import measurementRouter from './measurementRouter';
 import eventRouter from './eventRouter';
 import observationsRouter from './observationsRouter';
+import deviceRouter from './deviceRouter';
+import devicesRouter from './devicesRouter';
 
 const router = express.Router();
 
@@ -15,5 +17,7 @@ router.use('/user', userRouter);
 router.use('/measurement', measurementRouter);
 router.use('/event', eventRouter);
 router.use('/observations', observationsRouter);
+router.use('/device', deviceRouter);
+router.use('/devices', devicesRouter);
 
 export default router;

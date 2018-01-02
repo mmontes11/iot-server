@@ -2,9 +2,10 @@ import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
 import { ObservationKind } from '../request/observationKind';
-import { extractUserNameFromRequest } from '../../utils/requestUtils';
 import requestValidator from '../../helpers/requestValidator';
-import geoUtils from '../../utils/geoUtils';
+import request from '../../utils/request';
+import ip from '../../utils/ip';
+import geojson from '../../utils/geojson';
 import _ from 'underscore';
 
 const createUser = (user) => {
@@ -14,32 +15,32 @@ const createUser = (user) => {
     });
 };
 
-const createMeasurement = (measurement, req) => {
-    const username = extractUserNameFromRequest(req);
+const createMeasurement = (req, measurement) => {
+    const username = request.extractUserNameFromRequest(req);
+    const device = req.body.device;
     return new MeasurementModel({
         username: username,
-        device: measurement.device,
+        device: device.name,
         phenomenonTime: new Date(),
         type: measurement.type,
-        relatedEntities: measurement.relatedEntities,
         unit: measurement.unit,
         value: measurement.value
     });
 };
 
-const createEvent = (event, req) => {
-    const username = extractUserNameFromRequest(req);
+const createEvent = (req, event) => {
+    const username = request.extractUserNameFromRequest(req);
+    const device = req.body.device;
     return new EventModel({
         username: username,
-        device: event.device,
+        device: device.name,
         phenomenonTime: new Date(),
         type: event.type,
-        relatedEntities: event.relatedEntities,
         duration: event.duration
     });
 };
 
-const createObservationUsingKind = (observation, req) => {
+const createObservationUsingKind = (req, observation) => {
     const observationKind = observation.kind;
     if (_.isUndefined(observationKind)) {
         throw Error('observation.kind path is undefined');
@@ -48,15 +49,15 @@ const createObservationUsingKind = (observation, req) => {
     const invalidObservationError = Error('Invalid observation');
     switch (observationKind) {
         case ObservationKind.measurementKind: {
-            if (requestValidator.validateMeasurement(observation)) {
-                return createMeasurement(observation, req);
+            if (requestValidator.validMeasurement(observation)) {
+                return createMeasurement(req, observation);
             } else {
                 throw invalidObservationError;
             }
         }
         case ObservationKind.eventKind: {
-            if (requestValidator.validateEvent(observation)) {
-                return createEvent(observation, req);
+            if (requestValidator.validEvent(observation)) {
+                return createEvent(req, observation);
             } else {
                 throw invalidObservationError;
             }
@@ -67,17 +68,17 @@ const createObservationUsingKind = (observation, req) => {
     }
 };
 
-const createDevice = async (deviceName, lastObservation, req) => {
+const createDevice = (req, lastObservation) => {
+    const device = req.body.device;
+    const geometry = geojson.longLatToPoint(device.location.longitude, device.location.latitude);
     try {
-        let device = {
-            name: deviceName,
-            lastObservation: lastObservation
+        const deviceIp = ip.extractIPfromRequest(req);
+        const deviceExtraFields = {
+            ip: deviceIp,
+            lastObservation,
+            geometry
         };
-        const deviceLocationAndIp = await geoUtils.locationAndIpFromRequest(req);
-        if (!_.isUndefined(deviceLocationAndIp)) {
-            device = Object.assign({}, device, deviceLocationAndIp);
-        }
-        return device;
+        return Object.assign({}, device, deviceExtraFields);
     } catch(err) {
         throw err;
     }

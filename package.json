@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "export NODE_ENV=development && gulp serve",
-    "test": "npm run transpile && export NODE_ENV=test && mocha --reporter spec --timeout 5000 dist/test",
+    "test": "npm run transpile && export NODE_ENV=test && mocha --reporter spec --timeout 10000 dist/test",
     "transpile": "gulp",
     "production": "gulp serve"
   },
@@ -34,6 +34,7 @@
     "API"
   ],
   "dependencies": {
+    "@google/maps": "^0.4.5",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
@@ -50,7 +51,6 @@
     "express-basic-auth": "^0.2.3",
     "express-jwt": "^5.1.0",
     "express-winston": "^2.4.0",
-    "geoip-lite": "^1.2.1",
     "gulp": "3.9.1",
     "gulp-babel": "6.1.2",
     "gulp-load-plugins": "^1.2.0",
@@ -67,7 +67,6 @@
     "mongoose": "^4.7.4",
     "mongoose-geojson-schema": "^2.1.2",
     "mongoose-schema-extend": "^0.2.2",
-    "public-ip": "^2.3.5",
     "redis": "^2.6.5",
     "request-ip": "^2.0.2",
     "run-sequence": "^1.1.5",

@@ -14,7 +14,7 @@ const createObservations = async (req, res, next) => {
 
     for (const observation of observations) {
         try {
-            const newObservation = modelFactory.createObservationUsingKind(observation, req);
+            const newObservation = modelFactory.createObservationUsingKind(req, observation);
             savePromises.push(newObservation.save().reflect());
         } catch (err) {
             invalidObservations.push(observation);
@@ -29,7 +29,7 @@ const createObservations = async (req, res, next) => {
         }
     });
 
-    await createOrUpdateDeviceIfNeeded(createdObservations, req);
+    await createOrUpdateDeviceIfNeeded(req, createdObservations);
 
     handleResponse(res, createdObservations, invalidObservations);
 };
@@ -54,12 +54,12 @@ const handleResponse = (res, createdObservations, invalidObservations) => {
     }
 };
 
-const createOrUpdateDeviceIfNeeded = async (createdObservations, req) => {
+const createOrUpdateDeviceIfNeeded = async (req, createdObservations) => {
     if (!_.isEmpty(createdObservations)) {
         const latestObservation = _.max(createdObservations, (observation) => {
             return observation.phenomenonTime;
         });
-        return deviceController.createOrUpdateDevice(latestObservation, req);
+        return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
     } else {
         return undefined;
     }

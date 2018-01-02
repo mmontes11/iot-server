@@ -8,9 +8,9 @@ import constants from '../utils/constants';
 
  const createEvent = async (req, res) =>{
     try {
-        const newEvent = modelFactory.createEvent(req.body, req);
+        const newEvent = modelFactory.createEvent(req, req.body.event);
         const savedEvent = await newEvent.save();
-        await deviceController.createOrUpdateDevice(savedEvent, req);
+        await deviceController.createOrUpdateDevice(req, savedEvent.phenomenonTime);
         res.status(httpStatus.CREATED).json(savedEvent);
     } catch (err) {
         responseHandler.handleError(res, err);

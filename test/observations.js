@@ -5,7 +5,8 @@ import Promise from 'bluebird';
 import { MeasurementModel } from '../src/models/db/measurement';
 import { EventModel } from '../src/models/db/event';
 import server from '../index';
-import constants from './constants';
+import constants from './constants/observations';
+import userConstants from './constants/user';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -19,14 +20,14 @@ describe('Observations', () => {
     before((done) => {
         chai.request(server)
             .post('/api/user')
-            .set('Authorization', constants.validAuthHeader)
-            .send(constants.validUser)
+            .set('Authorization', userConstants.validAuthHeader)
+            .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
                     .post('/api/user/logIn')
-                    .set('Authorization', constants.validAuthHeader)
-                    .send(constants.validUser)
+                    .set('Authorization', userConstants.validAuthHeader)
+                    .send(userConstants.validUser)
                     .end((err, res) => {
                         assert(err !== undefined, 'Error obtaining token');
                         assert(res.body.token !== undefined, 'Error obtaining token');
@@ -49,7 +50,8 @@ describe('Observations', () => {
     describe('POST /observations 304', () => {
         it('tries to create observations using an empty array', (done) => {
             const emptyObservations = {
-                observations: []
+                observations: [],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -66,7 +68,8 @@ describe('Observations', () => {
     describe('POST /observations 400', () => {
         it('tries to create observations using an invalid payload', (done) => {
             const invalidPayload = {
-                foo: []
+                foo: [],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -85,7 +88,29 @@ describe('Observations', () => {
                     constants.validMeasurementWithInvalidKind,
                     constants.invalidEventWithKind,
                     constants.validEventWithInvalidKind
-                ]
+                ],
+                device: constants.validDevice
+            };
+            chai.request(server)
+                .post('/api/observations')
+                .set('Authorization', auth())
+                .send(invalidObservations)
+                .end((err, res) => {
+                    should.exist(err);
+                    should.exist(res.body.invalidObservations);
+                    should.not.exist(res.body.createdObservations);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
+                    done();
+                });
+        });
+        it('tries to create observations with an invalid device', (done) => {
+            const invalidObservations = {
+                observations: [
+                    constants.validMeasurementWithInvalidKind,
+                    constants.validEventWithInvalidKind
+                ],
+                device: constants.invalidDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -118,7 +143,8 @@ describe('Observations', () => {
                 observations: [
                     ...measurements,
                     ...events
-                ]
+                ],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')
@@ -142,7 +168,8 @@ describe('Observations', () => {
                 observations: [
                     constants.validMeasurementWithKind,
                     constants.validEventWithKind
-                ]
+                ],
+                device: constants.validDevice
             };
             chai.request(server)
                 .post('/api/observations')

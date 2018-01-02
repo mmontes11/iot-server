@@ -6,21 +6,40 @@ import constants from '../utils/constants';
 import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateUser);
+    if (requestValidator.validUser(req.body)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateCreateMeasurement = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateMeasurement);
+    const measurement = req.body.measurement;
+    const device = req.body.device;
+    if (requestValidator.validMeasurement(measurement) && requestValidator.validDevice(device)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateCreateEvent = (req, res, next) => {
-    validateBody(req, res, next, requestValidator.validateEvent);
+    const event = req.body.event;
+    const device = req.body.device;
+    if (requestValidator.validEvent(event) && requestValidator.validDevice(device)) {
+        next();
+    } else {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
 };
 
 const validateMeasurementStats = (req, res, next) => {
     const lastTimePeriodParam = req.query.lastTimePeriod;
     const startDateParam = req.query.startDate;
     const endDateParam = req.query.endDate;
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+    const address = req.query.address;
     if (!_.isUndefined(lastTimePeriodParam)) {
         if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
             return res.sendStatus(httpStatus.BAD_REQUEST)
@@ -36,6 +55,9 @@ const validateMeasurementStats = (req, res, next) => {
             return res.sendStatus(httpStatus.BAD_REQUEST);
         }
     }
+    if (!validRegionParams(longitude, latitude, address)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
+    }
     next();
 };
 
@@ -47,22 +69,26 @@ const validateCreateObservations = (req, res, next) => {
     if (_.isEmpty(observations)) {
         return res.sendStatus(httpStatus.NOT_MODIFIED);
     }
-    const firstObservation = _.first(observations);
-    const observationHaveSameDevice = _.every(observations, (observation) => {
-        return _.isEqual(observation.device, firstObservation.device)
-    });
-    if (!observationHaveSameDevice) {
-        return res.status(httpStatus.BAD_REQUEST).json(errors.observationsMustHaveSameDeviceError);
+    const device = req.body.device;
+    if (!requestValidator.validDevice(device)) {
+        return res.sendStatus(httpStatus.BAD_REQUEST);
     }
     next();
 };
 
-const validateBody = (req, res, next, isValid) => {
-    if (isValid(req.body)) {
-        next();
-    } else {
+const validateGetDevices = (req, res, next) => {
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+    const address = req.query.address;
+    if (!validRegionParams(longitude, latitude, address)) {
         return res.sendStatus(httpStatus.BAD_REQUEST);
     }
+    next();
 };
 
-export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations };
+const validRegionParams = (longitude, latitude, address) => {
+    const allRegionParamsUndefined = _.isUndefined(longitude) && _.isUndefined(latitude) && _.isUndefined(address);
+    return  allRegionParamsUndefined || ((!_.isUndefined(longitude) && !_.isUndefined(latitude)) || !_.isUndefined(address));
+};
+
+export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetDevices };

@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import { MeasurementModel } from '../models/db/measurement';
+import { DeviceModel } from "../models/db/device"
 import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
@@ -10,9 +11,9 @@ import constants from '../utils/constants';
 
  const createMeasurement = async (req, res) => {
     try {
-        const newMeasurement = modelFactory.createMeasurement(req.body, req);
+        const newMeasurement = modelFactory.createMeasurement(req, req.body.measurement);
         const savedMeasurement = await newMeasurement.save();
-        await deviceController.createOrUpdateDevice(savedMeasurement, req);
+        await deviceController.createOrUpdateDevice(req, savedMeasurement.phenomenonTime);
         res.status(httpStatus.CREATED).json(savedMeasurement);
     } catch (err) {
         responseHandler.handleError(res, err);
@@ -40,7 +41,6 @@ import constants from '../utils/constants';
 
  const getStats = async (req, res) => {
     const type = req.query.type;
-    const device = req.query.device;
     let timePeriod = undefined;
     if (!_.isUndefined(req.query.lastTimePeriod)) {
         timePeriod = new TimePeriod(req.query.lastTimePeriod);
@@ -50,6 +50,16 @@ import constants from '../utils/constants';
     }
 
     try {
+        let device;
+        if (!_.isUndefined(req.query.device) || !_.isUndefined(req.query.address) ||
+                (!_.isUndefined(req.query.longitude) && !_.isUndefined(req.query.latitude))) {
+            
+            device = await deviceController.getDeviceNameFromRequest(req);
+            if (_.isUndefined(device)) {
+                return res.sendStatus(httpStatus.NOT_FOUND);
+            }
+        }
+
         if (statsCache.cachePolicy(timePeriod)) {
             const statsFromCache = await statsCache.getStatsCache(type, device, timePeriod);
             if (!_.isNull(statsFromCache)) {
