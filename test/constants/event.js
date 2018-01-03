@@ -1,8 +1,28 @@
 export default {
     eventRequestWithInvalidEvent: {
         event : {
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: 'raspberry',
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
+            }
+        }
+    },
+    eventRequestWithInvalidDevice: {
+        event : {
             username: 'mmontes',
-            device: 'raspberry',
             type: 'door_opened',
             duration: {
                 unit: {
@@ -14,18 +34,6 @@ export default {
         },
         device: {
             name: 'raspberry'
-        }
-    },
-    eventRequestWithInvalidDevice: {
-        event: {
-            name: 'whatever'
-        },
-        device: {
-            name: 'raspberry',
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
-            }
         }
     },
     validEventRequest: {
@@ -43,9 +51,12 @@ export default {
         },
         device: {
             name: "raspberry",
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
             }
         }
     },

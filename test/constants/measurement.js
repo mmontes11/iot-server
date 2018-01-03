@@ -6,9 +6,12 @@ export default {
         },
         device: {
             name: 'raspberry',
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
             }
         }
     },
@@ -23,9 +26,12 @@ export default {
             value: 10
         },
         device: {
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
             }
         }
     },
@@ -41,9 +47,12 @@ export default {
         },
         device: {
             name: 'raspberry',
-            location: {
-                longitude: -8.40,
-                latitude: 43.37
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
             }
         }
     },

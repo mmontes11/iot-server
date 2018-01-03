@@ -4,9 +4,11 @@ import _ from 'underscore';
 import Promise from 'bluebird';
 import { MeasurementModel } from '../src/models/db/measurement';
 import { EventModel } from '../src/models/db/event';
+import { Devi } from '../src/models/db/event';
 import server from '../index';
 import constants from './constants/observations';
 import userConstants from './constants/user';
+import {DeviceModel} from "../src/models/db/device";
 
 const assert = chai.assert;
 const should = chai.should();
@@ -38,7 +40,7 @@ describe('Observations', () => {
     });
 
     beforeEach((done) => {
-        const promises = [MeasurementModel.remove({}), EventModel.remove({})];
+        const promises = [MeasurementModel.remove({}), EventModel.remove({}), DeviceModel.remove({})];
         Promise.all(promises)
             .then(() => {
                 done();
@@ -118,10 +120,9 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body.invalidObservations);
-                    should.not.exist(res.body.createdObservations);
+                    console.log(res.body);
+                    should.exist(res.body.invalidDevice);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
                     done();
                 });
         });

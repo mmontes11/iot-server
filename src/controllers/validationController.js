@@ -71,7 +71,7 @@ const validateCreateObservations = (req, res, next) => {
     }
     const device = req.body.device;
     if (!requestValidator.validDevice(device)) {
-        return res.sendStatus(httpStatus.BAD_REQUEST);
+        return res.status(httpStatus.BAD_REQUEST).json({ invalidDevice: device });
     }
     next();
 };

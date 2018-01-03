@@ -1,17 +1,16 @@
 export default {
     validDevice: {
         name: 'raspberry',
-        location: {
-            longitude: -8.40,
-            latitude: 43.37
+        geometry : {
+            type : 'Point',
+            coordinates : [
+                -8.4065665,
+                43.3682188
+            ]
         }
     },
     invalidDevice:  {
-        name: 'raspberry',
-        location: {
-            longitude: -8.40,
-            latitude: 43.37
-        }
+        name: 'raspberry'
     },
     validMeasurementWithKind: {
         kind: 'measurement',

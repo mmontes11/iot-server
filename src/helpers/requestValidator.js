@@ -22,8 +22,7 @@ const validEvent = (event) => {
 };
 
 const validDevice = (device) => {
-    return !_.isUndefined(device) && !_.isUndefined(device.name) && !_.isUndefined(device.location)
-        && !_.isUndefined(device.location.longitude) && !_.isUndefined(device.location.latitude);
+    return !_.isUndefined(device) && !_.isUndefined(device.name) && !_.isUndefined(device.geometry);
 };
 
 export default { validUser, validObservation, validUnit, validMeasurement, validEvent, validDevice }

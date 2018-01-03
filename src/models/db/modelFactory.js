@@ -70,13 +70,11 @@ const createObservationUsingKind = (req, observation) => {
 
 const createDevice = (req, lastObservation) => {
     const device = req.body.device;
-    const geometry = geojson.longLatToPoint(device.location.longitude, device.location.latitude);
     try {
         const deviceIp = ip.extractIPfromRequest(req);
         const deviceExtraFields = {
             ip: deviceIp,
-            lastObservation,
-            geometry
+            lastObservation
         };
         return Object.assign({}, device, deviceExtraFields);
     } catch(err) {

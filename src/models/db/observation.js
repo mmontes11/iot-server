@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import mongoose from '../../../lib/mongoose';
+import observations from "../../../test/constants/observations";
 
 const ObservationSchema = new mongoose.Schema({
     username: String,
@@ -27,6 +28,13 @@ ObservationSchema.statics.findLastN = function(n = 10, type){
         findCriteria = { type : type };
     }
     return this.find(findCriteria).sort({'phenomenonTime': -1}).limit(n);
+};
+
+ObservationSchema.statics.removeObservations = function (observations) {
+    const observationsIDs = _.map(observations, (observation) => {
+        return observation._id
+    });
+    return this.remove({ _id: { $in: observationsIDs }});
 };
 
 const ObservationModel = mongoose.model('Observation', ObservationSchema);

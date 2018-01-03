@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import requestValidator from '../helpers/requestValidator';
 import modelFactory from '../models/db/modelFactory';
+import { ObservationModel } from "../models/db/observation"
 import deviceController from './deviceController';
 
 const createObservations = async (req, res, next) => {
@@ -29,9 +30,29 @@ const createObservations = async (req, res, next) => {
         }
     });
 
-    await createOrUpdateDeviceIfNeeded(req, createdObservations);
+    let deviceError;
+    try {
+        await createOrUpdateDeviceIfNeeded(req, createdObservations);
+    } catch (err) {
+        deviceError = err;
+    }
 
-    handleResponse(res, createdObservations, invalidObservations);
+    if (_.isUndefined(deviceError)) {
+        handleResponse(res, createdObservations, invalidObservations);
+    } else {
+        await handleDeviceError(req, res, createdObservations)
+    }
+};
+
+const createOrUpdateDeviceIfNeeded = async (req, createdObservations) => {
+    if (!_.isEmpty(createdObservations)) {
+        const latestObservation = _.max(createdObservations, (observation) => {
+            return observation.phenomenonTime;
+        });
+        return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
+    } else {
+        return undefined;
+    }
 };
 
 const handleResponse = (res, createdObservations, invalidObservations) => {
@@ -54,15 +75,25 @@ const handleResponse = (res, createdObservations, invalidObservations) => {
     }
 };
 
-const createOrUpdateDeviceIfNeeded = async (req, createdObservations) => {
-    if (!_.isEmpty(createdObservations)) {
-        const latestObservation = _.max(createdObservations, (observation) => {
-            return observation.phenomenonTime;
-        });
-        return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
+
+const handleDeviceError = async (req, res, createdObservations) => {
+    if (!_.isUndefined(createdObservations) && !_.isEmpty(createdObservations)) {
+        try {
+            await ObservationModel.removeObservations(createdObservations);
+            sendDeviceErrorResponse(req, res);
+        } catch (err) {
+            throw err;
+        }
     } else {
-        return undefined;
+        sendDeviceErrorResponse(req, res);
     }
+};
+
+const sendDeviceErrorResponse = (req, res) => {
+    const response = {
+        invalidDevice: req.body.device
+    };
+    res.status(httpStatus.BAD_REQUEST).json(response);
 };
 
 export default { createObservations };
