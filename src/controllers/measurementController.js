@@ -13,8 +13,12 @@ import constants from '../utils/constants';
     try {
         const newMeasurement = modelFactory.createMeasurement(req, req.body.measurement);
         const savedMeasurement = await newMeasurement.save();
-        await deviceController.createOrUpdateDevice(req, savedMeasurement.phenomenonTime);
-        res.status(httpStatus.CREATED).json(savedMeasurement);
+        try {
+            await deviceController.createOrUpdateDevice(req, savedMeasurement.phenomenonTime);
+            res.status(httpStatus.CREATED).json(savedMeasurement);
+        } catch (err) {
+            await deviceController.handleDeviceCreationError(req, res [savedMeasurement]);
+        }
     } catch (err) {
         responseHandler.handleError(res, err);
     }

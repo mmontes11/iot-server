@@ -1,7 +1,9 @@
 import _ from 'underscore';
+import httpStatus from 'http-status';
 import requestValidator from '../helpers/requestValidator';
 import modelFactory from '../models/db/modelFactory';
 import { DeviceModel } from "../models/db/device";
+import { ObservationModel } from "../models/db/observation"
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/constants';
 import geocoder from '../utils/geocoder';
@@ -45,6 +47,19 @@ const getDeviceNameFromRequest = async (req) => {
     }
 };
 
+const handleDeviceCreationError = async (req, res, createdObservations) => {
+    if (!_.isUndefined(createdObservations) && !_.isEmpty(createdObservations)) {
+        try {
+            await ObservationModel.removeObservations(createdObservations);
+            _sendDeviceErrorResponse(req, res);
+        } catch (err) {
+            responseHandler.handleError(req, res);
+        }
+    } else {
+        _sendDeviceErrorResponse(req, res);
+    }
+};
+
 const _getDevices = async (req) => {
     let longitude = req.query.longitude;
     let latitude = req.query.latitude;
@@ -68,4 +83,12 @@ const _getDevices = async (req) => {
     }
 };
 
-export default { createOrUpdateDevice, getDeviceByName, getDevices, getDeviceNameFromRequest };
+const _sendDeviceErrorResponse = (req, res) => {
+    const response = {
+        invalidDevice: req.body.device
+    };
+    res.status(httpStatus.BAD_REQUEST).json(response);
+};
+
+
+export default { createOrUpdateDevice, getDeviceByName, getDevices, getDeviceNameFromRequest, handleDeviceCreationError };

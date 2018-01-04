@@ -30,29 +30,21 @@ const createObservations = async (req, res, next) => {
         }
     });
 
-    let deviceError;
     try {
-        await createOrUpdateDeviceIfNeeded(req, createdObservations);
-    } catch (err) {
-        deviceError = err;
-    }
-
-    if (_.isUndefined(deviceError)) {
+        if (!_.isEmpty(createdObservations)) {
+            await createOrUpdateDevice(req, createdObservations);
+        }
         handleResponse(res, createdObservations, invalidObservations);
-    } else {
-        handleDeviceError(req, res, createdObservations)
+    } catch (err) {
+        await deviceController.handleDeviceCreationError(req, res, createdObservations);
     }
 };
 
-const createOrUpdateDeviceIfNeeded = async (req, createdObservations) => {
-    if (!_.isEmpty(createdObservations)) {
-        const latestObservation = _.max(createdObservations, (observation) => {
-            return observation.phenomenonTime;
-        });
-        return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
-    } else {
-        return undefined;
-    }
+const createOrUpdateDevice = async (req, createdObservations) => {
+    const latestObservation = _.max(createdObservations, (observation) => {
+        return observation.phenomenonTime;
+    });
+    return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
 };
 
 const handleResponse = (res, createdObservations, invalidObservations) => {
@@ -73,27 +65,6 @@ const handleResponse = (res, createdObservations, invalidObservations) => {
         };
         return res.status(httpStatus.MULTI_STATUS).json(response);
     }
-};
-
-
-const handleDeviceError = async (req, res, createdObservations) => {
-    if (!_.isUndefined(createdObservations) && !_.isEmpty(createdObservations)) {
-        try {
-            await ObservationModel.removeObservations(createdObservations);
-            sendDeviceErrorResponse(req, res);
-        } catch (err) {
-            throw err;
-        }
-    } else {
-        sendDeviceErrorResponse(req, res);
-    }
-};
-
-const sendDeviceErrorResponse = (req, res) => {
-    const response = {
-        invalidDevice: req.body.device
-    };
-    res.status(httpStatus.BAD_REQUEST).json(response);
 };
 
 export default { createObservations };
