@@ -1,7 +1,6 @@
 export default {
     measurementRequestWithInvalidMeasurement: {
         measurement: {
-            device: 'raspberry',
             value: 10
         },
         device: {
@@ -17,7 +16,6 @@ export default {
     },
     measurementRequestWithInvalidDevice: {
         measurement: {
-            device: 'raspberry',
             type: 'temperature',
             unit: {
                 name: 'degrees',
@@ -37,7 +35,6 @@ export default {
     },
     validMeasurementRequest: {
         measurement: {
-            device: 'raspberry',
             type: 'temperature',
             unit: {
                 name: 'degrees',
