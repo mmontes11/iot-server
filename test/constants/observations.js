@@ -12,6 +12,15 @@ export default {
     invalidDevice:  {
         name: 'raspberry'
     },
+    deviceWithInvalidGeometry:  {
+        name: 'raspberry',
+        geometry : {
+            coordinates : [
+                -8.4065665,
+                43.3682188
+            ]
+        }
+    },
     validMeasurementWithKind: {
         kind: 'measurement',
         device: 'raspberry',
