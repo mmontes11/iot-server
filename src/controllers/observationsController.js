@@ -40,7 +40,7 @@ const createObservations = async (req, res, next) => {
     if (_.isUndefined(deviceError)) {
         handleResponse(res, createdObservations, invalidObservations);
     } else {
-        await handleDeviceError(req, res, createdObservations)
+        handleDeviceError(req, res, createdObservations)
     }
 };
 
