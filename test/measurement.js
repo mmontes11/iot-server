@@ -1,8 +1,10 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
+import _ from 'underscore';
 import Promise from 'bluebird';
 import moment from 'moment';
 import { MeasurementModel } from '../src/models/db/measurement';
+import { DeviceModel } from '../src/models/db/device';
 import { TimePeriod } from '../src/models/request/timePeriod';
 import statsCache from '../src/cache/statsCache';
 import redisClient from '../lib/redis';
@@ -28,6 +30,18 @@ const createMeasurements = (measurements, done) => {
     }).catch((err) => {
         done(err);
     });
+};
+const ensureNoMeasurementsCreated = (done) => {
+    MeasurementModel.find()
+        .then((measurements) => {
+            if (_.isEmpty(measurements)) {
+                done();
+            } else {
+                done(new Error('Some measurements have been created'));
+            }
+        }).catch((err) => {
+            done(err);
+        });
 };
 const testCachedStats = (type, device, lastTimePeriod, res, done) => {
     statsCache.getStatsCache(type, device, lastTimePeriod)
@@ -76,7 +90,7 @@ describe('Measurement', () => {
     });
 
     beforeEach((done) => {
-        const promises = [MeasurementModel.remove({}), redisClient.flushall()];
+        const promises = [MeasurementModel.remove({}), DeviceModel.remove({}), redisClient.flushall()];
         Promise.all(promises)
             .then(() => {
                 done();
@@ -94,7 +108,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoMeasurementsCreated(done);
                 });
         });
         it('tries to create a measurement with an invalid device', (done) => {
@@ -105,7 +119,18 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoMeasurementsCreated(done);
+                });
+        });
+        it('tries to create a measurement with a device that has an invalid geometry', (done) => {
+            chai.request(server)
+                .post('/api/measurement')
+                .set('Authorization', auth())
+                .send(constants.measurementRequestWithDeviceWithInvalidGeometry)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    ensureNoMeasurementsCreated(done);
                 });
         });
     });

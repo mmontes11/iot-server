@@ -36,6 +36,26 @@ export default {
             name: 'raspberry'
         }
     },
+    eventRequestWithDeviceWithInvalidGeometry: {
+        event : {
+            duration: {
+                unit: {
+                    name: 'seconds',
+                    symbol: 's'
+                },
+                value: 2.4
+            }
+        },
+        device: {
+            name: 'raspberry',
+            geometry : {
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
+            }
+        }
+    },
     validEventRequest: {
         event : {
             username: 'mmontes',

@@ -33,6 +33,24 @@ export default {
             }
         }
     },
+    measurementRequestWithDeviceWithInvalidGeometry: {
+        measurement: {
+            type: 'temperature',
+            unit: {
+                name: 'degrees',
+                symbol: '°C'
+            },
+            value: 10
+        },
+        device: {
+            geometry : {
+                coordinates : [
+                    -8.4065665,
+                    43.3682188
+                ]
+            }
+        }
+    },
     validMeasurementRequest: {
         measurement: {
             type: 'temperature',

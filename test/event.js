@@ -1,7 +1,9 @@
 import chai from '../lib/chai';
 import httpStatus from 'http-status';
+import _ from 'underscore';
 import Promise from 'bluebird';
 import { EventModel } from '../src/models/db/event';
+import { DeviceModel } from '../src/models/db/device';
 import server from '../index';
 import constants from './constants/event';
 import userConstants from './constants/user';
@@ -22,6 +24,18 @@ const createEvents = (events, done) => {
     }).catch((err) => {
         done(err);
     });
+};
+const ensureNoEventsCreated = (done) => {
+    DeviceModel.find()
+        .then((events) => {
+            if (_.isEmpty(events)) {
+                done();
+            } else {
+                done(new Error('Some events have been created'));
+            }
+        }).catch((err) => {
+            done(err);
+        });
 };
 
 describe('Event', () => {
@@ -47,10 +61,13 @@ describe('Event', () => {
     });
 
     beforeEach((done) => {
-        EventModel.remove({}, (err) => {
-            assert(err !== undefined, 'Error cleaning MongoDB for tests');
-            done();
-        });
+        const promises = [EventModel.remove({}), DeviceModel.remove({})];
+        Promise.all(promises)
+            .then(() => {
+                done();
+            }).catch((err) => {
+                done(err);
+            });
     });
 
     describe('POST /event 400', () => {
@@ -62,7 +79,7 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoEventsCreated(done);
                 });
         });
         it('tries to create an event with an invalid device', (done) => {
@@ -73,7 +90,18 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoEventsCreated(done);
+                });
+        });
+        it('tries to create an event with a device that has an invalid geometry', (done) => {
+            chai.request(server)
+                .post('/api/event')
+                .set('Authorization', auth())
+                .send(constants.eventRequestWithInvalidDevice)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    ensureNoEventsCreated(done);
                 });
         });
     });
