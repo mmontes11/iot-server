@@ -19,19 +19,6 @@ const auth = () => {
     return `Bearer ${token}`;
 };
 
-const ensureNoObservationsCreated = (done) => {
-    ObservationModel.find()
-        .then((observations) => {
-            if (_.isEmpty(observations)) {
-                done();
-            } else {
-                done(new Error('Some observations have been created'));
-            }
-        }).catch((err) => {
-            done(err);
-        });
-};
-
 describe('Observations', () => {
 
     before((done) => {
@@ -118,7 +105,7 @@ describe('Observations', () => {
                     should.not.exist(res.body[serverConstants.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
-                    ensureNoObservationsCreated(done);
+                    done();
                 });
         });
         it('tries to create observations with an invalid device', (done) => {
@@ -137,7 +124,7 @@ describe('Observations', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoObservationsCreated(done);
+                    done();
                 });
         });
         it('tries to create observations with a device that has an invalid geometry', (done) => {
@@ -156,7 +143,7 @@ describe('Observations', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoObservationsCreated(done);
+                    done();
                 });
         });
     });

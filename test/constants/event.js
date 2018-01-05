@@ -22,7 +22,6 @@ export default {
     },
     eventRequestWithInvalidDevice: {
         event : {
-            username: 'mmontes',
             type: 'door_opened',
             duration: {
                 unit: {
@@ -38,6 +37,7 @@ export default {
     },
     eventRequestWithDeviceWithInvalidGeometry: {
         event : {
+            type: 'door_opened',
             duration: {
                 unit: {
                     name: 'seconds',
@@ -58,7 +58,6 @@ export default {
     },
     validEventRequest: {
         event : {
-            username: 'mmontes',
             device: 'raspberry',
             type: 'door_opened',
             duration: {

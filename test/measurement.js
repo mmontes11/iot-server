@@ -11,6 +11,7 @@ import redisClient from '../lib/redis';
 import server from '../index';
 import constants from './constants/measurement';
 import userConstants from './constants/user';
+import serverConstants from '../src/utils/constants';
 
 import config from '../config/index';
 
@@ -30,18 +31,6 @@ const createMeasurements = (measurements, done) => {
     }).catch((err) => {
         done(err);
     });
-};
-const ensureNoMeasurementsCreated = (done) => {
-    MeasurementModel.find()
-        .then((measurements) => {
-            if (_.isEmpty(measurements)) {
-                done();
-            } else {
-                done(new Error('Some measurements have been created'));
-            }
-        }).catch((err) => {
-            done(err);
-        });
 };
 const testCachedStats = (type, device, lastTimePeriod, res, done) => {
     statsCache.getStatsCache(type, device, lastTimePeriod)
@@ -108,7 +97,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoMeasurementsCreated(done);
+                    done();
                 });
         });
         it('tries to create a measurement with an invalid device', (done) => {
@@ -119,7 +108,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoMeasurementsCreated(done);
+                    done();
                 });
         });
         it('tries to create a measurement with a device that has an invalid geometry', (done) => {
@@ -129,8 +118,9 @@ describe('Measurement', () => {
                 .send(constants.measurementRequestWithDeviceWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoMeasurementsCreated(done);
+                    done();
                 });
         });
     });
@@ -194,7 +184,7 @@ describe('Measurement', () => {
         });
     });
 
-    describe('GET /event/last 200', () => {
+    describe('GET /measurement/last 200', () => {
         beforeEach((done) => {
             const events = [constants.temperatureMeasurement, constants.temperatureMeasurement2,
                 constants.humidityMeasurement, constants.humidityMeasurement2];

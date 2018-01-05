@@ -17,7 +17,7 @@ import constants from '../utils/constants';
             await deviceController.createOrUpdateDevice(req, savedMeasurement.phenomenonTime);
             res.status(httpStatus.CREATED).json(savedMeasurement);
         } catch (err) {
-            await deviceController.handleDeviceCreationError(req, res [savedMeasurement]);
+            await deviceController.handleDeviceCreationError(req, res, [savedMeasurement]);
         }
     } catch (err) {
         responseHandler.handleError(res, err);

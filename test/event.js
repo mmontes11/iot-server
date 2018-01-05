@@ -7,6 +7,7 @@ import { DeviceModel } from '../src/models/db/device';
 import server from '../index';
 import constants from './constants/event';
 import userConstants from './constants/user';
+import serverConstants from '../src/utils/constants';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -24,18 +25,6 @@ const createEvents = (events, done) => {
     }).catch((err) => {
         done(err);
     });
-};
-const ensureNoEventsCreated = (done) => {
-    DeviceModel.find()
-        .then((events) => {
-            if (_.isEmpty(events)) {
-                done();
-            } else {
-                done(new Error('Some events have been created'));
-            }
-        }).catch((err) => {
-            done(err);
-        });
 };
 
 describe('Event', () => {
@@ -79,7 +68,7 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoEventsCreated(done);
+                    done();
                 });
         });
         it('tries to create an event with an invalid device', (done) => {
@@ -90,18 +79,19 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoEventsCreated(done);
+                    done();
                 });
         });
         it('tries to create an event with a device that has an invalid geometry', (done) => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.eventRequestWithInvalidDevice)
+                .send(constants.eventRequestWithDeviceWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    ensureNoEventsCreated(done);
+                    done();
                 });
         });
     });

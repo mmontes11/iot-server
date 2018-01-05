@@ -34,15 +34,16 @@ export default {
         }
     },
     measurementRequestWithDeviceWithInvalidGeometry: {
-        measurement: {
+        measurement : {
             type: 'temperature',
             unit: {
-                name: 'degrees',
-                symbol: '°C'
+                name: "degrees",
+                symbol: "°C"
             },
             value: 10
         },
         device: {
+            name: 'raspberry',
             geometry : {
                 coordinates : [
                     -8.4065665,
