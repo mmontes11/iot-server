@@ -8,6 +8,7 @@ import { Devi } from '../src/models/db/event';
 import server from '../index';
 import constants from './constants/observations';
 import userConstants from './constants/user';
+import serverConstants from '../src/utils/constants';
 import {DeviceModel} from "../src/models/db/device";
 import {ObservationModel} from "../src/models/db/observation";
 
@@ -113,8 +114,8 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body.invalidObservations);
-                    should.not.exist(res.body.createdObservations);
+                    should.exist(res.body[serverConstants.invalidObservationsArrayName]);
+                    should.not.exist(res.body[serverConstants.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
                     ensureNoObservationsCreated(done);
@@ -134,7 +135,7 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body.invalidDevice);
+                    should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoObservationsCreated(done);
                 });
@@ -153,7 +154,7 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body.invalidDevice);
+                    should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoObservationsCreated(done);
                 });
@@ -185,11 +186,11 @@ describe('Observations', () => {
                 .send(validAndInvalidObservations)
                 .end((err, res) => {
                     should.not.exist(err);
-                    should.exist(res.body.invalidObservations);
-                    should.exist(res.body.createdObservations);
+                    should.exist(res.body[serverConstants.invalidObservationsArrayName]);
+                    should.exist(res.body[serverConstants.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.MULTI_STATUS);
-                    res.body.invalidObservations.length.should.be.eql(4);
-                    res.body.createdObservations.length.should.be.eql(2);
+                    res.body[serverConstants.invalidObservationsArrayName].length.should.be.eql(4);
+                    res.body[serverConstants.createdObservationsArrayName].length.should.be.eql(2);
                     done();
                 });
         });
@@ -210,10 +211,10 @@ describe('Observations', () => {
                 .send(validObservations)
                 .end((err, res) => {
                     should.not.exist(err);
-                    should.not.exist(res.body.invalidObservations);
-                    should.exist(res.body.createdObservations);
+                    should.not.exist(res.body[serverConstants.invalidObservationsArrayName]);
+                    should.exist(res.body[serverConstants.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.CREATED);
-                    res.body.createdObservations.length.should.be.eql(2);
+                    res.body[serverConstants.createdObservationsArrayName].length.should.be.eql(2);
                     done();
                 });
         });

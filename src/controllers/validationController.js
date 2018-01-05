@@ -3,7 +3,6 @@ import httpStatus from 'http-status';
 import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/constants';
-import errors from '../utils/errors';
 
 const validateCreateUser = (req, res, next) => {
     if (requestValidator.validUser(req.body)) {
@@ -71,7 +70,7 @@ const validateCreateObservations = (req, res, next) => {
     }
     const device = req.body.device;
     if (!requestValidator.validDevice(device)) {
-        return res.status(httpStatus.BAD_REQUEST).json({ invalidDevice: device });
+        return res.status(httpStatus.BAD_REQUEST).json({ [constants.invalidDeviceKey]: device });
     }
     next();
 };

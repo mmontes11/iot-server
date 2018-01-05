@@ -85,7 +85,7 @@ const _getDevices = async (req) => {
 
 const _sendDeviceErrorResponse = (req, res) => {
     const response = {
-        invalidDevice: req.body.device
+        [constants.invalidDeviceKey]: req.body.device
     };
     res.status(httpStatus.BAD_REQUEST).json(response);
 };
