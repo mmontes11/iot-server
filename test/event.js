@@ -26,6 +26,18 @@ const createEvents = (events, done) => {
         done(err);
     });
 };
+const ensureNoEventsCreated = (done) => {
+    EventModel.find()
+        .then((events) => {
+            if (_.isEmpty(events)) {
+                done();
+            } else {
+                done(new Error('Some events have been created'));
+            }
+        }).catch((err) => {
+            done(err);
+        });
+};
 
 describe('Event', () => {
 
@@ -68,7 +80,7 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoEventsCreated(done);
                 });
         });
         it('tries to create an event with an invalid device', (done) => {
@@ -79,7 +91,7 @@ describe('Event', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoEventsCreated(done);
                 });
         });
         it('tries to create an event with a device that has an invalid geometry', (done) => {
@@ -91,7 +103,7 @@ describe('Event', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoEventsCreated(done);
                 });
         });
     });

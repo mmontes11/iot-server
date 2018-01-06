@@ -4,19 +4,30 @@ import _ from 'underscore';
 import Promise from 'bluebird';
 import { MeasurementModel } from '../src/models/db/measurement';
 import { EventModel } from '../src/models/db/event';
-import { Devi } from '../src/models/db/event';
+import { DeviceModel } from '../src/models/db/device';
+import { ObservationModel } from '../src/models/db/observation';
 import server from '../index';
 import constants from './constants/observations';
 import userConstants from './constants/user';
 import serverConstants from '../src/utils/constants';
-import {DeviceModel} from "../src/models/db/device";
-import {ObservationModel} from "../src/models/db/observation";
 
 const assert = chai.assert;
 const should = chai.should();
 let token = null;
 const auth = () => {
     return `Bearer ${token}`;
+};
+const ensureNoObservationsCreated = (done) => {
+    ObservationModel.find()
+        .then((observations) => {
+            if (_.isEmpty(observations)) {
+                done();
+            } else {
+                done(new Error('Some observations have been created'));
+            }
+        }).catch((err) => {
+            done(err);
+        });
 };
 
 describe('Observations', () => {
@@ -64,7 +75,7 @@ describe('Observations', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.NOT_MODIFIED);
-                    done();
+                    ensureNoObservationsCreated(done);
                 });
         });
     });
@@ -82,7 +93,7 @@ describe('Observations', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoObservationsCreated(done);
                 });
         });
         it('tries to create invalid observations', (done) => {
@@ -105,7 +116,7 @@ describe('Observations', () => {
                     should.not.exist(res.body[serverConstants.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
-                    done();
+                    ensureNoObservationsCreated(done);
                 });
         });
         it('tries to create observations with an invalid device', (done) => {
@@ -124,7 +135,7 @@ describe('Observations', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoObservationsCreated(done);
                 });
         });
         it('tries to create observations with a device that has an invalid geometry', (done) => {
@@ -143,7 +154,7 @@ describe('Observations', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoObservationsCreated(done);
                 });
         });
     });

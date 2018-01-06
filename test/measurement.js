@@ -32,6 +32,18 @@ const createMeasurements = (measurements, done) => {
         done(err);
     });
 };
+const ensureNoMeasurementsCreated = (done) => {
+    MeasurementModel.find()
+        .then((measurements) => {
+            if (_.isEmpty(measurements)) {
+                done();
+            } else {
+                done(new Error('Some measurements have been created'));
+            }
+        }).catch((err) => {
+            done(err);
+        });
+};
 const testCachedStats = (type, device, lastTimePeriod, res, done) => {
     statsCache.getStatsCache(type, device, lastTimePeriod)
         .then((cachedStats) => {
@@ -97,7 +109,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoMeasurementsCreated(done);
                 });
         });
         it('tries to create a measurement with an invalid device', (done) => {
@@ -108,7 +120,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoMeasurementsCreated(done);
                 });
         });
         it('tries to create a measurement with a device that has an invalid geometry', (done) => {
@@ -120,7 +132,7 @@ describe('Measurement', () => {
                     should.exist(err);
                     should.exist(res.body[serverConstants.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
+                    ensureNoMeasurementsCreated(done);
                 });
         });
     });
