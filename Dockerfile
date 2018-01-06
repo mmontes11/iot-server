@@ -6,8 +6,6 @@ RUN mkdir ${WORKDIR}
 
 WORKDIR ${WORKDIR}
 
-COPY . ${WORKDIR}
-
-RUN npm install
+ADD dist ${WORKDIR}
 
 CMD npm run production
