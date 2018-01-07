@@ -3,7 +3,7 @@ import 'mongoose-schema-extend';
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import config from '../config/index';
-import { logInfo } from '../src/utils/log';
+import { logInfo } from '../utils/log';
 
 mongoose.Promise = Promise;
 

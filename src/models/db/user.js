@@ -1,4 +1,4 @@
-import mongoose from '../../../lib/mongoose';
+import mongoose from '../../lib/mongoose';
 import regex from '../../utils/regex'
 
 const UserSchema = new mongoose.Schema({

@@ -1,8 +1,8 @@
-import chai from '../lib/chai';
+import chai from '../src/lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import { DeviceModel } from '../src/models/db/device';
-import server from '../index';
+import server from '../src/index';
 import constants from './constants/device';
 import userConstants from './constants/user';
 

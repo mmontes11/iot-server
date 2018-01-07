@@ -1,4 +1,4 @@
-import mongoose from '../../../lib/mongoose';
+import mongoose from '../../lib/mongoose';
 import constants from '../../utils/constants';
 import _ from 'underscore';
 import regex from '../../utils/regex';

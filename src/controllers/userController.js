@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import _ from 'underscore';
 import { UserModel } from '../models/db/user';
 import modelFactory from '../models/db/modelFactory';
-import config from '../../config/index';
+import config from '../config/index';
 import responseHandler from '../helpers/responseHandler';
 
  const createIfNotExists = async (req, res) => {

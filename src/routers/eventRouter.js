@@ -2,7 +2,7 @@ import express from 'express';
 import expressJwt from 'express-jwt';
 import eventController from '../controllers/eventController';
 import validationController from '../controllers/validationController';
-import config from '../../config/index';
+import config from '../config/index';
 
 const router = express.Router();
 

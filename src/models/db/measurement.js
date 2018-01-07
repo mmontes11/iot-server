@@ -1,5 +1,5 @@
 import _ from "underscore";
-import mongoose from "../../../lib/mongoose";
+import mongoose from "../../lib/mongoose";
 import { ObservationSchema } from "./observation";
 import { UnitSchema } from './unit';
 

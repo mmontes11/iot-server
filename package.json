@@ -11,9 +11,12 @@
     "npm": ">=5.0.0"
   },
   "scripts": {
-    "start": "export NODE_ENV=development && babel-node index.js",
-    "test": "npm run build && export NODE_ENV=test && mocha --reporter spec --timeout 10000 dist/test",
-    "build": "gulp && cd dist && npm install --production && cd -",
+    "start": "export NODE_ENV=development && babel-node src/index.js",
+    "test": "export NODE_ENV=test && mocha --compilers js:babel-register --timeout 10000 test/",
+    "clean": "rm -rf dist/*",
+    "prebuild": "npm run clean",
+    "build": "babel -d dist/ src/",
+    "dist": "npm run build && cp package.json dist/ && cd dist && npm install --production && cd -",
     "production": "export NODE_ENV=production && node index.js"
   },
   "repository": {
@@ -30,8 +33,10 @@
     "chai",
     "mocha",
     "es6",
+    "babel",
     "REST",
-    "API"
+    "API",
+    "IoT"
   ],
   "dependencies": {
     "@google/maps": "^0.4.5",

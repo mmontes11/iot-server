@@ -1,4 +1,4 @@
-import mongoose from '../../../lib/mongoose';
+import mongoose from '../../lib/mongoose';
 
 const UnitSchema = new mongoose.Schema({
     name: String,

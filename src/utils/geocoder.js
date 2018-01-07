@@ -1,4 +1,4 @@
-import googleMaps from '../../lib/googleMaps';
+import googleMaps from '../lib/googleMaps';
 import _ from 'underscore';
 import { logInfo, logError } from './log';
 

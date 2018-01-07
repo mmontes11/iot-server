@@ -3,9 +3,9 @@ import redis from './lib/redis';
 import app from './lib/express';
 import { Server } from 'http';
 import SocketIO from 'socket.io';
-import { SocketController } from './src/socket/socketController';
+import { SocketController } from './socket/socketController';
 import config from './config/index';
-import { logInfo, logError } from './src/utils/log';
+import { logInfo, logError } from './utils/log';
 
 const server = new Server(app);
 const io = new SocketIO(server);

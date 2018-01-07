@@ -1,4 +1,4 @@
-import chai from '../lib/chai';
+import chai from '../src/lib/chai';
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
@@ -7,13 +7,13 @@ import { MeasurementModel } from '../src/models/db/measurement';
 import { DeviceModel } from '../src/models/db/device';
 import { TimePeriod } from '../src/models/request/timePeriod';
 import statsCache from '../src/cache/statsCache';
-import redisClient from '../lib/redis';
-import server from '../index';
+import redisClient from '../src/lib/redis';
+import server from '../src/index';
 import constants from './constants/measurement';
 import userConstants from './constants/user';
 import serverConstants from '../src/utils/constants';
 
-import config from '../config/index';
+import config from '../src/config/index';
 
 const assert = chai.assert;
 const should = chai.should();

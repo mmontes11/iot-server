@@ -7,7 +7,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import winston from './winston';
 import expressWinston from 'express-winston';
-import routes from '../src/routers/indexRouter';
+import routes from '../routers/indexRouter';
 import config from '../config/index';
 
 const app = express();

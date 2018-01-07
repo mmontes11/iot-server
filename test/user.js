@@ -1,7 +1,7 @@
-import chai from '../lib/chai';
+import chai from '../src/lib/chai';
 import httpStatus from 'http-status';
 import { UserModel } from '../src/models/db/user';
-import server from '../index';
+import server from '../src/index';
 import constants from './constants/user';
 
 const assert = chai.assert;

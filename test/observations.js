@@ -1,4 +1,4 @@
-import chai from '../lib/chai';
+import chai from '../src/lib/chai';
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
@@ -6,7 +6,7 @@ import { MeasurementModel } from '../src/models/db/measurement';
 import { EventModel } from '../src/models/db/event';
 import { DeviceModel } from '../src/models/db/device';
 import { ObservationModel } from '../src/models/db/observation';
-import server from '../index';
+import server from '../src/index';
 import constants from './constants/observations';
 import userConstants from './constants/user';
 import serverConstants from '../src/utils/constants';

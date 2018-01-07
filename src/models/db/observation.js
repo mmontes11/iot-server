@@ -1,6 +1,5 @@
 import _ from 'underscore';
-import mongoose from '../../../lib/mongoose';
-import observations from "../../../test/constants/observations";
+import mongoose from '../../lib/mongoose';
 
 const ObservationSchema = new mongoose.Schema({
     username: String,
