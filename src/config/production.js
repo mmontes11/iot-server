@@ -5,5 +5,6 @@ export default {
     redisUrl: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 30,
+    maxDefaultNearbyDistanceInMeters: 10000,
     debug: true
 };

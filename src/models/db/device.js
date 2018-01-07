@@ -1,5 +1,5 @@
 import mongoose from '../../lib/mongoose';
-import constants from '../../utils/constants';
+import config from '../../config/index';
 import _ from 'underscore';
 import regex from '../../utils/regex';
 
@@ -44,7 +44,7 @@ DeviceSchema.statics.findDeviceByName = function (name) {
     return this.findOne({ name: name });
 };
 
-DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = constants.maxDefaultNearbyDistanceInMeters){
+DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = config.maxDefaultNearbyDistanceInMeters){
     let query;
     if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
         query = {

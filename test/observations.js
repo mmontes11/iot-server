@@ -9,7 +9,7 @@ import { ObservationModel } from '../src/models/db/observation';
 import server from '../src/index';
 import constants from './constants/observations';
 import userConstants from './constants/user';
-import serverConstants from '../src/utils/constants';
+import responseKeys from '../src/utils/responseKeys';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -112,10 +112,10 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[serverConstants.invalidObservationsArrayName]);
-                    should.not.exist(res.body[serverConstants.createdObservationsArrayName]);
+                    should.exist(res.body[responseKeys.invalidObservationsArrayName]);
+                    should.not.exist(res.body[responseKeys.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    res.body.invalidObservations.length.should.be.eql(_.size(invalidObservations.observations));
+                    res.body[responseKeys.invalidObservationsArrayName].length.should.be.eql(_.size(invalidObservations.observations));
                     ensureNoObservationsCreated(done);
                 });
         });
@@ -133,7 +133,7 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[serverConstants.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoObservationsCreated(done);
                 });
@@ -152,7 +152,7 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[serverConstants.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoObservationsCreated(done);
                 });
@@ -184,11 +184,11 @@ describe('Observations', () => {
                 .send(validAndInvalidObservations)
                 .end((err, res) => {
                     should.not.exist(err);
-                    should.exist(res.body[serverConstants.invalidObservationsArrayName]);
-                    should.exist(res.body[serverConstants.createdObservationsArrayName]);
+                    should.exist(res.body[responseKeys.invalidObservationsArrayName]);
+                    should.exist(res.body[responseKeys.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.MULTI_STATUS);
-                    res.body[serverConstants.invalidObservationsArrayName].length.should.be.eql(4);
-                    res.body[serverConstants.createdObservationsArrayName].length.should.be.eql(2);
+                    res.body[responseKeys.invalidObservationsArrayName].length.should.be.eql(4);
+                    res.body[responseKeys.createdObservationsArrayName].length.should.be.eql(2);
                     done();
                 });
         });
@@ -209,10 +209,10 @@ describe('Observations', () => {
                 .send(validObservations)
                 .end((err, res) => {
                     should.not.exist(err);
-                    should.not.exist(res.body[serverConstants.invalidObservationsArrayName]);
-                    should.exist(res.body[serverConstants.createdObservationsArrayName]);
+                    should.not.exist(res.body[responseKeys.invalidObservationsArrayName]);
+                    should.exist(res.body[responseKeys.createdObservationsArrayName]);
                     res.should.have.status(httpStatus.CREATED);
-                    res.body[serverConstants.createdObservationsArrayName].length.should.be.eql(2);
+                    res.body[responseKeys.createdObservationsArrayName].length.should.be.eql(2);
                     done();
                 });
         });

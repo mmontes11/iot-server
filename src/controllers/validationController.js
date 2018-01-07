@@ -2,7 +2,7 @@ import _ from "underscore";
 import httpStatus from 'http-status';
 import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
 import requestValidator from '../helpers/requestValidator';
-import constants from '../utils/constants';
+import constants from '../utils/responseKeys';
 
 const validateCreateUser = (req, res, next) => {
     if (requestValidator.validUser(req.body)) {

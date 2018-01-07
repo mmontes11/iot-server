@@ -11,7 +11,7 @@ import redisClient from '../src/lib/redis';
 import server from '../src/index';
 import constants from './constants/measurement';
 import userConstants from './constants/user';
-import serverConstants from '../src/utils/constants';
+import responseKeys from '../src/utils/responseKeys';
 
 import config from '../src/config/index';
 
@@ -130,7 +130,7 @@ describe('Measurement', () => {
                 .send(constants.measurementRequestWithDeviceWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[serverConstants.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoMeasurementsCreated(done);
                 });

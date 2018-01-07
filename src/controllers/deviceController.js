@@ -5,7 +5,7 @@ import requestValidator from '../helpers/requestValidator';
 import modelFactory from '../models/db/modelFactory';
 import { DeviceModel } from "../models/db/device";
 import responseHandler from '../helpers/responseHandler';
-import constants from '../utils/constants';
+import constants from '../utils/responseKeys';
 import geocoder from '../utils/geocoder';
 
 const createOrUpdateDevice = (req, lastObservation) => {

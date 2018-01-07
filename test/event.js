@@ -7,7 +7,7 @@ import { DeviceModel } from '../src/models/db/device';
 import server from '../src/index';
 import constants from './constants/event';
 import userConstants from './constants/user';
-import serverConstants from '../src/utils/constants';
+import responseKeys from '../src/utils/responseKeys';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -101,7 +101,7 @@ describe('Event', () => {
                 .send(constants.eventRequestWithDeviceWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[serverConstants.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidDeviceKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoEventsCreated(done);
                 });

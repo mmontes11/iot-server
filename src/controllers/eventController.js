@@ -4,7 +4,7 @@ import { EventModel } from '../models/db/event';
 import modelFactory from '../models/db/modelFactory';
 import responseHandler from '../helpers/responseHandler';
 import deviceController from './deviceController';
-import constants from '../utils/constants';
+import constants from '../utils/responseKeys';
 
  const createEvent = async (req, res) => {
     try {

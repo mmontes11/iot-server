@@ -7,7 +7,7 @@ import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
 import responseHandler from '../helpers/responseHandler';
 import deviceController from './deviceController';
-import constants from '../utils/constants';
+import constants from '../utils/responseKeys';
 
  const createMeasurement = async (req, res) => {
     try {

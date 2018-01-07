@@ -1,4 +1,4 @@
-import constants from '../utils/constants';
+import constants from '../utils/responseKeys';
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';

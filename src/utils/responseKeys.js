@@ -6,5 +6,4 @@ export default {
     createdObservationsArrayName: "createdObservations",
     invalidObservationsArrayName: "invalidObservations",
     invalidDeviceKey: "invalidDevice",
-    maxDefaultNearbyDistanceInMeters: 10000
 };

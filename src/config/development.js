@@ -5,5 +5,6 @@ export default {
     redisUrl: 'redis://localhost:6379',
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 5,
+    maxDefaultNearbyDistanceInMeters: 10000,
     debug: true
 };
