@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "ES6 NodeJS + MongoDB IoT backend",
   "author": "Martín Montes <martin11lrx@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "main": "index.js",
   "private": false,
   "engines": {
