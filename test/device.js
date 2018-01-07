@@ -1,4 +1,4 @@
-import chai from '../src/lib/chai';
+import chai from './lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import { DeviceModel } from '../src/models/db/device';

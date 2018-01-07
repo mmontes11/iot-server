@@ -1,4 +1,4 @@
-import chai from '../src/lib/chai';
+import chai from './lib/chai';
 import httpStatus from 'http-status';
 import { UserModel } from '../src/models/db/user';
 import server from '../src/index';

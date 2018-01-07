@@ -1,4 +1,4 @@
-import chai from '../src/lib/chai';
+import chai from './lib/chai';
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
