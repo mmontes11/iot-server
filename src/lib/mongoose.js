@@ -14,4 +14,6 @@ if (config.debug) {
     });
 }
 
+mongoose.connect(config.mongoUrl, {useMongoClient: true});
+
 export default mongoose;
