@@ -5,7 +5,6 @@ import { ObservationKind } from '../request/observationKind';
 import requestValidator from '../../helpers/requestValidator';
 import request from '../../utils/request';
 import ip from '../../utils/ip';
-import geojson from '../../utils/geojson';
 import _ from 'underscore';
 
 const createUser = (user) => {

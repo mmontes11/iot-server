@@ -29,13 +29,6 @@ ObservationSchema.statics.findLastN = function(n = 10, type){
     return this.find(findCriteria).sort({'phenomenonTime': -1}).limit(n);
 };
 
-ObservationSchema.statics.removeObservations = function (observations) {
-    const observationsIDs = _.map(observations, (observation) => {
-        return observation._id
-    });
-    return this.remove({ _id: { $in: observationsIDs }});
-};
-
 const ObservationModel = mongoose.model('Observation', ObservationSchema);
 
 export { ObservationSchema, ObservationModel };
