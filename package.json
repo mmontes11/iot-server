@@ -13,7 +13,7 @@
   "scripts": {
     "start": "export NODE_ENV=development && babel-node src/index.js",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc report | coveralls",
     "clean": "rm -rf dist/*",
     "prebuild": "npm run clean",
     "build": "babel -d dist/ src/",
@@ -87,16 +87,5 @@
     "mocha": "^3.5.3",
     "nyc": "^11.4.1",
     "run-sequence": "^1.1.5"
-  },
-  "nyc": {
-    "require": [
-      "babel-register"
-    ],
-    "reporter": [
-      "lcov",
-      "text"
-    ],
-    "sourceMap": false,
-    "instrument": false
   }
 }
