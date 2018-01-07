@@ -29,8 +29,13 @@ node_modules
 package-lock.json
 npm-debug.log*
 
-# config
+# Config
 config/productionPrivate.js
+
+# Test & Coverage
+.nyc_output
+coverage
 
 # other
 *.rdb
+
