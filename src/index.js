@@ -2,15 +2,10 @@ import mongoose from './lib/mongoose';
 import redis from './lib/redis';
 import app from './lib/express';
 import { Server } from 'http';
-import SocketIO from 'socket.io';
-import { SocketController } from './socket/socketController';
 import config from './config/index';
 import { logInfo, logError } from './utils/log';
 
 const server = new Server(app);
-const io = new SocketIO(server);
-const socketController = new SocketController(io);
-socketController.listen();
 
 mongoose.connect(config.mongoUrl, {useMongoClient: true}, (err) => {
 	if (err) {

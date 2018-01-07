@@ -62,7 +62,6 @@
     "redis": "^2.6.5",
     "request-ip": "^2.0.2",
     "run-sequence": "^1.1.5",
-    "socket.io": "^1.7.3",
     "underscore": "^1.8.3",
     "winston": "^2.3.0",
     "winston-mongodb": "^2.0.10"
