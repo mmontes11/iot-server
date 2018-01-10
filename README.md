@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/mmontes11/iot_backend/badge.svg?branch=develop)](https://coveralls.io/github/mmontes11/iot_backend?branch=develop)
 [![MIT License](https://img.shields.io/npm/l/stack-overflow-copy-paste.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
-An ES6 NodeJS + MongoDB + Redis backend that manages your IoT data 
+ES6 NodeJS + MongoDB + Redis backend that manages your IoT data 
 
 ### Docker Hub
 
