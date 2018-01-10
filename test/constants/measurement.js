@@ -1,5 +1,5 @@
 export default {
-    measurementRequestWithInvalidMeasurement: {
+    measurementRequestWithInvalidMeasurementA: {
         measurement: {
             value: 10
         },
@@ -52,7 +52,7 @@ export default {
             }
         }
     },
-    validMeasurementRequest: {
+    validMeasurementRequestWithDeviceInCoruna: {
         measurement: {
             type: 'temperature',
             unit: {
@@ -62,12 +62,32 @@ export default {
             value: 10
         },
         device: {
-            name: 'raspberry',
+            name: 'raspi-coruna',
             geometry : {
                 type : 'Point',
                 coordinates : [
                     -8.4065665,
                     43.3682188
+                ]
+            }
+        }
+    },
+    validMeasurementRequestWithDeviceInNYC: {
+        measurement: {
+            type: 'temperature',
+            unit: {
+                name: 'degrees',
+                symbol: '°C'
+            },
+            value: 10
+        },
+        device: {
+            name: 'raspi-nyc',
+            geometry : {
+                type : 'Point',
+                coordinates : [
+                    -74.25,
+                    40.69
                 ]
             }
         }

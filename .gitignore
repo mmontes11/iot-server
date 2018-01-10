@@ -30,7 +30,7 @@ package-lock.json
 npm-debug.log*
 
 # Config
-config/productionPrivate.js
+src/config/productionPrivate.js
 
 # Test & Coverage
 .nyc_output

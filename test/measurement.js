@@ -32,6 +32,14 @@ const createMeasurements = (measurements, done) => {
         done(err);
     });
 };
+const performMeasurementCreationRequest = (measurementRequests, done) => {
+    Promise.all(measurementRequests)
+        .then(() => {
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+};
 const ensureNoMeasurementsCreated = (done) => {
     MeasurementModel.find()
         .then((measurements) => {
@@ -142,7 +150,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.validMeasurementRequest)
+                .send(constants.validMeasurementRequestWithDeviceInCoruna)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
@@ -588,4 +596,199 @@ describe('Measurement', () => {
         });
     });
 
+    describe('GET /measurement/stats?address=X 404', () => {
+        beforeEach((done) => {
+            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
+                return new Promise((resolve, reject) => {
+                    chai.request(server)
+                        .post('/api/measurement')
+                        .set('Authorization', auth())
+                        .send(measurementRequestBody)
+                        .end((err, res) => {
+                            if (_.isUndefined(err)) {
+                                resolve();
+                            } else {
+                                reject(err);
+                            }
+                        });
+                });
+            });
+            performMeasurementCreationRequest(measurementRequestPromises, done);
+        });
+        it('gets stats from an address that has no devices', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'address': 'Tombuctú',
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+        it('gets stats from a non existing address', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'address': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats?address=X 200', () => {
+        beforeEach((done) => {
+            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
+                return new Promise((resolve, reject) => {
+                    chai.request(server)
+                        .post('/api/measurement')
+                        .set('Authorization', auth())
+                        .send(measurementRequestBody)
+                        .end((err, res) => {
+                            if (_.isUndefined(err)) {
+                                resolve();
+                            } else {
+                                reject(err);
+                            }
+                        });
+                });
+            });
+            performMeasurementCreationRequest(measurementRequestPromises, done);
+        });
+        it('gets stats from A Coruña address', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'address': 'A Coruña',
+                    'maxDistance': 100000
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    done();
+                });
+        });
+        it('gets stats from NYC address', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'address': 'Times Square',
+                    'maxDistance': 100000
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats?longitude=X&latitude=Y 404', () => {
+        beforeEach((done) => {
+            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
+                return new Promise((resolve, reject) => {
+                    chai.request(server)
+                        .post('/api/measurement')
+                        .set('Authorization', auth())
+                        .send(measurementRequestBody)
+                        .end((err, res) => {
+                            if (_.isUndefined(err)) {
+                                resolve();
+                            } else {
+                                reject(err);
+                            }
+                        });
+                });
+            });
+            performMeasurementCreationRequest(measurementRequestPromises, done);
+        });
+        it('gets stats from  coordinates that have no devices', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'longitude': -3.0167342,
+                    'latitude': 16.7714039
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /measurement/stats?longitude=X&latitude=Y 200', () => {
+        beforeEach((done) => {
+            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
+                return new Promise((resolve, reject) => {
+                    chai.request(server)
+                        .post('/api/measurement')
+                        .set('Authorization', auth())
+                        .send(measurementRequestBody)
+                        .end((err, res) => {
+                            if (_.isUndefined(err)) {
+                                resolve();
+                            } else {
+                                reject(err);
+                            }
+                        });
+                });
+            });
+            performMeasurementCreationRequest(measurementRequestPromises, done);
+        });
+        it('gets stats from A Coruña coordinates', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'longitude': -8.4165665,
+                    'latitude': 43.3682188
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    done();
+                });
+        });
+        it('gets stats from NYC coordinates', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'longitude': -74.25,
+                    'latitude': 40.69
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(1);
+                    done();
+                });
+        });
+    });
 });
