@@ -320,6 +320,34 @@ describe('Measurement', () => {
                     done();
                 });
         });
+        it('gets measurement stats of a non valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'startDate': '2016-01-32',
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+        it('gets measurement stats of a non valid time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'endDate': '2016-13-01',
+                    'lastTimePeriod': 'month'
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
         it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
@@ -369,6 +397,22 @@ describe('Measurement', () => {
                     res.body.stats.should.be.a('array');
                     res.body.stats.length.should.be.equal(4);
                     testCachedStats(undefined, undefined, new TimePeriod('month'), res, done);
+                });
+        });
+        it('gets measurement stats of a valid custom time period', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'startDate': moment().utc().subtract(1, 'minute').toISOString()
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body.should.be.a('object');
+                    res.body.stats.should.be.a('array');
+                    res.body.stats.length.should.be.equal(4);
+                    done();
                 });
         });
         it('gets measurement stats of a valid custom time period', (done) => {
