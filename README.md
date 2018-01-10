@@ -8,5 +8,5 @@ ES6 NodeJS + MongoDB + Redis backend that manages your IoT data
 
 ### Docker Hub
 
-Image available in [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
+Image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
 
