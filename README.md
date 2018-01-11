@@ -6,14 +6,24 @@
 
 Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend 
 
+### Run in development
+
+```bash
+$ npm install 
+$ npm start
+```
+
 ### DockerHub
 
 Image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
 
 ### Deploy using Docker Compose
 
-Steps to deploy described in [IoT backend docker](https://github.com/mmontes11/iot_backend_docker)
+You may change your environment variables located in `.env` and then execute:
+```bash
+$ docker-compose up -d 
+```
 
-### Run in Postman
+### Test requests with Postman
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/95f05db9eadcd090b16a#?env%5BIoT_DEV%5D=W3siZW5hYmxlZCI6dHJ1ZSwia2V5Ijoic2VydmVyIiwidmFsdWUiOiJsb2NhbGhvc3Q6ODAwMCIsInR5cGUiOiJ0ZXh0In0seyJlbmFibGVkIjp0cnVlLCJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5Ym1GdFpTSTZJbTF0YjI1MFpYTWlMQ0pwWVhRaU9qRTFNRFkzTnpFeE9EQjkuSkVsN1owN0JRbHZuWk8wRWdrTkZRYV9CRGtGUzJfUXpQekhGbDlvMklDWSIsInR5cGUiOiJ0ZXh0In0seyJlbmFibGVkIjp0cnVlLCJrZXkiOiJnb29nbGVNYXBzS2V5IiwidmFsdWUiOiJBSXphU3lDdGxzdkxrRVBUd01tU1BYbTFFc0JYY2RKOTRrWk5KQzQiLCJ0eXBlIjoidGV4dCJ9LHsiZW5hYmxlZCI6dHJ1ZSwia2V5IjoiYmFzaWNBdXRoIiwidmFsdWUiOiJZV1J0YVc0NllXUnRhVzQ9IiwidHlwZSI6InRleHQifV0=)
