@@ -12,7 +12,7 @@ Image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
 
 ### Deploy using Docker Compose
 
-Steps to deploy described in [IoT backend container](https://github.com/mmontes11/iot_backend_container)
+Steps to deploy described in [IoT backend docker](https://github.com/mmontes11/iot_backend_docker)
 
 ### Run in Postman
 
