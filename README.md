@@ -12,6 +12,12 @@ Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend
 $ npm install 
 $ npm start
 ```
+### Run tests and show coverage
+
+```bash
+$ npm test
+```
+
 ### Build server image
 
 ```bash
