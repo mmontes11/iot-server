@@ -12,10 +12,16 @@ Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend
 $ npm install 
 $ npm start
 ```
+### Build server image
+
+```bash
+$ npm dist 
+$ docker build -t iot_backend .
+```
 
 ### DockerHub
 
-Image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
+Server image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
 
 ### Deploy using Docker Compose
 
