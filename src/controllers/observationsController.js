@@ -8,7 +8,7 @@ import { ObservationModel } from "../models/db/observation"
 import thingController from './thingController';
 
 const createObservations = async (req, res, next) => {
-    const observations = req.body[constants.observationsArrayName];
+    const observations = req.body[constants.observationsArrayKey];
     let createdObservations = [];
     let invalidObservations = [];
     let savePromises = [];
@@ -50,18 +50,18 @@ const createOrUpdateThing = async (req, createdObservations) => {
 const handleResponse = (res, createdObservations, invalidObservations) => {
     if (_.isEmpty(createdObservations)) {
         const response = {
-            [constants.invalidObservationsArrayName]: invalidObservations
+            [constants.invalidObservationsArrayKey]: invalidObservations
         };
         return res.status(httpStatus.BAD_REQUEST).json(response);
     } else if (_.isEmpty(invalidObservations)) {
         const response = {
-            [constants.createdObservationsArrayName]: createdObservations
+            [constants.createdObservationsArrayKey]: createdObservations
         };
         return res.status(httpStatus.CREATED).json(response);
     } else {
         const response = {
-            [constants.createdObservationsArrayName]: createdObservations,
-            [constants.invalidObservationsArrayName]: invalidObservations
+            [constants.createdObservationsArrayKey]: createdObservations,
+            [constants.invalidObservationsArrayKey]: invalidObservations
         };
         return res.status(httpStatus.MULTI_STATUS).json(response);
     }

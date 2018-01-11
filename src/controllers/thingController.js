@@ -26,7 +26,7 @@ const getThingByName = async (req, res, next) => {
 const getThings = async (req, res, next) => {
     try {
         const things = await _getThings(req);
-        responseHandler.handleResponse(res, things, constants.thingsArrayName);
+        responseHandler.handleResponse(res, things, constants.thingsArrayKey);
     } catch (err) {
         responseHandler.handleError(res, err);
     }

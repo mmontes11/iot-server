@@ -26,7 +26,7 @@ import constants from '../utils/responseKeys';
  const getTypes = async (req, res) => {
     try {
         const types = await MeasurementModel.types();
-        responseHandler.handleResponse(res, types, constants.typesArrayName);
+        responseHandler.handleResponse(res, types, constants.typesArrayKey);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
@@ -66,15 +66,15 @@ import constants from '../utils/responseKeys';
         if (statsCache.cachePolicy(timePeriod)) {
             const statsFromCache = await statsCache.getStatsCache(type, thing, timePeriod);
             if (!_.isNull(statsFromCache)) {
-                responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
+                responseHandler.handleResponse(res, statsFromCache, constants.statsArrayKey)
             } else {
                 const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
                 statsCache.setStatsCache(type, thing, timePeriod, statsFromDB);
-                responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
+                responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
             }
         } else {
             const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
-            responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
+            responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
         }
     } catch (err) {
         responseHandler.handleError(res, err);

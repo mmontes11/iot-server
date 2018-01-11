@@ -24,7 +24,7 @@ import constants from '../utils/responseKeys';
 const getTypes = async (req, res) => {
     try {
         const types = await EventModel.types();
-        responseHandler.handleResponse(res, types, constants.typesArrayName);
+        responseHandler.handleResponse(res, types, constants.typesArrayKey);
     } catch (err) {
         responseHandler.handleError(res, err);
     }
