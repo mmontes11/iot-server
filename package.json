@@ -1,7 +1,7 @@
 {
   "name": "iot_backend",
   "version": "0.0.1",
-  "description": "ES6 NodeJS + MongoDB IoT backend",
+  "description": "Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend",
   "author": "Martín Montes <martin11lrx@gmail.com>",
   "license": "MIT",
   "main": "index.js",
@@ -25,19 +25,26 @@
     "url": "https://github.com/mmontes11/iot_backend.git"
   },
   "keywords": [
+    "js",
+    "javascript",
+    "es6",
+    "babel",
+    "nodejs",
+    "npm",
     "express",
-    "node",
-    "node.js",
     "mongodb",
     "mongoose",
     "redis",
-    "chai",
     "mocha",
-    "es6",
-    "babel",
-    "REST",
-    "API",
-    "IoT"
+    "chai",
+    "istanbul",
+    "travis-ci",
+    "winston",
+    "docker",
+    "docker-compose",
+    "iot-backend",
+    "iot",
+    "internet-of-things"
   ],
   "dependencies": {
     "@google/maps": "^0.4.5",
