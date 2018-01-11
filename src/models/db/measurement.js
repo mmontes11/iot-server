@@ -14,7 +14,7 @@ const MeasurementSchema = ObservationSchema.extend({
     }
 });
 
-MeasurementSchema.statics.getStats = function (type, device, timePeriod){
+MeasurementSchema.statics.getStats = function (type, thing, timePeriod){
     const match = [];
     const matchConditions = [];
     if (!_.isUndefined(type)) {
@@ -22,9 +22,9 @@ MeasurementSchema.statics.getStats = function (type, device, timePeriod){
             type
         });
     }
-    if (!_.isUndefined(device)) {
+    if (!_.isUndefined(thing)) {
         matchConditions.push({
-            device
+            thing
         });
     }
     if (!_.isUndefined(timePeriod)) {
@@ -55,7 +55,7 @@ MeasurementSchema.statics.getStats = function (type, device, timePeriod){
             $group: {
                 _id: {
                     type: '$type',
-                    device: '$device'
+                    thing: '$thing'
                 },
                 avg: {
                     $avg: '$value'

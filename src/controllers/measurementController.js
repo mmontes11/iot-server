@@ -1,12 +1,11 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import { MeasurementModel } from '../models/db/measurement';
-import { DeviceModel } from "../models/db/device"
 import modelFactory from '../models/db/modelFactory';
 import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
 import statsCache from '../cache/statsCache';
 import responseHandler from '../helpers/responseHandler';
-import deviceController from './deviceController';
+import thingController from './thingController';
 import constants from '../utils/responseKeys';
 
  const createMeasurement = async (req, res) => {
@@ -14,10 +13,10 @@ import constants from '../utils/responseKeys';
         const newMeasurement = modelFactory.createMeasurement(req, req.body.measurement);
         const savedMeasurement = await newMeasurement.save();
         try {
-            await deviceController.createOrUpdateDevice(req, savedMeasurement.phenomenonTime);
+            await thingController.createOrUpdateThing(req, savedMeasurement.phenomenonTime);
             res.status(httpStatus.CREATED).json(savedMeasurement);
         } catch (err) {
-            await deviceController.handleDeviceCreationError(req, res, [savedMeasurement]);
+            await thingController.handleThingCreationError(req, res, [savedMeasurement]);
         }
     } catch (err) {
         responseHandler.handleError(res, err);
@@ -54,27 +53,27 @@ import constants from '../utils/responseKeys';
     }
 
     try {
-        let device;
-        if (!_.isUndefined(req.query.device) || !_.isUndefined(req.query.address) ||
+        let thing;
+        if (!_.isUndefined(req.query.thing) || !_.isUndefined(req.query.address) ||
                 (!_.isUndefined(req.query.longitude) && !_.isUndefined(req.query.latitude))) {
             
-            device = await deviceController.getDeviceNameFromRequest(req);
-            if (_.isUndefined(device)) {
+            thing = await thingController.getThingNameFromRequest(req);
+            if (_.isUndefined(thing)) {
                 return res.sendStatus(httpStatus.NOT_FOUND);
             }
         }
 
         if (statsCache.cachePolicy(timePeriod)) {
-            const statsFromCache = await statsCache.getStatsCache(type, device, timePeriod);
+            const statsFromCache = await statsCache.getStatsCache(type, thing, timePeriod);
             if (!_.isNull(statsFromCache)) {
                 responseHandler.handleResponse(res, statsFromCache, constants.statsArrayName)
             } else {
-                const statsFromDB = await getStatsFromDB(type, device, timePeriod);
-                statsCache.setStatsCache(type, device, timePeriod, statsFromDB);
+                const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
+                statsCache.setStatsCache(type, thing, timePeriod, statsFromDB);
                 responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
             }
         } else {
-            const statsFromDB = await getStatsFromDB(type, device, timePeriod);
+            const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
             responseHandler.handleResponse(res, statsFromDB, constants.statsArrayName);
         }
     } catch (err) {
@@ -82,9 +81,9 @@ import constants from '../utils/responseKeys';
     }
 };
 
- const getStatsFromDB = async (type, device, timePeriod) => {
+ const getStatsFromDB = async (type, thing, timePeriod) => {
     try {
-        return await MeasurementModel.getStats(type, device, timePeriod);
+        return await MeasurementModel.getStats(type, thing, timePeriod);
     } catch (err) {
         throw err;
     }

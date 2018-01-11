@@ -9,14 +9,14 @@ const cachePolicy = (timePeriod) => {
     return _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod)
 };
 
-const getStatsCacheKey = (type, device, lastTimePeriod) => {
+const getStatsCacheKey = (type, thing, lastTimePeriod) => {
     let cacheKey = statsCacheKey;
     const elementsCacheKey = [];
     if (!_.isUndefined(type)) {
         elementsCacheKey.push(type)
     }
-    if (!_.isUndefined(device)) {
-        elementsCacheKey.push(device);
+    if (!_.isUndefined(thing)) {
+        elementsCacheKey.push(thing);
     }
     if (!_.isUndefined(lastTimePeriod) && lastTimePeriod.isValid()) {
         elementsCacheKey.push(lastTimePeriod.name)
@@ -30,12 +30,12 @@ const getStatsCacheKey = (type, device, lastTimePeriod) => {
     return cacheKey
 };
 
-const setStatsCache = (type, device, lastTimePeriod, stats) => {
-    cacheHandler.setObjectCache(getStatsCacheKey(type, device, lastTimePeriod), stats, config.statsCacheInSeconds)
+const setStatsCache = (type, thing, lastTimePeriod, stats) => {
+    cacheHandler.setObjectCache(getStatsCacheKey(type, thing, lastTimePeriod), stats, config.statsCacheInSeconds)
 };
 
-const getStatsCache = (type, device, lastTimePeriod) => {
-    return cacheHandler.getObjectCache(getStatsCacheKey(type, device, lastTimePeriod))
+const getStatsCache = (type, thing, lastTimePeriod) => {
+    return cacheHandler.getObjectCache(getStatsCacheKey(type, thing, lastTimePeriod))
 };
 
 export default { cachePolicy, setStatsCache, getStatsCache };

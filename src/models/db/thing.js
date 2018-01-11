@@ -12,7 +12,7 @@ const SupportedObservationTypesSchema = mongoose.Schema({
     }]
 });
 
-const DeviceSchema = mongoose.Schema({
+const ThingSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -36,15 +36,15 @@ const DeviceSchema = mongoose.Schema({
     }
 });
 
-DeviceSchema.statics.upsertDevice = function(device){
-    return this.update({ name: device.name }, device, { upsert: true });
+ThingSchema.statics.upsertThing = function(thing){
+    return this.update({ name: thing.name }, thing, { upsert: true });
 };
 
-DeviceSchema.statics.findDeviceByName = function (name) {
+ThingSchema.statics.findThingByName = function (name) {
     return this.findOne({ name: name });
 };
 
-DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = config.maxDefaultNearbyDistanceInMeters){
+ThingSchema.statics.findThings = function(longitude, latitude, maxDistance = config.maxDefaultNearbyDistanceInMeters){
     let query;
     if (!_.isUndefined(longitude) && !_.isUndefined(latitude)) {
         query = {
@@ -62,6 +62,6 @@ DeviceSchema.statics.findDevices = function(longitude, latitude, maxDistance = c
     return this.find(query);
 };
 
-const DeviceModel = mongoose.model('Device', DeviceSchema);
+const ThingModel = mongoose.model('Thing', ThingSchema);
 
-export { DeviceSchema, DeviceModel };
+export { ThingSchema, ThingModel };

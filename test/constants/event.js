@@ -9,7 +9,7 @@ export default {
                 value: 2.4
             }
         },
-        device: {
+        thing: {
             name: 'raspberry',
             geometry : {
                 type : 'Point',
@@ -20,7 +20,7 @@ export default {
             }
         }
     },
-    eventRequestWithInvalidDevice: {
+    eventRequestWithInvalidThing: {
         event : {
             type: 'door_opened',
             duration: {
@@ -31,11 +31,11 @@ export default {
                 value: 2.4
             }
         },
-        device: {
+        thing: {
             name: 'raspberry'
         }
     },
-    eventRequestWithDeviceWithInvalidGeometry: {
+    eventRequestWithThingWithInvalidGeometry: {
         event : {
             type: 'door_opened',
             duration: {
@@ -46,7 +46,7 @@ export default {
                 value: 2.4
             }
         },
-        device: {
+        thing: {
             name: 'raspberry',
             geometry : {
                 coordinates : [
@@ -58,7 +58,7 @@ export default {
     },
     validEventRequest: {
         event : {
-            device: 'raspberry',
+            thing: 'raspberry',
             type: 'door_opened',
             duration: {
                 unit: {
@@ -68,7 +68,7 @@ export default {
                 value: 2.4
             }
         },
-        device: {
+        thing: {
             name: "raspberry",
             geometry : {
                 type : 'Point',
@@ -81,7 +81,7 @@ export default {
     },
     doorOpenedEvent: {
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'door_opened',
         duration: {
             unit: {
@@ -93,7 +93,7 @@ export default {
     },
     doorClosedEvent: {
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'door_closed',
         duration: {
             unit: {
@@ -105,7 +105,7 @@ export default {
     },
     doorClosedEvent2: {
         username: 'mmontes',
-        device: 'arduino',
+        thing: 'arduino',
         type: 'door_closed',
         duration: {
             unit: {
@@ -117,7 +117,7 @@ export default {
     },
     windowOpenedEvent: {
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'window_opened',
         duration: {
             unit: {

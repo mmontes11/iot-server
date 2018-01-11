@@ -4,7 +4,7 @@ import _ from 'underscore';
 import Promise from 'bluebird';
 import moment from 'moment';
 import { MeasurementModel } from '../src/models/db/measurement';
-import { DeviceModel } from '../src/models/db/device';
+import { ThingModel } from '../src/models/db/thing';
 import { TimePeriod } from '../src/models/request/timePeriod';
 import statsCache from '../src/cache/statsCache';
 import redisClient from '../src/lib/redis';
@@ -52,15 +52,15 @@ const ensureNoMeasurementsCreated = (done) => {
             done(err);
         });
 };
-const testCachedStats = (type, device, lastTimePeriod, res, done) => {
-    statsCache.getStatsCache(type, device, lastTimePeriod)
+const testCachedStats = (type, thing, lastTimePeriod, res, done) => {
+    statsCache.getStatsCache(type, thing, lastTimePeriod)
         .then((cachedStats) => {
             res.body.stats.should.be.eql(cachedStats);
             setTimeout(() => {
-                statsCache.getStatsCache(type, device, lastTimePeriod)
+                statsCache.getStatsCache(type, thing, lastTimePeriod)
                     .then((cachedStats) => {
                         should.not.exist(cachedStats);
-                        MeasurementModel.getStats(type, device, lastTimePeriod)
+                        MeasurementModel.getStats(type, thing, lastTimePeriod)
                             .then((statsFromDB) => {
                                 res.body.stats.should.be.eql(statsFromDB);
                                 done();
@@ -99,7 +99,7 @@ describe('Measurement', () => {
     });
 
     beforeEach((done) => {
-        const promises = [MeasurementModel.remove({}), DeviceModel.remove({}), redisClient.flushall()];
+        const promises = [MeasurementModel.remove({}), ThingModel.remove({}), redisClient.flushall()];
         Promise.all(promises)
             .then(() => {
                 done();
@@ -120,25 +120,25 @@ describe('Measurement', () => {
                     ensureNoMeasurementsCreated(done);
                 });
         });
-        it('tries to create a measurement with an invalid device', (done) => {
+        it('tries to create a measurement with an invalid thing', (done) => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.measurementRequestWithInvalidDevice)
+                .send(constants.measurementRequestWithInvalidThing)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoMeasurementsCreated(done);
                 });
         });
-        it('tries to create a measurement with a device that has an invalid geometry', (done) => {
+        it('tries to create a measurement with a thing that has an invalid geometry', (done) => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.measurementRequestWithDeviceWithInvalidGeometry)
+                .send(constants.measurementRequestWithThingWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[responseKeys.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidThingKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoMeasurementsCreated(done);
                 });
@@ -150,7 +150,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .post('/api/measurement')
                 .set('Authorization', auth())
-                .send(constants.validMeasurementRequestWithDeviceInCoruna)
+                .send(constants.validMeasurementRequestWithThingInCoruna)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
@@ -506,8 +506,8 @@ describe('Measurement', () => {
         });
     });
 
-    describe('GET /measurement/stats?device=X 404', () => {
-        it('gets measurement stats by device but no measurement has been created', (done) => {
+    describe('GET /measurement/stats?thing=X 404', () => {
+        it('gets measurement stats by thing but no measurement has been created', (done) => {
             chai.request(server)
                 .get('/api/measurement/whatever/stats')
                 .set('Authorization', auth())
@@ -519,7 +519,7 @@ describe('Measurement', () => {
         });
     });
 
-    describe('GET /measurement/stats?device=X 200', () => {
+    describe('GET /measurement/stats?thing=X 200', () => {
         beforeEach((done) => {
             const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
                 constants.humidityMeasurement3];
@@ -529,7 +529,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'device': 'raspberry'
+                    'thing': 'raspberry'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -545,7 +545,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'device': 'raspberry',
+                    'thing': 'raspberry',
                     'lastTimePeriod': 'month'
                 })
                 .set('Authorization', auth())
@@ -562,7 +562,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'device': 'raspberry',
+                    'thing': 'raspberry',
                     'startDate': moment().utc().subtract(1, 'minute').toISOString(),
                     'endDate': moment().utc().add(1, 'minute').toISOString()
                 })
@@ -578,7 +578,7 @@ describe('Measurement', () => {
         });
     });
 
-    describe('GET /measurement/stats?type=X&device=Y 200', () => {
+    describe('GET /measurement/stats?type=X&thing=Y 200', () => {
         beforeEach((done) => {
             const measurements = [constants.temperatureMeasurement, constants.temperatureMeasurement2, constants.temperatureMeasurement3,
                 constants.humidityMeasurement, constants.humidityMeasurement2, constants.humidityMeasurement3];
@@ -589,7 +589,7 @@ describe('Measurement', () => {
                 .get('/api/measurement/stats')
                 .query({
                     'type': 'temperature',
-                    'device': 'raspberry'
+                    'thing': 'raspberry'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -606,7 +606,7 @@ describe('Measurement', () => {
                 .get('/api/measurement/stats')
                 .query({
                     'type': 'temperature',
-                    'device': 'raspberry',
+                    'thing': 'raspberry',
                     'lastTimePeriod': 'month'
                 })
                 .set('Authorization', auth())
@@ -624,7 +624,7 @@ describe('Measurement', () => {
                 .get('/api/measurement/stats')
                 .query({
                     'type': 'temperature',
-                    'device': 'raspberry',
+                    'thing': 'raspberry',
                     'startDate': moment().utc().subtract(1, 'minute').toISOString(),
                     'endDate': moment().utc().add(1, 'minute').toISOString()
                 })
@@ -642,7 +642,7 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?address=X 404', () => {
         beforeEach((done) => {
-            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestBodies = [constants.validMeasurementRequestWithThingInCoruna, constants.validMeasurementRequestWithThingInNYC];
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
@@ -660,7 +660,7 @@ describe('Measurement', () => {
             });
             performMeasurementCreationRequest(measurementRequestPromises, done);
         });
-        it('gets stats from an address that has no devices', (done) => {
+        it('gets stats from an address that has no things', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
@@ -690,7 +690,7 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?address=X 200', () => {
         beforeEach((done) => {
-            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestBodies = [constants.validMeasurementRequestWithThingInCoruna, constants.validMeasurementRequestWithThingInNYC];
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
@@ -746,7 +746,7 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?longitude=X&latitude=Y 404', () => {
         beforeEach((done) => {
-            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestBodies = [constants.validMeasurementRequestWithThingInCoruna, constants.validMeasurementRequestWithThingInNYC];
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
@@ -764,7 +764,7 @@ describe('Measurement', () => {
             });
             performMeasurementCreationRequest(measurementRequestPromises, done);
         });
-        it('gets stats from  coordinates that have no devices', (done) => {
+        it('gets stats from  coordinates that have no things', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
@@ -782,7 +782,7 @@ describe('Measurement', () => {
 
     describe('GET /measurement/stats?longitude=X&latitude=Y 200', () => {
         beforeEach((done) => {
-            const measurementRequestBodies = [constants.validMeasurementRequestWithDeviceInCoruna, constants.validMeasurementRequestWithDeviceInNYC];
+            const measurementRequestBodies = [constants.validMeasurementRequestWithThingInCoruna, constants.validMeasurementRequestWithThingInNYC];
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)

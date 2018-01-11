@@ -3,7 +3,7 @@ export default {
         measurement: {
             value: 10
         },
-        device: {
+        thing: {
             name: 'raspberry',
             geometry : {
                 type : 'Point',
@@ -14,7 +14,7 @@ export default {
             }
         }
     },
-    measurementRequestWithInvalidDevice: {
+    measurementRequestWithInvalidThing: {
         measurement: {
             type: 'temperature',
             unit: {
@@ -23,7 +23,7 @@ export default {
             },
             value: 10
         },
-        device: {
+        thing: {
             geometry : {
                 type : 'Point',
                 coordinates : [
@@ -33,7 +33,7 @@ export default {
             }
         }
     },
-    measurementRequestWithDeviceWithInvalidGeometry: {
+    measurementRequestWithThingWithInvalidGeometry: {
         measurement : {
             type: 'temperature',
             unit: {
@@ -42,7 +42,7 @@ export default {
             },
             value: 10
         },
-        device: {
+        thing: {
             name: 'raspberry',
             geometry : {
                 coordinates : [
@@ -52,7 +52,7 @@ export default {
             }
         }
     },
-    validMeasurementRequestWithDeviceInCoruna: {
+    validMeasurementRequestWithThingInCoruna: {
         measurement: {
             type: 'temperature',
             unit: {
@@ -61,7 +61,7 @@ export default {
             },
             value: 10
         },
-        device: {
+        thing: {
             name: 'raspi-coruna',
             geometry : {
                 type : 'Point',
@@ -72,7 +72,7 @@ export default {
             }
         }
     },
-    validMeasurementRequestWithDeviceInNYC: {
+    validMeasurementRequestWithThingInNYC: {
         measurement: {
             type: 'temperature',
             unit: {
@@ -81,7 +81,7 @@ export default {
             },
             value: 10
         },
-        device: {
+        thing: {
             name: 'raspi-nyc',
             geometry : {
                 type : 'Point',
@@ -93,7 +93,7 @@ export default {
         }
     },
     temperatureMeasurement: {
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -102,7 +102,7 @@ export default {
         value: 10
     },
     temperatureMeasurement2: {
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -111,7 +111,7 @@ export default {
         value: 15
     },
     temperatureMeasurement3: {
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'arduino',
         unit: {
             name: 'degrees',
@@ -120,7 +120,7 @@ export default {
         value: 15
     },
     humidityMeasurement: {
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'humidity',
         unit: {
             name: 'relative',
@@ -129,7 +129,7 @@ export default {
         value: 0.3
     },
     humidityMeasurement2: {
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'humidity',
         unit: {
             name: 'relative',
@@ -138,7 +138,7 @@ export default {
         value: 0.6
     },
     humidityMeasurement3: {
-        device: 'arduino',
+        thing: 'arduino',
         type: 'humidity',
         unit: {
             name: 'relative',

@@ -16,10 +16,10 @@ const createUser = (user) => {
 
 const createMeasurement = (req, measurement) => {
     const username = request.extractUserNameFromRequest(req);
-    const device = req.body.device;
+    const thing = req.body.thing;
     return new MeasurementModel({
         username: username,
-        device: device.name,
+        thing: thing.name,
         phenomenonTime: new Date(),
         type: measurement.type,
         unit: measurement.unit,
@@ -29,10 +29,10 @@ const createMeasurement = (req, measurement) => {
 
 const createEvent = (req, event) => {
     const username = request.extractUserNameFromRequest(req);
-    const device = req.body.device;
+    const thing = req.body.thing;
     return new EventModel({
         username: username,
-        device: device.name,
+        thing: thing.name,
         phenomenonTime: new Date(),
         type: event.type,
         duration: event.duration
@@ -67,18 +67,18 @@ const createObservationUsingKind = (req, observation) => {
     }
 };
 
-const createDevice = (req, lastObservation) => {
-    const device = req.body.device;
+const createThing = (req, lastObservation) => {
+    const thing = req.body.thing;
     try {
-        const deviceIp = ip.extractIPfromRequest(req);
-        const deviceExtraFields = {
-            ip: deviceIp,
+        const thingIp = ip.extractIPfromRequest(req);
+        const thingExtraFields = {
+            ip: thingIp,
             lastObservation
         };
-        return Object.assign({}, device, deviceExtraFields);
+        return Object.assign({}, thing, thingExtraFields);
     } catch(err) {
         throw err;
     }
 };
 
-export default { createUser, createMeasurement, createEvent, createObservationUsingKind, createDevice };
+export default { createUser, createMeasurement, createEvent, createObservationUsingKind, createThing };

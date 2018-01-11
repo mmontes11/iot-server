@@ -3,7 +3,7 @@ import _ from 'underscore';
 import { EventModel } from '../models/db/event';
 import modelFactory from '../models/db/modelFactory';
 import responseHandler from '../helpers/responseHandler';
-import deviceController from './deviceController';
+import thingController from './thingController';
 import constants from '../utils/responseKeys';
 
  const createEvent = async (req, res) => {
@@ -11,10 +11,10 @@ import constants from '../utils/responseKeys';
         const newEvent = modelFactory.createEvent(req, req.body.event);
         const savedEvent = await newEvent.save();
         try {
-            await deviceController.createOrUpdateDevice(req, savedEvent.phenomenonTime);
+            await thingController.createOrUpdateThing(req, savedEvent.phenomenonTime);
             res.status(httpStatus.CREATED).json(savedEvent);
         } catch (err) {
-            await deviceController.handleDeviceCreationError(req, res, [savedEvent]);
+            await thingController.handleThingCreationError(req, res, [savedEvent]);
         }
     } catch (err) {
         responseHandler.handleError(res, err);

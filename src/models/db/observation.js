@@ -3,7 +3,7 @@ import mongoose from '../../lib/mongoose';
 
 const ObservationSchema = new mongoose.Schema({
     username: String,
-    device: {
+    thing: {
         type: String,
         required: true
     },

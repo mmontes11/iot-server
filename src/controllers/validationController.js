@@ -14,8 +14,8 @@ const validateCreateUser = (req, res, next) => {
 
 const validateCreateMeasurement = (req, res, next) => {
     const measurement = req.body.measurement;
-    const device = req.body.device;
-    if (requestValidator.validMeasurement(measurement) && requestValidator.validDevice(device)) {
+    const thing = req.body.thing;
+    if (requestValidator.validMeasurement(measurement) && requestValidator.validThing(thing)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -24,8 +24,8 @@ const validateCreateMeasurement = (req, res, next) => {
 
 const validateCreateEvent = (req, res, next) => {
     const event = req.body.event;
-    const device = req.body.device;
-    if (requestValidator.validEvent(event) && requestValidator.validDevice(device)) {
+    const thing = req.body.thing;
+    if (requestValidator.validEvent(event) && requestValidator.validThing(thing)) {
         next();
     } else {
         return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -68,14 +68,14 @@ const validateCreateObservations = (req, res, next) => {
     if (_.isEmpty(observations)) {
         return res.sendStatus(httpStatus.NOT_MODIFIED);
     }
-    const device = req.body.device;
-    if (!requestValidator.validDevice(device)) {
-        return res.status(httpStatus.BAD_REQUEST).json({ [constants.invalidDeviceKey]: device });
+    const thing = req.body.thing;
+    if (!requestValidator.validThing(thing)) {
+        return res.status(httpStatus.BAD_REQUEST).json({ [constants.invalidThingKey]: thing });
     }
     next();
 };
 
-const validateGetDevices = (req, res, next) => {
+const validateGetThings = (req, res, next) => {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
     const address = req.query.address;
@@ -90,4 +90,4 @@ const validRegionParams = (longitude, latitude, address) => {
     return  allRegionParamsUndefined || ((!_.isUndefined(longitude) && !_.isUndefined(latitude)) || !_.isUndefined(address));
 };
 
-export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetDevices };
+export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetThings };

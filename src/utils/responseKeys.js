@@ -1,9 +1,9 @@
 export default {
     typesArrayName: "types",
     statsArrayName: "stats",
-    devicesArrayName: "devices",
+    thingsArrayName: "things",
     observationsArrayName: "observations",
     createdObservationsArrayName: "createdObservations",
     invalidObservationsArrayName: "invalidObservations",
-    invalidDeviceKey: "invalidDevice",
+    invalidThingKey: "invalidThing",
 };

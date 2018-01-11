@@ -1,5 +1,5 @@
 export default {
-    validDevice: {
+    validThing: {
         name: 'raspberry',
         geometry : {
             type : 'Point',
@@ -9,10 +9,10 @@ export default {
             ]
         }
     },
-    invalidDevice:  {
+    invalidThing:  {
         name: 'raspberry'
     },
-    deviceWithInvalidGeometry:  {
+    thingWithInvalidGeometry:  {
         name: 'raspberry',
         geometry : {
             coordinates : [
@@ -23,7 +23,7 @@ export default {
     },
     validMeasurementWithKind: {
         kind: 'measurement',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -33,7 +33,7 @@ export default {
     },
     invalidMeasurementWithKind: {
         kind: 'measurement',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -42,7 +42,7 @@ export default {
     },
     validMeasurementWithInvalidKind: {
         kind: 'foo',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'temperature',
         unit: {
             name: 'degrees',
@@ -53,7 +53,7 @@ export default {
     validEventWithKind: {
         kind: 'event',
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'window_opened',
         duration: {
             unit:  {
@@ -66,7 +66,7 @@ export default {
     invalidEventWithKind: {
         kind: 'event',
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         duration: {
             unit:  {
                 name: 'seconds',
@@ -78,7 +78,7 @@ export default {
     validEventWithInvalidKind: {
         kind: 'bar',
         username: 'mmontes',
-        device: 'raspberry',
+        thing: 'raspberry',
         type: 'window_opened',
         duration: {
             unit:  {

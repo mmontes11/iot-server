@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 import requestValidator from '../helpers/requestValidator';
 import modelFactory from '../models/db/modelFactory';
 import { ObservationModel } from "../models/db/observation"
-import deviceController from './deviceController';
+import thingController from './thingController';
 
 const createObservations = async (req, res, next) => {
     const observations = req.body[constants.observationsArrayName];
@@ -32,19 +32,19 @@ const createObservations = async (req, res, next) => {
 
     try {
         if (!_.isEmpty(createdObservations)) {
-            await createOrUpdateDevice(req, createdObservations);
+            await createOrUpdateThing(req, createdObservations);
         }
         handleResponse(res, createdObservations, invalidObservations);
     } catch (err) {
-        await deviceController.handleDeviceCreationError(req, res, createdObservations);
+        await thingController.handleThingCreationError(req, res, createdObservations);
     }
 };
 
-const createOrUpdateDevice = async (req, createdObservations) => {
+const createOrUpdateThing = async (req, createdObservations) => {
     const latestObservation = _.max(createdObservations, (observation) => {
         return observation.phenomenonTime;
     });
-    return deviceController.createOrUpdateDevice(req, latestObservation.phenomenonTime);
+    return thingController.createOrUpdateThing(req, latestObservation.phenomenonTime);
 };
 
 const handleResponse = (res, createdObservations, invalidObservations) => {

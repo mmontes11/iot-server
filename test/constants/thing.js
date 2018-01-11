@@ -1,5 +1,5 @@
 export default {
-    deviceAtACoruna: {
+    thingAtACoruna: {
         name: 'raspi-coruna',
         ip: '192.168.0.1',
         geometry : {
@@ -10,7 +10,7 @@ export default {
             ]
         }
     },
-    deviceAtACoruna2: {
+    thingAtACoruna2: {
         name: 'raspi-coruna2',
         ip: '192.168.0.1',
         geometry : {
@@ -21,7 +21,7 @@ export default {
             ]
         }
     },
-    deviceAtNYC: {
+    thingAtNYC: {
         name: 'raspi-nyc',
         ip: '192.168.0.1',
         geometry : {
@@ -32,7 +32,7 @@ export default {
             ]
         }
     },
-    deviceAtTokyo: {
+    thingAtTokyo: {
         name: 'raspi-tokyo',
         ip: '192.168.0.1',
         geometry : {

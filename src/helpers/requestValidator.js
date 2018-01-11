@@ -21,8 +21,8 @@ const validEvent = (event) => {
     return validObservation(event);
 };
 
-const validDevice = (device) => {
-    return !_.isUndefined(device) && !_.isUndefined(device.name) && !_.isUndefined(device.geometry);
+const validThing = (thing) => {
+    return !_.isUndefined(thing) && !_.isUndefined(thing.name) && !_.isUndefined(thing.geometry);
 };
 
-export default { validUser, validObservation, validUnit, validMeasurement, validEvent, validDevice }
+export default { validUser, validObservation, validUnit, validMeasurement, validEvent, validThing }

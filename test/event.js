@@ -3,11 +3,11 @@ import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
 import { EventModel } from '../src/models/db/event';
-import { DeviceModel } from '../src/models/db/device';
+import { ThingModel } from '../src/models/db/thing';
 import server from '../src/index';
+import responseKeys from '../src/utils/responseKeys';
 import constants from './constants/event';
 import userConstants from './constants/user';
-import responseKeys from '../src/utils/responseKeys';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -62,7 +62,7 @@ describe('Event', () => {
     });
 
     beforeEach((done) => {
-        const promises = [EventModel.remove({}), DeviceModel.remove({})];
+        const promises = [EventModel.remove({}), ThingModel.remove({})];
         Promise.all(promises)
             .then(() => {
                 done();
@@ -83,25 +83,25 @@ describe('Event', () => {
                     ensureNoEventsCreated(done);
                 });
         });
-        it('tries to create an event with an invalid device', (done) => {
+        it('tries to create an event with an invalid thing', (done) => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.eventRequestWithInvalidDevice)
+                .send(constants.eventRequestWithInvalidThing)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoEventsCreated(done);
                 });
         });
-        it('tries to create an event with a device that has an invalid geometry', (done) => {
+        it('tries to create an event with a thing that has an invalid geometry', (done) => {
             chai.request(server)
                 .post('/api/event')
                 .set('Authorization', auth())
-                .send(constants.eventRequestWithDeviceWithInvalidGeometry)
+                .send(constants.eventRequestWithThingWithInvalidGeometry)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[responseKeys.invalidDeviceKey]);
+                    should.exist(res.body[responseKeys.invalidThingKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoEventsCreated(done);
                 });
@@ -219,8 +219,8 @@ describe('Event', () => {
                     res.should.have.status(httpStatus.OK);
                     res.body.type.should.be.a('string');
                     res.body.type.should.equal('door_closed');
-                    res.body.device.should.be.a('string');
-                    res.body.device.should.equal('arduino');
+                    res.body.thing.should.be.a('string');
+                    res.body.thing.should.equal('arduino');
                     done();
                 });
         });

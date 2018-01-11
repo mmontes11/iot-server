@@ -1,9 +1,10 @@
 import chai from './lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
-import { DeviceModel } from '../src/models/db/device';
+import { ThingModel } from '../src/models/db/thing';
 import server from '../src/index';
-import constants from './constants/device';
+import responseKeys from '../src/utils/responseKeys';
+import constants from './constants/thing';
 import userConstants from './constants/user';
 
 const assert = chai.assert;
@@ -12,10 +13,10 @@ let token = null;
 const auth = () => {
     return `Bearer ${token}`;
 };
-const createDevices = (devices, done) => {
-    Promise.each(devices, (device) => {
-        const newDevice = new DeviceModel(device);
-        return newDevice.save();
+const createthings = (things, done) => {
+    Promise.each(things, (thing) => {
+        const newthing = new ThingModel(thing);
+        return newthing.save();
     }).then(() => {
         done();
     }).catch((err) => {
@@ -24,7 +25,7 @@ const createDevices = (devices, done) => {
 };
 
 
-describe('Device', () => {
+describe('thing', () => {
 
     before((done) => {
         chai.request(server)
@@ -47,17 +48,17 @@ describe('Device', () => {
     });
 
     beforeEach((done) => {
-        DeviceModel.remove({}, (err) => {
+        ThingModel.remove({}, (err) => {
             assert(err !== undefined, 'Error cleaning MongoDB for tests');
-            const devices = [constants.deviceAtACoruna, constants.deviceAtACoruna2, constants.deviceAtNYC, constants.deviceAtTokyo];
-            createDevices(devices, done);
+            const things = [constants.thingAtACoruna, constants.thingAtACoruna2, constants.thingAtNYC, constants.thingAtTokyo];
+            createthings(things, done);
         });
     });
 
-    describe('GET /device/X 404', () => {
-        it('tries to get a non existing device', (done) => {
+    describe('GET /thing/X 404', () => {
+        it('tries to get a non existing thing', (done) => {
             chai.request(server)
-                .get('/api/device/whatever')
+                .get('/api/thing/whatever')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -67,10 +68,10 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /device/X 200', () => {
-        it('gets an existing device', (done) => {
+    describe('GET /thing/X 200', () => {
+        it('gets an existing thing', (done) => {
             chai.request(server)
-                .get('/api/device/raspi-coruna')
+                .get('/api/thing/raspi-coruna')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -80,24 +81,24 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices 200', () => {
-        it('gets all devices', (done) => {
+    describe('GET /things 200', () => {
+        it('gets all things', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body.devices.length.should.be.eql(4);
+                    res.body[responseKeys.thingsArrayName].length.should.be.eql(4);
                     done();
                 });
         });
     });
 
-    describe('GET /devices?latitude=X 400', () => {
-        it('tries to get devices using invalid coordinates', (done) => {
+    describe('GET /things?latitude=X 400', () => {
+        it('tries to get things using invalid coordinates', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     latitude: 42.08
                 })
@@ -110,10 +111,10 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?longitude=X&latitude=X 404', () => {
-        it('gets devices by Madagascar coordinates', (done) => {
+    describe('GET /things?longitude=X&latitude=X 404', () => {
+        it('gets things by Madagascar coordinates', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     longitude: -18.40,
                     latitude: 43.37
@@ -127,10 +128,10 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?longitude=X&latitude=X 200', () => {
-        it('gets devices by A Coruna coordinates', (done) => {
+    describe('GET /things?longitude=X&latitude=X 200', () => {
+        it('gets things by A Coruna coordinates', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     longitude: -8.4065665,
                     latitude: 43.3682188
@@ -139,14 +140,14 @@ describe('Device', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body.devices.length.should.be.eql(2);
+                    res.body[responseKeys.thingsArrayName].length.should.be.eql(2);
                     done();
                 });
         });
 
-        it('gets devices by A Coruna coordinates with max distance of 10 metres', (done) => {
+        it('gets things by A Coruna coordinates with max distance of 10 metres', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     longitude: -8.4065665,
                     latitude: 43.3682188,
@@ -156,16 +157,16 @@ describe('Device', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body.devices.length.should.be.eql(1);
+                    res.body[responseKeys.thingsArrayName].length.should.be.eql(1);
                     done();
                 });
         });
     });
 
-    describe('GET /devices?address=X 404', () => {
-        it('tries to get devices using an invalid address', (done) => {
+    describe('GET /things?address=X 404', () => {
+        it('tries to get things using an invalid address', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     address: 'foo'
                 })
@@ -176,9 +177,9 @@ describe('Device', () => {
                     done();
                 });
         });
-        it('gets devices by Madagascar address', (done) => {
+        it('gets things by Madagascar address', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     address: 'Madagascar'
                 })
@@ -191,10 +192,10 @@ describe('Device', () => {
         });
     });
 
-    describe('GET /devices?address=X 200', () => {
-        it('gets devices by A Coruna address', (done) => {
+    describe('GET /things?address=X 200', () => {
+        it('gets things by A Coruna address', (done) => {
             chai.request(server)
-                .get('/api/devices')
+                .get('/api/things')
                 .query({
                     address: 'A Coruna'
                 })
@@ -202,7 +203,7 @@ describe('Device', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body.devices.length.should.be.eql(2);
+                    res.body[responseKeys.thingsArrayName].length.should.be.eql(2);
                     done();
                 });
         });
