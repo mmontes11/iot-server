@@ -1,0 +1,40 @@
+version: '2'
+services:
+  nginx:
+    build: nginx
+    ports:
+      - "${NGINX_EXTERNAL_PORT}:${NGINX_INTERNAL_PORT}"
+    links:
+      - node1
+      - node2
+    restart: always
+  node1:
+    image: mmontes11/iot_backend
+    env_file:
+      - .env
+    expose:
+      - "${NODE_PORT}"
+    links:
+      - mongo_docker
+      - redis_docker
+    restart: always
+  node2:
+    image: mmontes11/iot_backend
+    env_file:
+      - .env
+    expose:
+      - "${NODE_PORT}"
+    links:
+      - mongo_docker
+      - redis_docker
+    restart: always
+  mongo_docker:
+    image: mongo
+    expose:
+      - "${MONGO_PORT}"
+    restart: always
+  redis_docker:
+    image: redis
+    expose:
+      - "${REDIS_PORT}"
+    restart: always
