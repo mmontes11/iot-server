@@ -10,7 +10,7 @@ ES6 NodeJS + MongoDB + Redis IoT backend
 
 Image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
 
-### Deploy with Docker Compose
+### Deploy using Docker Compose
 
 Steps to deploy described in [IoT backend container](https://github.com/mmontes11/iot_backend_container)
 
