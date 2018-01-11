@@ -47,7 +47,7 @@ describe('thing', () => {
             });
     });
 
-    beforeEach((done) => {
+    before((done) => {
         ThingModel.remove({}, (err) => {
             assert(err !== undefined, 'Error cleaning MongoDB for tests');
             const things = [constants.thingAtACoruna, constants.thingAtACoruna2, constants.thingAtNYC, constants.thingAtTokyo];
@@ -81,20 +81,6 @@ describe('thing', () => {
         });
     });
 
-    describe('GET /things 200', () => {
-        it('gets all things', (done) => {
-            chai.request(server)
-                .get('/api/things')
-                .set('Authorization', auth())
-                .end((err, res) => {
-                    should.not.exist(err);
-                    res.should.have.status(httpStatus.OK);
-                    res.body[responseKeys.thingsArrayName].length.should.be.eql(4);
-                    done();
-                });
-        });
-    });
-
     describe('GET /things?latitude=X 400', () => {
         it('tries to get things using invalid coordinates', (done) => {
             chai.request(server)
@@ -105,6 +91,7 @@ describe('thing', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidRegionParamsKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -123,41 +110,6 @@ describe('thing', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.NOT_FOUND);
-                    done();
-                });
-        });
-    });
-
-    describe('GET /things?longitude=X&latitude=X 200', () => {
-        it('gets things by A Coruna coordinates', (done) => {
-            chai.request(server)
-                .get('/api/things')
-                .query({
-                    longitude: -8.4065665,
-                    latitude: 43.3682188
-                })
-                .set('Authorization', auth())
-                .end((err, res) => {
-                    should.not.exist(err);
-                    res.should.have.status(httpStatus.OK);
-                    res.body[responseKeys.thingsArrayName].length.should.be.eql(2);
-                    done();
-                });
-        });
-
-        it('gets things by A Coruna coordinates with max distance of 10 metres', (done) => {
-            chai.request(server)
-                .get('/api/things')
-                .query({
-                    longitude: -8.4065665,
-                    latitude: 43.3682188,
-                    maxDistance: 10
-                })
-                .set('Authorization', auth())
-                .end((err, res) => {
-                    should.not.exist(err);
-                    res.should.have.status(httpStatus.OK);
-                    res.body[responseKeys.thingsArrayName].length.should.be.eql(1);
                     done();
                 });
         });
@@ -192,6 +144,55 @@ describe('thing', () => {
         });
     });
 
+    describe('GET /things 200', () => {
+        it('gets all things', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(4);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /things?longitude=X&latitude=X 200', () => {
+        it('gets things by A Coruna coordinates', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    longitude: -8.4065665,
+                    latitude: 43.3682188
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(2);
+                    done();
+                });
+        });
+
+        it('gets things by A Coruna coordinates with max distance of 10 metres', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    longitude: -8.4065665,
+                    latitude: 43.3682188,
+                    maxDistance: 10
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(1);
+                    done();
+                });
+        });
+    });
+
     describe('GET /things?address=X 200', () => {
         it('gets things by A Coruna address', (done) => {
             chai.request(server)
@@ -203,7 +204,7 @@ describe('thing', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body[responseKeys.thingsArrayName].length.should.be.eql(2);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(2);
                     done();
                 });
         });

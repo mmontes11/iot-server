@@ -1,5 +1,5 @@
 export default {
-    measurementRequestWithInvalidMeasurementA: {
+    measurementRequestWithInvalidMeasurement: {
         measurement: {
             value: 10
         },

@@ -79,6 +79,7 @@ describe('Event', () => {
                 .send(constants.eventRequestWithInvalidEvent)
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidEventKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoEventsCreated(done);
                 });
@@ -90,6 +91,7 @@ describe('Event', () => {
                 .send(constants.eventRequestWithInvalidThing)
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidThingKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     ensureNoEventsCreated(done);
                 });

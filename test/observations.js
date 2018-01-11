@@ -112,10 +112,10 @@ describe('Observations', () => {
                 .send(invalidObservations)
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[responseKeys.invalidObservationsArrayName]);
-                    should.not.exist(res.body[responseKeys.createdObservationsArrayName]);
+                    should.exist(res.body[responseKeys.invalidObservationsArrayKey]);
+                    should.not.exist(res.body[responseKeys.createdObservationsArrayKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    res.body[responseKeys.invalidObservationsArrayName].length.should.be.eql(_.size(invalidObservations.observations));
+                    res.body[responseKeys.invalidObservationsArrayKey].length.should.be.eql(_.size(invalidObservations.observations));
                     ensureNoObservationsCreated(done);
                 });
         });
@@ -159,6 +159,30 @@ describe('Observations', () => {
         });
     });
 
+    describe('POST /observations 201', () => {
+        it('creates observations', (done) => {
+            const validObservations = {
+                observations: [
+                    constants.validMeasurementWithKind,
+                    constants.validEventWithKind
+                ],
+                thing: constants.validThing
+            };
+            chai.request(server)
+                .post('/api/observations')
+                .set('Authorization', auth())
+                .send(validObservations)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    should.not.exist(res.body[responseKeys.invalidObservationsArrayKey]);
+                    should.exist(res.body[responseKeys.createdObservationsArrayKey]);
+                    res.should.have.status(httpStatus.CREATED);
+                    res.body[responseKeys.createdObservationsArrayKey].length.should.be.eql(2);
+                    done();
+                });
+        });
+    });
+
     describe('POST /observations 207', () => {
         it('creates observations and also tries to create invalid ones', (done) => {
             const measurements = [
@@ -184,35 +208,11 @@ describe('Observations', () => {
                 .send(validAndInvalidObservations)
                 .end((err, res) => {
                     should.not.exist(err);
-                    should.exist(res.body[responseKeys.invalidObservationsArrayName]);
-                    should.exist(res.body[responseKeys.createdObservationsArrayName]);
+                    should.exist(res.body[responseKeys.invalidObservationsArrayKey]);
+                    should.exist(res.body[responseKeys.createdObservationsArrayKey]);
                     res.should.have.status(httpStatus.MULTI_STATUS);
-                    res.body[responseKeys.invalidObservationsArrayName].length.should.be.eql(4);
-                    res.body[responseKeys.createdObservationsArrayName].length.should.be.eql(2);
-                    done();
-                });
-        });
-    });
-
-    describe('POST /observations 201', () => {
-        it('creates observations', (done) => {
-            const validObservations = {
-                observations: [
-                    constants.validMeasurementWithKind,
-                    constants.validEventWithKind
-                ],
-                thing: constants.validThing
-            };
-            chai.request(server)
-                .post('/api/observations')
-                .set('Authorization', auth())
-                .send(validObservations)
-                .end((err, res) => {
-                    should.not.exist(err);
-                    should.not.exist(res.body[responseKeys.invalidObservationsArrayName]);
-                    should.exist(res.body[responseKeys.createdObservationsArrayName]);
-                    res.should.have.status(httpStatus.CREATED);
-                    res.body[responseKeys.createdObservationsArrayName].length.should.be.eql(2);
+                    res.body[responseKeys.invalidObservationsArrayKey].length.should.be.eql(4);
+                    res.body[responseKeys.createdObservationsArrayKey].length.should.be.eql(2);
                     done();
                 });
         });

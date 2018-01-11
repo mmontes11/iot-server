@@ -288,6 +288,7 @@ describe('Measurement', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidLastTimePeriodKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -302,6 +303,7 @@ describe('Measurement', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -315,7 +317,8 @@ describe('Measurement', () => {
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
-                    should.exist(err);
+                    should.exist(err)
+                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -330,6 +333,7 @@ describe('Measurement', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -345,6 +349,7 @@ describe('Measurement', () => {
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
+                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     done();
                 });
         });
@@ -358,6 +363,7 @@ describe('Measurement', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
+                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
