@@ -15,6 +15,7 @@ $ npm start
 ### Run tests and show coverage
 
 ```bash
+$ npm install
 $ npm test
 ```
 
