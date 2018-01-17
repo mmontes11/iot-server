@@ -5,7 +5,7 @@ import compress from 'compression';
 import methodOverride from 'method-override';
 import cors from 'cors';
 import helmet from 'helmet';
-import winston from './winston';
+import winston from 'winston';
 import expressWinston from 'express-winston';
 import routes from '../routers/indexRouter';
 import config from '../config/index';

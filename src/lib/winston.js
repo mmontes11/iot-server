@@ -1,28 +1,29 @@
 import winston from 'winston';
 import 'winston-mongodb';
-import config from '../config/index';
+import config from '../config';
 
-winston.remove(winston.transports.Console);
+const logger = new (winston.Logger)({
+    level: 'info',
+    transports: [
+        new winston.transports.Console ({
+            timestamp: true,
+            json: false,
+            colorize: true
+        }),
+        new winston.transports.File({
+            timestamp: true,
+            json: false,
+            colorize: true,
+            filename: 'log_iot.log'
+        }),
+        new winston.transports.MongoDB({
+            timestamp: true,
+            json: true,
+            colorize: true,
+            db: config.mongoUrl,
+            collection: 'log_iot'
+        })
+    ]
+});
 
-if (config.debug) {
-    winston.add(winston.transports.Console, {
-        timestamp: true,
-        json: false,
-        colorize: true
-    });
-    winston.add(winston.transports.File, {
-        timestamp: true,
-        json: false,
-        colorize: true,
-        filename: 'log_iot.log'
-    });
-    winston.add(winston.transports.MongoDB, {
-        timestamp: true,
-        json: true,
-        colorize: true,
-        db: config.mongoUrl,
-        collection: 'log_iot'
-    });
-}
-
-export default winston;
+export default logger;
