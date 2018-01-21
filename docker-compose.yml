@@ -9,7 +9,7 @@ services:
       - node2
     restart: always
   node1:
-    image: mmontes11/iot_backend
+    image: mmontes11/iot-backend
     env_file:
       - .env
     expose:
@@ -19,7 +19,7 @@ services:
       - redis_docker
     restart: always
   node2:
-    image: mmontes11/iot_backend
+    image: mmontes11/iot-backend
     env_file:
       - .env
     expose:

@@ -1,5 +1,5 @@
 {
-  "name": "iot_backend",
+  "name": "iot-backend",
   "version": "0.0.1",
   "description": "Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend",
   "author": "Martín Montes <martin11lrx@gmail.com>",
