@@ -1,7 +1,7 @@
-# iot_backend
+# iot-backend
 
-[![Build Status](https://travis-ci.org/mmontes11/iot_backend.svg?branch=develop)](https://travis-ci.org/mmontes11/iot_backend)
-[![Coverage Status](https://coveralls.io/repos/github/mmontes11/iot_backend/badge.svg?branch=develop)](https://coveralls.io/github/mmontes11/iot_backend?branch=develop)
+[![Build Status](https://travis-ci.org/mmontes11/iot_backend.svg?branch=develop)](https://travis-ci.org/mmontes11/iot-backend)
+[![Coverage Status](https://coveralls.io/repos/github/mmontes11/iot-backend/badge.svg?branch=develop)](https://coveralls.io/github/mmontes11/iot-backend?branch=develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend 
@@ -23,12 +23,12 @@ $ npm test
 
 ```bash
 $ npm run dist 
-$ docker build -t iot_backend .
+$ docker build -t iot-backend .
 ```
 
 ### DockerHub
 
-Server image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot_backend/)
+Server image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot-backend/)
 
 ### Deploy using Docker Compose
 
