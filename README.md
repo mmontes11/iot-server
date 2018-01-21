@@ -1,6 +1,6 @@
 # iot-backend
 
-[![Build Status](https://travis-ci.org/mmontes11/iot_backend.svg?branch=develop)](https://travis-ci.org/mmontes11/iot-backend)
+[![Build Status](https://travis-ci.org/mmontes11/iot-backend.svg?branch=develop)](https://travis-ci.org/mmontes11/iot-backend)
 [![Coverage Status](https://coveralls.io/repos/github/mmontes11/iot-backend/badge.svg?branch=develop)](https://coveralls.io/github/mmontes11/iot-backend?branch=develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
