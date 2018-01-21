@@ -32,14 +32,14 @@ if (config.debug) {
                 timestamp: true,
                 json: false,
                 colorize: true,
-                filename: 'log_iot_express.log'
+                filename: 'log-iot-express.log'
             }),
             new winston.transports.MongoDB({
                 timestamp: true,
                 json: true,
                 colorize: true,
                 db: config.mongoUrl,
-                collection: 'log_iot_express'
+                collection: 'log-iot-express'
             })
         ],
         meta: true,
