@@ -13,7 +13,7 @@ export default {
     startDateKey: "startDate",
     endDateKey: "endDate",
     invalidLastTimePeriodKey: "invalidTimePeriod",
-    invalidRegionParamsKey: "invalidRegionParams",
+    invalidCoordinateParamsKey: "invalidCoordinateParams",
     longitudeKey: "longitude",
     latitudeKey: "latitude",
     addressKey: "addressKey"

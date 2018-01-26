@@ -62,15 +62,14 @@ const validateMeasurementStats = (req, res, next) => {
             return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidDateRangeKey]: responseBody });
         }
     }
-    if (!validRegionParams(longitude, latitude, address)) {
+    if (!validCoordinateParams(longitude, latitude)) {
         const responseBody = {
-            [serverKeys.invalidRegionParamsKey]: {
+            [serverKeys.invalidCoordinateParamsKey]: {
                 [serverKeys.longitudeKey]: longitude,
-                [serverKeys.latitudeKey]: latitude,
-                [serverKeys.addressKey]: address
+                [serverKeys.latitudeKey]: latitude
             }
         };
-        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidRegionParamsKey]: responseBody });
+        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
     }
     next();
 };
@@ -93,23 +92,20 @@ const validateCreateObservations = (req, res, next) => {
 const validateGetThings = (req, res, next) => {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
-    const address = req.query.address;
-    if (!validRegionParams(longitude, latitude, address)) {
+    if (!validCoordinateParams(longitude, latitude)) {
         const responseBody = {
-            [serverKeys.invalidRegionParamsKey]: {
+            [serverKeys.invalidCoordinateParamsKey]: {
                 [serverKeys.longitudeKey]: longitude,
-                [serverKeys.latitudeKey]: latitude,
-                [serverKeys.addressKey]: address
+                [serverKeys.latitudeKey]: latitude
             }
         };
-        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidRegionParamsKey]: responseBody });
+        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
     }
     next();
 };
 
-const validRegionParams = (longitude, latitude, address) => {
-    const allRegionParamsUndefined = _.isUndefined(longitude) && _.isUndefined(latitude) && _.isUndefined(address);
-    return  allRegionParamsUndefined || ((!_.isUndefined(longitude) && !_.isUndefined(latitude)) || !_.isUndefined(address));
+const validCoordinateParams = (longitude, latitude) => {
+    return (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 };
 
 export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetThings };

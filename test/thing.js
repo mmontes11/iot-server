@@ -91,7 +91,7 @@ describe('thing', () => {
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[responseKeys.invalidRegionParamsKey]);
+                    should.exist(res.body[responseKeys.invalidCoordinateParamsKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });

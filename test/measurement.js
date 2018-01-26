@@ -338,6 +338,20 @@ describe('Measurement', () => {
                     done();
                 });
         });
+        it('gets measurement stats of a non valid location', (done) => {
+            chai.request(server)
+                .get('/api/measurement/stats')
+                .query({
+                    'longitude': -8.35
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    should.exist(res.body[responseKeys.invalidCoordinateParamsKey]);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
     });
 
     describe('GET /measurement/stats 200', () => {
