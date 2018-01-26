@@ -3,7 +3,7 @@ import _ from "underscore";
 
 const hourString = "hour", dayString = "day", weekString = "week", monthString = "month", yearString = "year";
 const validTimePeriods = [hourString, dayString, weekString, monthString, yearString];
-const supportedDateFormats = [moment.ISO_8601, "MM-DD-YYYY"];
+const supportedDateFormats = [moment.ISO_8601, "YYYY-MM-DD"];
 
 class TimePeriod {
     constructor(timePeriodString){

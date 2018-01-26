@@ -45,15 +45,6 @@ const validateMeasurementStats = (req, res, next) => {
     const longitude = req.query.longitude;
     const address = req.query.address;
     if (!_.isUndefined(lastTimePeriodParam)) {
-        if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
-            const responseBody = {
-                [serverKeys.invalidDateRangeKey]: {
-                    [serverKeys.startDateKey]: startDateParam,
-                    [serverKeys.endDateKey]: endDateParam
-                }
-            };
-            return res.status(httpStatus.BAD_REQUEST).json(responseBody)
-        }
         const lastTimePeriod = new TimePeriod(lastTimePeriodParam);
         if (!lastTimePeriod.isValid()) {
             return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidLastTimePeriodKey]: lastTimePeriodParam })

@@ -45,11 +45,11 @@ import constants from '../utils/responseKeys';
  const getStats = async (req, res) => {
     const type = req.query.type;
     let timePeriod = undefined;
-    if (!_.isUndefined(req.query.lastTimePeriod)) {
-        timePeriod = new TimePeriod(req.query.lastTimePeriod);
-    }
     if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
         timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
+    }
+    if (!_.isUndefined(req.query.lastTimePeriod)) {
+        timePeriod = new TimePeriod(req.query.lastTimePeriod);
     }
 
     try {

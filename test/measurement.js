@@ -293,12 +293,12 @@ describe('Measurement', () => {
                     done();
                 });
         });
-        it('gets measurement stats of a non valid time period', (done) => {
+        it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'startDate': '2016-01-01T01:00:00.000Z',
-                    'lastTimePeriod': 'month'
+                    'startDate': '1-1-2013',
+                    'endDate': '1-1-2018'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -308,48 +308,18 @@ describe('Measurement', () => {
                     done();
                 });
         });
-        it('gets measurement stats of a non valid time period', (done) => {
+        it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'endDate': '2016-01-01T01:00:00.000Z',
-                    'lastTimePeriod': 'month'
-                })
-                .set('Authorization', auth())
-                .end((err, res) => {
-                    should.exist(err)
-                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
-                    res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
-                });
-        });
-        it('gets measurement stats of a non valid time period', (done) => {
-            chai.request(server)
-                .get('/api/measurement/stats')
-                .query({
-                    'startDate': '2016-01-32',
-                    'lastTimePeriod': 'month'
+                    'startDate': '2016-01-01',
+                    'endDate': '2015-01-01'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
                     should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
-                });
-        });
-        it('gets measurement stats of a non valid time period', (done) => {
-            chai.request(server)
-                .get('/api/measurement/stats')
-                .query({
-                    'endDate': '2016-13-01',
-                    'lastTimePeriod': 'month'
-                })
-                .set('Authorization', auth())
-                .end((err, res) => {
-                    should.exist(err);
-                    res.should.have.status(httpStatus.BAD_REQUEST);
-                    should.exist(res.body[responseKeys.invalidDateRangeKey]);
                     done();
                 });
         });
