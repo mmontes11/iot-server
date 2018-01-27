@@ -2,7 +2,7 @@ import moment from "moment";
 import _ from "underscore";
 
 const hourString = "hour", dayString = "day", weekString = "week", monthString = "month", yearString = "year";
-const validTimePeriods = [hourString, dayString, weekString, monthString, yearString];
+const supportedTimePeriods = [hourString, dayString, weekString, monthString, yearString];
 const supportedDateFormats = [moment.ISO_8601, "YYYY-MM-DD"];
 
 class TimePeriod {
@@ -13,8 +13,11 @@ class TimePeriod {
         }
         this.endDate = moment().utc();
     }
+    static supportedTimePeriods() {
+        return supportedTimePeriods;
+    }
     static _normalizeTimePeriod(timePeriodString) {
-        if (validTimePeriods.includes(timePeriodString)) {
+        if (supportedTimePeriods.includes(timePeriodString)) {
             return timePeriodString;
         } else {
             return undefined

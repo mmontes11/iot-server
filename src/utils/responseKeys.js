@@ -2,6 +2,7 @@ export default {
     typesArrayKey: "types",
     statsArrayKey: "stats",
     thingsArrayKey: "things",
+    timePeriodsArrayKey: "timePeriods",
     observationsArrayKey: "observations",
     createdObservationsArrayKey: "createdObservations",
     invalidObservationsArrayKey: "invalidObservations",
