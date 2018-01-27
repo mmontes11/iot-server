@@ -3,8 +3,8 @@ import _ from 'underscore';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import requestValidator from '../helpers/requestValidator';
-import modelFactory from '../models/db/modelFactory';
-import { ObservationModel } from "../models/db/observation"
+import modelFactory from '../models/modelFactory';
+import { ObservationModel } from "../models/observation"
 import thingController from './thingController';
 
 const createObservations = async (req, res, next) => {

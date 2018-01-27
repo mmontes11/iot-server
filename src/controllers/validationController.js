@@ -1,6 +1,6 @@
 import _ from "underscore";
 import httpStatus from 'http-status';
-import { TimePeriod, CustomTimePeriod } from "../models/request/timePeriod";
+import { TimePeriod, CustomTimePeriod } from "../models/timePeriod";
 import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/responseKeys';
 import serverKeys from '../utils/responseKeys';

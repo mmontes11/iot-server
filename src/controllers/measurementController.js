@@ -1,8 +1,8 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
-import { MeasurementModel } from '../models/db/measurement';
-import modelFactory from '../models/db/modelFactory';
-import { TimePeriod, CustomTimePeriod } from '../models/request/timePeriod';
+import { MeasurementModel } from '../models/measurement';
+import modelFactory from '../models/modelFactory';
+import { TimePeriod, CustomTimePeriod } from '../models/timePeriod';
 import statsCache from '../cache/statsCache';
 import responseHandler from '../helpers/responseHandler';
 import thingController from './thingController';

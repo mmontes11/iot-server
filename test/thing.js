@@ -1,7 +1,7 @@
 import chai from './lib/chai';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
-import { ThingModel } from '../src/models/db/thing';
+import { ThingModel } from '../src/models/thing';
 import server from '../src/index';
 import responseKeys from '../src/utils/responseKeys';
 import constants from './constants/thing';

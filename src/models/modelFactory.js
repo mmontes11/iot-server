@@ -1,10 +1,10 @@
 import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
-import { ObservationKind } from '../request/observationKind';
-import requestValidator from '../../helpers/requestValidator';
-import request from '../../utils/request';
-import ip from '../../utils/ip';
+import { ObservationKind } from './observationKind';
+import requestValidator from '../helpers/requestValidator';
+import request from '../utils/request';
+import ip from '../utils/ip';
 import _ from 'underscore';
 
 const createUser = (user) => {
