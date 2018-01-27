@@ -28,6 +28,9 @@ const ThingSchema = mongoose.Schema({
         required: true,
         index: '2dsphere'
     },
+    googleMapsUrl: {
+        type: String
+    },
     lastObservation: {
         type: Date,
     },
