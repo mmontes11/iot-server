@@ -38,18 +38,12 @@ const validateCreateEvent = (req, res, next) => {
 };
 
 const validateMeasurementStats = (req, res, next) => {
-    const timePeriodParam = req.query.timePeriod;
     const startDateParam = req.query.startDate;
     const endDateParam = req.query.endDate;
+    const timePeriodParam = req.query.timePeriod;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
     const address = req.query.address;
-    if (!_.isUndefined(timePeriodParam)) {
-        const timePeriod = new TimePeriod(timePeriodParam);
-        if (!timePeriod.isValid()) {
-            return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidTimePeriod]: timePeriodParam })
-        }
-    }
     if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
         const timePeriod = new CustomTimePeriod(startDateParam, endDateParam);
         if (!timePeriod.isValid()) {
@@ -60,6 +54,12 @@ const validateMeasurementStats = (req, res, next) => {
                 }
             };
             return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidDateRangeKey]: responseBody });
+        }
+    }
+    if (!_.isUndefined(timePeriodParam)) {
+        const timePeriod = new TimePeriod(timePeriodParam);
+        if (!timePeriod.isValid()) {
+            return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidTimePeriod]: timePeriodParam })
         }
     }
     if (!validCoordinateParams(longitude, latitude)) {

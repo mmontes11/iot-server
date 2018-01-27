@@ -28,9 +28,8 @@ class TimePeriod {
     }
 }
 
-class CustomTimePeriod extends TimePeriod {
+class CustomTimePeriod {
     constructor(startDate, endDate) {
-        super();
         if (!_.isUndefined(startDate)) {
             this.startDate = moment(startDate, supportedDateFormats).utc();
         }
@@ -39,16 +38,15 @@ class CustomTimePeriod extends TimePeriod {
         }
     }
     isValid() {
-        if (!_.isUndefined(this.startDate) && !this.startDate.isValid()) {
+        if (!_.isUndefined(this.startDate) || !_.isUndefined(this.endDate)) {
+            if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
+                return this.endDate.isAfter(this.startDate)
+            } else {
+                return true;
+            }
+        } else {
             return false
         }
-        if (!_.isUndefined(this.endDate) && !this.endDate.isValid()) {
-            return false
-        }
-        if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
-            return this.endDate.isAfter(this.startDate)
-        }
-        return true;
     }
 }
 
