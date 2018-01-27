@@ -52,15 +52,15 @@ const ensureNoMeasurementsCreated = (done) => {
             done(err);
         });
 };
-const testCachedStats = (type, thing, lastTimePeriod, res, done) => {
-    statsCache.getStatsCache(type, thing, lastTimePeriod)
+const testCachedStats = (type, thing, timePeriod, res, done) => {
+    statsCache.getStatsCache(type, thing, timePeriod)
         .then((cachedStats) => {
             res.body.stats.should.be.eql(cachedStats);
             setTimeout(() => {
-                statsCache.getStatsCache(type, thing, lastTimePeriod)
+                statsCache.getStatsCache(type, thing, timePeriod)
                     .then((cachedStats) => {
                         should.not.exist(cachedStats);
-                        MeasurementModel.getStats(type, thing, lastTimePeriod)
+                        MeasurementModel.getStats(type, thing, timePeriod)
                             .then((statsFromDB) => {
                                 res.body.stats.should.be.eql(statsFromDB);
                                 done();
@@ -283,12 +283,12 @@ describe('Measurement', () => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'lastTimePeriod': 'whatever'
+                    'timePeriod': 'whatever'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
-                    should.exist(res.body[responseKeys.invalidLastTimePeriodKey]);
+                    should.exist(res.body[responseKeys.invalidTimePeriod]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
                     done();
                 });
@@ -377,7 +377,7 @@ describe('Measurement', () => {
             chai.request(server)
                 .get('/api/measurement/stats')
                 .query({
-                    'lastTimePeriod': 'month'
+                    'timePeriod': 'month'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -464,7 +464,7 @@ describe('Measurement', () => {
                 .get('/api/measurement/stats')
                 .query({
                     'type': 'temperature',
-                    'lastTimePeriod': 'month'
+                    'timePeriod': 'month'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -536,7 +536,7 @@ describe('Measurement', () => {
                 .get('/api/measurement/stats')
                 .query({
                     'thing': 'raspberry',
-                    'lastTimePeriod': 'month'
+                    'timePeriod': 'month'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {
@@ -597,7 +597,7 @@ describe('Measurement', () => {
                 .query({
                     'type': 'temperature',
                     'thing': 'raspberry',
-                    'lastTimePeriod': 'month'
+                    'timePeriod': 'month'
                 })
                 .set('Authorization', auth())
                 .end((err, res) => {

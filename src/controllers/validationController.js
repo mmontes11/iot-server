@@ -38,16 +38,16 @@ const validateCreateEvent = (req, res, next) => {
 };
 
 const validateMeasurementStats = (req, res, next) => {
-    const lastTimePeriodParam = req.query.lastTimePeriod;
+    const timePeriodParam = req.query.timePeriod;
     const startDateParam = req.query.startDate;
     const endDateParam = req.query.endDate;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
     const address = req.query.address;
-    if (!_.isUndefined(lastTimePeriodParam)) {
-        const lastTimePeriod = new TimePeriod(lastTimePeriodParam);
-        if (!lastTimePeriod.isValid()) {
-            return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidLastTimePeriodKey]: lastTimePeriodParam })
+    if (!_.isUndefined(timePeriodParam)) {
+        const timePeriod = new TimePeriod(timePeriodParam);
+        if (!timePeriod.isValid()) {
+            return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidTimePeriod]: timePeriodParam })
         }
     }
     if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {

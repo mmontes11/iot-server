@@ -48,8 +48,8 @@ import constants from '../utils/responseKeys';
     if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
         timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate)
     }
-    if (!_.isUndefined(req.query.lastTimePeriod)) {
-        timePeriod = new TimePeriod(req.query.lastTimePeriod);
+    if (!_.isUndefined(req.query.timePeriod)) {
+        timePeriod = new TimePeriod(req.query.timePeriod);
     }
 
     try {
