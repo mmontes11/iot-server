@@ -9,13 +9,11 @@ Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend
 ### Run in development
 
 ```bash
-$ npm install 
 $ npm start
 ```
 ### Run tests and show coverage
 
 ```bash
-$ npm install
 $ npm test
 ```
 
