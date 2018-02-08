@@ -8,6 +8,13 @@ export default {
                 -8.4065665,
                 43.3682188
             ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: []
         }
     },
     thingAtACoruna2: {
@@ -19,6 +26,13 @@ export default {
                 -8.40,
                 43.38
             ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: []
         }
     },
     thingAtNYC: {
@@ -30,6 +44,13 @@ export default {
                 -74.25,
                 40.69
             ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: []
         }
     },
     thingAtTokyo: {
@@ -41,6 +62,13 @@ export default {
                 139.57,
                 35.67
             ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: []
         }
     }
 };

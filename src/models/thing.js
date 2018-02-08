@@ -1,7 +1,7 @@
-import mongoose from '../../lib/mongoose';
-import config from '../../config/index';
+import mongoose from '../lib/mongoose';
+import config from '../config/index';
 import _ from 'underscore';
-import regex from '../../utils/regex';
+import regex from '../utils/regex';
 
 const SupportedObservationTypesSchema = mongoose.Schema({
     measurement: [{
@@ -28,11 +28,15 @@ const ThingSchema = mongoose.Schema({
         required: true,
         index: '2dsphere'
     },
+    googleMapsUrl: {
+        type: String
+    },
     lastObservation: {
         type: Date,
     },
     supportedObservationTypes: {
         type: SupportedObservationTypesSchema,
+        required: true
     }
 });
 

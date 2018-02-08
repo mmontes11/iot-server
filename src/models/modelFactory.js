@@ -1,10 +1,11 @@
 import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
-import { ObservationKind } from '../request/observationKind';
-import requestValidator from '../../helpers/requestValidator';
-import request from '../../utils/request';
-import ip from '../../utils/ip';
+import { ObservationKind } from './observationKind';
+import requestValidator from '../helpers/requestValidator';
+import request from '../utils/request';
+import ip from '../utils/ip';
+import geojson from '../utils/geojson';
 import _ from 'underscore';
 
 const createUser = (user) => {
@@ -71,9 +72,11 @@ const createThing = (req, lastObservation) => {
     const thing = req.body.thing;
     try {
         const thingIp = ip.extractIPfromRequest(req);
+        const { latitude, longitude } = geojson.latLangFromGeometry(thing.geometry);
         const thingExtraFields = {
             ip: thingIp,
-            lastObservation
+            lastObservation,
+            googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
         };
         return Object.assign({}, thing, thingExtraFields);
     } catch(err) {

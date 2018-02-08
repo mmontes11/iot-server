@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
-import { EventModel } from '../models/db/event';
-import modelFactory from '../models/db/modelFactory';
+import { EventModel } from '../models/event';
+import modelFactory from '../models/modelFactory';
 import responseHandler from '../helpers/responseHandler';
 import thingController from './thingController';
 import constants from '../utils/responseKeys';

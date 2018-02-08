@@ -2,7 +2,7 @@ import moment from "moment";
 import _ from "underscore";
 
 const hourString = "hour", dayString = "day", weekString = "week", monthString = "month", yearString = "year";
-const validTimePeriods = [hourString, dayString, weekString, monthString, yearString];
+const supportedTimePeriods = [hourString, dayString, weekString, monthString, yearString];
 const supportedDateFormats = [moment.ISO_8601, "YYYY-MM-DD"];
 
 class TimePeriod {
@@ -13,8 +13,11 @@ class TimePeriod {
         }
         this.endDate = moment().utc();
     }
+    static supportedTimePeriods() {
+        return supportedTimePeriods;
+    }
     static _normalizeTimePeriod(timePeriodString) {
-        if (validTimePeriods.includes(timePeriodString)) {
+        if (supportedTimePeriods.includes(timePeriodString)) {
             return timePeriodString;
         } else {
             return undefined
@@ -25,9 +28,8 @@ class TimePeriod {
     }
 }
 
-class CustomTimePeriod extends TimePeriod {
+class CustomTimePeriod {
     constructor(startDate, endDate) {
-        super();
         if (!_.isUndefined(startDate)) {
             this.startDate = moment(startDate, supportedDateFormats).utc();
         }
@@ -36,16 +38,15 @@ class CustomTimePeriod extends TimePeriod {
         }
     }
     isValid() {
-        if (!_.isUndefined(this.startDate) && !this.startDate.isValid()) {
+        if (!_.isUndefined(this.startDate) || !_.isUndefined(this.endDate)) {
+            if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
+                return this.endDate.isAfter(this.startDate)
+            } else {
+                return true;
+            }
+        } else {
             return false
         }
-        if (!_.isUndefined(this.endDate) && !this.endDate.isValid()) {
-            return false
-        }
-        if (!_.isUndefined(this.startDate) && !_.isUndefined(this.endDate)) {
-            return this.endDate.isAfter(this.startDate)
-        }
-        return true;
     }
 }
 

@@ -1,7 +1,7 @@
 import _ from 'underscore'
 import cacheHandler from './cacheHandler'
 import config from '../config/index'
-import { CustomTimePeriod } from '../models/request/timePeriod'
+import { CustomTimePeriod } from '../models/timePeriod'
 
 const statsCacheKey = "stats";
 
@@ -9,7 +9,7 @@ const cachePolicy = (timePeriod) => {
     return _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod)
 };
 
-const getStatsCacheKey = (type, thing, lastTimePeriod) => {
+const getStatsCacheKey = (type, thing, timePeriod) => {
     let cacheKey = statsCacheKey;
     const elementsCacheKey = [];
     if (!_.isUndefined(type)) {
@@ -18,8 +18,8 @@ const getStatsCacheKey = (type, thing, lastTimePeriod) => {
     if (!_.isUndefined(thing)) {
         elementsCacheKey.push(thing);
     }
-    if (!_.isUndefined(lastTimePeriod) && lastTimePeriod.isValid()) {
-        elementsCacheKey.push(lastTimePeriod.name)
+    if (!_.isUndefined(timePeriod) && timePeriod.isValid()) {
+        elementsCacheKey.push(timePeriod.name)
     }
 
     elementsCacheKey
@@ -30,12 +30,12 @@ const getStatsCacheKey = (type, thing, lastTimePeriod) => {
     return cacheKey
 };
 
-const setStatsCache = (type, thing, lastTimePeriod, stats) => {
-    cacheHandler.setObjectCache(getStatsCacheKey(type, thing, lastTimePeriod), stats, config.statsCacheInSeconds)
+const setStatsCache = (type, thing, timePeriod, stats) => {
+    cacheHandler.setObjectCache(getStatsCacheKey(type, thing, timePeriod), stats, config.statsCacheInSeconds)
 };
 
-const getStatsCache = (type, thing, lastTimePeriod) => {
-    return cacheHandler.getObjectCache(getStatsCacheKey(type, thing, lastTimePeriod))
+const getStatsCache = (type, thing, timePeriod) => {
+    return cacheHandler.getObjectCache(getStatsCacheKey(type, thing, timePeriod))
 };
 
 export default { cachePolicy, setStatsCache, getStatsCache };
