@@ -79,6 +79,61 @@ describe('Auth', () => {
         });
     });
 
+    describe('POST /auth 401', () => {
+        it('tries to check auth with invalid credentials', (done) => {
+            chai.request(server)
+                .post('/api/auth/user')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.CREATED);
+                    chai.request(server)
+                        .post('/api/auth')
+                        .set('Authorization', constants.invalidAuthHeader)
+                        .send(constants.validUser)
+                        .end((err, res) => {
+                            should.exist(err);
+                            res.should.have.status(httpStatus.UNAUTHORIZED);
+                            done();
+                        });
+                });
+        });
+        it('tries to check auth with a non existing user', (done) => {
+            chai.request(server)
+                .post('/api/auth')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.UNAUTHORIZED);
+                    done();
+                });
+        });
+    });
+
+    describe('POST /auth/token 200', () => {
+        it('creates a user and gets a token', (done) => {
+            chai.request(server)
+                .post('/api/auth/user')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.CREATED);
+                    chai.request(server)
+                        .post('/api/auth')
+                        .set('Authorization', constants.validAuthHeader)
+                        .send(constants.validUser)
+                        .end((err, res) => {
+                            should.not.exist(err);
+                            res.should.have.status(httpStatus.OK);
+                            done();
+                        });
+                });
+        });
+    });
+
     describe('POST /auth/token 401', () => {
         it('tries to get a token with invalid credentials', (done) => {
             chai.request(server)

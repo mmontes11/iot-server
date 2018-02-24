@@ -11,6 +11,10 @@ router
         .all(expressBasicAuth({ users: config.basicAuthUsers}));
 
 router
+    .route('/')
+        .post(authController.checkAuth);
+
+router
     .route('/user')
         .post(validationController.validateCreateUserIfNotExists, authController.createUserIfNotExists);
 
