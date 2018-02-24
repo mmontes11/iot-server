@@ -17,6 +17,20 @@ describe('Auth', () => {
         });
     });
 
+    describe('POST /auth/user 401', () => {
+        it('tries to create a user with invalid credentials', (done) => {
+            chai.request(server)
+                .post('/api/auth/user')
+                .set('Authorization', constants.invalidAuthHeader)
+                .send(constants.validUser)
+                .end((err,res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.UNAUTHORIZED);
+                    done();
+                });
+        });
+    });
+
     describe('POST /auth/user 400', () => {
         it('tries to create an invalid user', (done) => {
             chai.request(server)
@@ -30,7 +44,6 @@ describe('Auth', () => {
                     done();
                 });
         });
-
         it('tries to create a user with weak password', (done) => {
             chai.request(server)
                 .post('/api/auth/user')
@@ -40,20 +53,6 @@ describe('Auth', () => {
                     should.exist(err);
                     should.exist(res.body[responseKeys.invalidUserKey]);
                     res.should.have.status(httpStatus.BAD_REQUEST);
-                    done();
-                });
-        });
-    });
-
-    describe('POST /auth/user 401', () => {
-        it('tries to create a user with invalid credentials', (done) => {
-            chai.request(server)
-                .post('/api/auth/user')
-                .set('Authorization', constants.invalidAuthHeader)
-                .send(constants.validUser)
-                .end((err,res) => {
-                    should.exist(err);
-                    res.should.have.status(httpStatus.UNAUTHORIZED);
                     done();
                 });
         });
@@ -81,6 +80,25 @@ describe('Auth', () => {
     });
 
     describe('POST /auth/token 401', () => {
+        it('tries to get a token with invalid credentials', (done) => {
+            chai.request(server)
+                .post('/api/auth/user')
+                .set('Authorization', constants.validAuthHeader)
+                .send(constants.validUser)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.CREATED);
+                    chai.request(server)
+                        .post('/api/auth/token')
+                        .set('Authorization', constants.invalidAuthHeader)
+                        .send(constants.validUser)
+                        .end((err, res) => {
+                            should.exist(err);
+                            res.should.have.status(httpStatus.UNAUTHORIZED);
+                            done();
+                        });
+                });
+        });
         it('tries get a token with a non existing user', (done) => {
             chai.request(server)
                 .post('/api/auth/token')
