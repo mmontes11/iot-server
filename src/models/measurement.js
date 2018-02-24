@@ -52,10 +52,24 @@ MeasurementSchema.statics.getStats = function (type, thing, timePeriod){
     }
     const pipeline = [
         {
+            $project: {
+                _id: 0,
+                value: 1,
+                type: 1,
+                thing: 1,
+                unitName: '$unit.name',
+                unitSymbol: '$unit.symbol',
+            }
+        },
+        {
             $group: {
                 _id: {
                     type: '$type',
-                    thing: '$thing'
+                    thing: '$thing',
+                    unit: {
+                        name: '$unitName',
+                        symbol: '$unitSymbol'
+                    }
                 },
                 avg: {
                     $avg: '$value'
