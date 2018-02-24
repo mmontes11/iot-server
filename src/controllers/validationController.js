@@ -5,7 +5,7 @@ import requestValidator from '../helpers/requestValidator';
 import constants from '../utils/responseKeys';
 import serverKeys from '../utils/responseKeys';
 
-const validateCreateUser = (req, res, next) => {
+const validateCreateUserIfNotExists = (req, res, next) => {
     const user = req.body;
     if (!requestValidator.validUser(user)) {
         return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidUserKey]: user });
@@ -108,4 +108,4 @@ const validCoordinateParams = (longitude, latitude) => {
     return (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 };
 
-export default { validateCreateUser, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetThings };
+export default { validateCreateUserIfNotExists, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetThings };

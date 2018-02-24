@@ -10,7 +10,7 @@ import statsCache from '../src/cache/statsCache';
 import redisClient from '../src/lib/redis';
 import server from '../src/index';
 import constants from './constants/measurement';
-import userConstants from './constants/user';
+import userConstants from './constants/auth';
 import responseKeys from '../src/utils/responseKeys';
 
 import config from '../src/config/index';
@@ -80,13 +80,13 @@ describe('Measurement', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/user')
+            .post('/api/auth/user')
             .set('Authorization', userConstants.validAuthHeader)
             .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/user/logIn')
+                    .post('/api/auth/token')
                     .set('Authorization', userConstants.validAuthHeader)
                     .send(userConstants.validUser)
                     .end((err, res) => {
