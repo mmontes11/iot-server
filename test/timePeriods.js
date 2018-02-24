@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import server from '../src/index';
 import responseKeys from '../src/utils/responseKeys';
-import userConstants from './constants/user';
+import userConstants from './constants/auth';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -12,17 +12,17 @@ const auth = () => {
     return `Bearer ${token}`;
 };
 
-describe('thing', () => {
+describe('TimePeriod', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/user')
+            .post('/api/auth/user')
             .set('Authorization', userConstants.validAuthHeader)
             .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/user/logIn')
+                    .post('/api/auth/token')
                     .set('Authorization', userConstants.validAuthHeader)
                     .send(userConstants.validUser)
                     .end((err, res) => {

@@ -6,7 +6,7 @@ import modelFactory from '../models/modelFactory';
 import config from '../config/index';
 import responseHandler from '../helpers/responseHandler';
 
- const createIfNotExists = async (req, res) => {
+ const createUserIfNotExists = async (req, res) => {
     const user = await UserModel.where({ username: req.body.username }).findOne();
     try {
         if (!_.isNull(user)) {
@@ -21,7 +21,7 @@ import responseHandler from '../helpers/responseHandler';
     }
 };
 
- const logIn = async (req, res) => {
+ const getToken = async (req, res) => {
     const user = await UserModel.where({ username: req.body.username, password: req.body.password }).findOne();
     try {
         if (_.isNull(user)) {
@@ -39,4 +39,4 @@ import responseHandler from '../helpers/responseHandler';
     }
 };
 
-export default { createIfNotExists, logIn };
+export default { createUserIfNotExists, getToken };

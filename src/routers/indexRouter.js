@@ -1,6 +1,6 @@
 import express from 'express';
 import httpStatus from 'http-status';
-import userRouter from './userRouter'
+import authRouter from './authRouter'
 import measurementRouter from './measurementRouter';
 import eventRouter from './eventRouter';
 import observationsRouter from './observationsRouter';
@@ -14,7 +14,7 @@ router.get('/health-check', (req, res) =>
     res.sendStatus(httpStatus.OK)
 );
 
-router.use('/user', userRouter);
+router.use('/auth', authRouter);
 router.use('/measurement', measurementRouter);
 router.use('/event', eventRouter);
 router.use('/observations', observationsRouter);

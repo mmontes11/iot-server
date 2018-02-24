@@ -5,7 +5,7 @@ import { ThingModel } from '../src/models/thing';
 import server from '../src/index';
 import responseKeys from '../src/utils/responseKeys';
 import constants from './constants/thing';
-import userConstants from './constants/user';
+import userConstants from './constants/auth';
 
 const assert = chai.assert;
 const should = chai.should();
@@ -25,17 +25,17 @@ const createthings = (things, done) => {
 };
 
 
-describe('thing', () => {
+describe('Thing', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/user')
+            .post('/api/auth/user')
             .set('Authorization', userConstants.validAuthHeader)
             .send(userConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/user/logIn')
+                    .post('/api/auth/token')
                     .set('Authorization', userConstants.validAuthHeader)
                     .send(userConstants.validUser)
                     .end((err, res) => {
