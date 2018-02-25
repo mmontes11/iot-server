@@ -95,6 +95,11 @@ MeasurementSchema.statics.getStats = function (type, thing, timePeriod){
                 stdDev: 1
 
             }
+        },
+        {
+            $sort: {
+                'data.type': 1
+            }
         }
     ];
     return this.aggregate([...match, ...pipeline]);
