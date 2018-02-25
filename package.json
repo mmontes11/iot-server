@@ -38,7 +38,6 @@
     "mocha",
     "chai",
     "istanbul",
-    "travis-ci",
     "winston",
     "docker",
     "docker-compose",
