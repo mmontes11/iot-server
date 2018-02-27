@@ -21,7 +21,7 @@ $ npm test
 ### Build server image
 
 ```bash
-$ npm run dist 
+$ npm run build 
 $ docker build -t iot-backend .
 ```
 

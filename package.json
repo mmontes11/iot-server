@@ -17,7 +17,6 @@
     "clean": "rm -rf dist/*",
     "prebuild": "npm run clean",
     "build": "babel -d dist/ src/",
-    "dist": "npm run build && cp package.json dist/ && cd dist && npm install --production && cd -",
     "production": "cross-env NODE_ENV=production node index.js"
   },
   "repository": {
