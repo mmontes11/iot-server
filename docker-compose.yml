@@ -9,32 +9,41 @@ services:
       - node2
     restart: always
   node1:
-    image: mmontes11/iot-backend
+    build: .
     env_file:
-      - .env
+      - .env.iot-backend
     expose:
       - "${NODE_PORT}"
     links:
-      - mongo_docker
-      - redis_docker
+      - mongo
+      - redis
     restart: always
   node2:
-    image: mmontes11/iot-backend
+    build: .
     env_file:
-      - .env
+      - .env.iot-backend
     expose:
       - "${NODE_PORT}"
     links:
-      - mongo_docker
-      - redis_docker
+      - mongo
+      - redis
     restart: always
-  mongo_docker:
+  mongo:
     image: mongo
     expose:
       - "${MONGO_PORT}"
     restart: always
-  redis_docker:
+  redis:
     image: redis
     expose:
       - "${REDIS_PORT}"
+    restart: always
+  biot:
+    image: mmontes11/biot
+    env_file:
+      - .env.biot
+    expose:
+      - "${BIOT_PORT}"
+    links:
+      - nginx
     restart: always
