@@ -33,6 +33,9 @@ Server image available on [Docker Hub](https://hub.docker.com/r/mmontes11/iot-ba
 
 Configure env variables:
 * [.env](https://github.com/mmontes11/iot-backend/blob/develop/.env)
+* [.env.biot](https://github.com/mmontes11/iot-backend/blob/develop/.env.biot)
+* [.env.iot-backend](https://github.com/mmontes11/iot-backend/blob/develop/.env.iot-backend)
+
 
 ```bash
 $ docker-compose up -d 
