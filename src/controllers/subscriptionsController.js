@@ -3,7 +3,7 @@ import httpStatus from 'http-status';
 import responseHandler from "../helpers/responseHandler";
 import responseKeys from '../utils/responseKeys';
 
-const getSubscriptionsForChat = async (req, res, next) => {
+const getSubscriptionsByChat = async (req, res, next) => {
     const chatId = parseInt(req.query.chatId);
     try {
         const subscriptions = await SubscriptionsModel.subscriptionsForChat(chatId);
@@ -13,4 +13,4 @@ const getSubscriptionsForChat = async (req, res, next) => {
     }
 };
 
-export default { getSubscriptionsForChat };
+export default { getSubscriptionsByChat };

@@ -116,7 +116,7 @@ const validateSubscription = (req, res, next) => {
     }
 };
 
-const validateGetSubscriptionsForChat = (req, res, next) => {
+const validateGetSubscriptionsByChat = (req, res, next) => {
     const chatId = req.query.chatId;
     if (_.isUndefined(chatId)) {
         res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.mandatoryQueryParamKey]: serverKeys.chatIdKey })
@@ -139,5 +139,5 @@ export default {
     validateCreateObservations,
     validateGetThings,
     validateSubscription,
-    validateGetSubscriptionsForChat
+    validateGetSubscriptionsByChat
 };

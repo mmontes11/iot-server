@@ -12,6 +12,6 @@ router
 
 router
     .route('/')
-        .get(validationController.validateGetSubscriptionsForChat, subscriptionsController.getSubscriptionsForChat);
+        .get(validationController.validateGetSubscriptionsByChat, subscriptionsController.getSubscriptionsByChat);
 
 export default router;
