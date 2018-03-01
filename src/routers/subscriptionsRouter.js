@@ -2,7 +2,7 @@ import express from 'express';
 import expressJwt from 'express-jwt';
 import config from '../config/index';
 import validationController from '../controllers/validationController';
-import subscriptionController from '../controllers/subscriptionController';
+import subscriptionsController from '../controllers/subscriptionsController';
 
 const router = express.Router();
 
@@ -12,6 +12,6 @@ router
 
 router
     .route('/')
-        .post(validationController.validateSubscription, subscriptionController.createSubscription);
+        .get(validationController.validateGetSubscriptionsForChat, subscriptionsController.getSubscriptionsForChat);
 
 export default router;

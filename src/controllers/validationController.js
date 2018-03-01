@@ -106,12 +106,22 @@ const validateGetThings = (req, res, next) => {
     }
 };
 
-const validateCreateSubscription = (req, res, next) => {
+const validateSubscription = (req, res, next) => {
     const subscription = req.body;
-    if (_.isUndefined(subscription) || _.isUndefined(subscription.type) || _.isUndefined(subscription.chatId) &&
+    if (_.isUndefined(subscription) || _.isUndefined(subscription.type) || _.isUndefined(subscription.chatId) ||
         _.isUndefined(subscription.thing) || _.isUndefined(subscription.observationType)) {
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidSubscriptionKey]: subscription });
+    } else {
+        next();
+    }
+};
 
-        res.sendStatus(httpStatus.BAD_REQUEST);
+const validateGetSubscriptionsForChat = (req, res, next) => {
+    const chatId = req.query.chatId;
+    if (_.isUndefined(chatId)) {
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.mandatoryQueryParamKey]: serverKeys.chatIdKey })
+    } else if (_.isNaN(parseInt(chatId))) {
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidQueryParamKey]: chatId })
     } else {
         next();
     }
@@ -128,5 +138,6 @@ export default {
     validateMeasurementStats,
     validateCreateObservations,
     validateGetThings,
-    validateCreateSubscription
+    validateSubscription,
+    validateGetSubscriptionsForChat
 };
