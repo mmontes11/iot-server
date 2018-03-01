@@ -7,6 +7,7 @@ import observationsRouter from './observationsRouter';
 import thingRouter from './thingRouter';
 import thingsRouter from './thingsRouter';
 import timePeriodsRouter from './timePeriodsRouter';
+import subscriptionRouter from './subscriptionRouter';
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use('/observations', observationsRouter);
 router.use('/thing', thingRouter);
 router.use('/things', thingsRouter);
 router.use('/timePeriods', timePeriodsRouter);
+router.use('/subscription', subscriptionRouter);
 
 export default router;

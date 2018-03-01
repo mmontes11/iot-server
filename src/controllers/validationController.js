@@ -8,9 +8,10 @@ import serverKeys from '../utils/responseKeys';
 const validateCreateUserIfNotExists = (req, res, next) => {
     const user = req.body;
     if (!requestValidator.validUser(user)) {
-        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidUserKey]: user });
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidUserKey]: user });
+    } else {
+        next();
     }
-    next();
 };
 
 const validateCreateMeasurement = (req, res, next) => {
@@ -99,13 +100,33 @@ const validateGetThings = (req, res, next) => {
                 [serverKeys.latitudeKey]: latitude
             }
         };
-        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
+    } else {
+        next();
     }
-    next();
+};
+
+const validateCreateSubscription = (req, res, next) => {
+    const subscription = req.body;
+    if (_.isUndefined(subscription) || _.isUndefined(subscription.type) || _.isUndefined(subscription.chatId) &&
+        _.isUndefined(subscription.thing) || _.isUndefined(subscription.observationType)) {
+
+        res.sendStatus(httpStatus.BAD_REQUEST);
+    } else {
+        next();
+    }
 };
 
 const validCoordinateParams = (longitude, latitude) => {
     return (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 };
 
-export default { validateCreateUserIfNotExists, validateCreateMeasurement, validateCreateEvent, validateMeasurementStats, validateCreateObservations, validateGetThings };
+export default {
+    validateCreateUserIfNotExists,
+    validateCreateMeasurement,
+    validateCreateEvent,
+    validateMeasurementStats,
+    validateCreateObservations,
+    validateGetThings,
+    validateCreateSubscription
+};

@@ -3,7 +3,7 @@ import config from '../config/index';
 import _ from 'underscore';
 import regex from '../utils/regex';
 
-const SupportedObservationTypesSchema = mongoose.Schema({
+const SupportedObservationTypesSchema = new mongoose.Schema({
     measurement: [{
         type: String
     }],
