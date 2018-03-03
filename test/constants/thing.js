@@ -70,5 +70,66 @@ export default {
             ],
             event: []
         }
-    }
+    },
+    thingWithEvents: {
+        name: 'raspi-events',
+        ip: '192.168.0.1',
+        geometry : {
+            type : 'Point',
+            coordinates : [
+                144.9347428,
+                -37.8254904
+            ]
+        },
+        supportedObservationTypes: {
+            event: [
+                "door-opened",
+                "door-closed"
+            ]
+        }
+    },
+    thingWithEventsAndMeasurements: {
+        name: 'raspi-events-measurements',
+        ip: '192.168.0.1',
+        geometry : {
+            type : 'Point',
+            coordinates : [
+                144.9347428,
+                -37.8254904
+            ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: [
+                "door-opened",
+                "door-closed"
+            ]
+        }
+    },
+    thingWithEventsAndMeasurements2: {
+        name: 'raspi-events-measurements2',
+        ip: '192.168.0.1',
+        geometry : {
+            type : 'Point',
+            coordinates : [
+                144.9347428,
+                -37.8254904
+            ]
+        },
+        supportedObservationTypes: {
+            measurement: [
+                "temperature",
+                "humidity"
+            ],
+            event: [
+                "door-opened",
+                "door-closed"
+            ]
+        }
+    },
+    invalidSupportsMeasurementsQueryParam: "foo",
+    invalidSupportsEventsQueryParam: "foo"
 };

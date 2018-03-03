@@ -1,4 +1,5 @@
 import chai from './lib/chai';
+import _ from 'underscore';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
 import { ThingModel } from '../src/models/thing';
@@ -50,7 +51,15 @@ describe('Thing', () => {
     before((done) => {
         ThingModel.remove({}, (err) => {
             assert(err !== undefined, 'Error cleaning MongoDB for tests');
-            const things = [constants.thingAtACoruna, constants.thingAtACoruna2, constants.thingAtNYC, constants.thingAtTokyo];
+            const things = [
+                constants.thingAtACoruna,
+                constants.thingAtACoruna2,
+                constants.thingAtNYC,
+                constants.thingAtTokyo,
+                constants.thingWithEvents,
+                constants.thingWithEventsAndMeasurements,
+                constants.thingWithEventsAndMeasurements2
+            ];
             createthings(things, done);
         });
     });
@@ -152,7 +161,7 @@ describe('Thing', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.OK);
-                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(4);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(7);
                     done();
                 });
         });
@@ -207,6 +216,90 @@ describe('Thing', () => {
                     res.body[responseKeys.thingsArrayKey].length.should.be.eql(2);
                     done();
                 });
+        });
+    });
+
+    describe('GET /things?supportsMeasurements=X&supportsEvents=X 400', () => {
+        it('tries to get things with invalid supportsMeasurements and supportsEvents', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    supportsMeasurements: constants.invalidSupportsMeasurementsQueryParam,
+                    supportsEvents: constants.invalidSupportsEventsQueryParam
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    should.exist(res.body[responseKeys.invalidQueryParamKey]);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /things?supportsMeasurements=X&supportsEvents=X 404', () => {
+        it('tries to get things with supportsMeasurements = false and supportsEvents = false but no one matches', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    supportsMeasurements: false,
+                    supportsEvents: false
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.NOT_FOUND);
+                    done();
+                });
+        });
+    });
+
+    describe('GET /things?supportsMeasurements=X&supportsEvents=X 200', () => {
+        it('gets things with supportsMeasurements = true and supportsEvents = false', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    supportsMeasurements: true,
+                    supportsEvents: false
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(4);
+                    done();
+                });
+
+        });
+        it('gets things with supportsEvents = false', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    supportsEvents: true,
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(3);
+                    done();
+                });
+        });
+        it('gets things with with supportsMeasurements = true and supportsEvents = true', (done) => {
+            chai.request(server)
+                .get('/api/things')
+                .query({
+                    supportsMeasurements: true,
+                    supportsEvents: true
+                })
+                .set('Authorization', auth())
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.status(httpStatus.OK);
+                    res.body[responseKeys.thingsArrayKey].length.should.be.eql(2);
+                    done();
+                });
+
         });
     });
 });

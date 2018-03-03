@@ -2,6 +2,7 @@ import _ from "underscore";
 import httpStatus from 'http-status';
 import { TimePeriod, CustomTimePeriod } from "../models/timePeriod";
 import requestValidator from '../helpers/requestValidator';
+import boolean from '../utils/boolean';
 import constants from '../utils/responseKeys';
 import serverKeys from '../utils/responseKeys';
 
@@ -93,6 +94,8 @@ const validateCreateObservations = (req, res, next) => {
 const validateGetThings = (req, res, next) => {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
+    const supportsMeasurements = req.query.supportsMeasurements;
+    const supportsEvents = req.query.supportsEvents;
     if (!validCoordinateParams(longitude, latitude)) {
         const responseBody = {
             [serverKeys.invalidCoordinateParamsKey]: {
@@ -100,10 +103,15 @@ const validateGetThings = (req, res, next) => {
                 [serverKeys.latitudeKey]: latitude
             }
         };
-        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
-    } else {
-        next();
+        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
     }
+    if (!_.isUndefined(supportsMeasurements) && !boolean.stringIsBoolean(supportsMeasurements)) {
+        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidQueryParamKey]: serverKeys.supportsMeasurementsKey });
+    }
+    if (!_.isUndefined(supportsEvents) && !boolean.stringIsBoolean(supportsEvents)) {
+        return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidQueryParamKey]: serverKeys.supportsEventsKey });
+    }
+    next();
 };
 
 const validateSubscription = (req, res, next) => {

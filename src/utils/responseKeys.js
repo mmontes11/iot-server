@@ -23,4 +23,6 @@ export default {
     mandatoryQueryParamKey: "mandatoryQueryParam",
     invalidQueryParamKey: "invalidQueryParam",
     chatIdKey: "chatId",
+    supportsMeasurementsKey: "supportsMeasurements",
+    supportsEventsKey: "supportsEvents"
 };

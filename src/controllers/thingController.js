@@ -7,6 +7,7 @@ import { ThingModel } from "../models/thing";
 import responseHandler from '../helpers/responseHandler';
 import constants from '../utils/responseKeys';
 import geocoder from '../utils/geocoder';
+import boolean from '../utils/boolean';
 
 const createOrUpdateThing = (req, lastObservation) => {
     const thingToUpsert = modelFactory.createThing(req, lastObservation);
@@ -68,6 +69,10 @@ const _getThings = async (req) => {
     let latitude = req.query.latitude;
     const address = req.query.address;
     const maxDistance = req.query.maxDistance;
+    const supportsMeasurements = req.query.supportsMeasurements;
+    const supportsMeasurementsBoolean = !_.isUndefined(supportsMeasurements) ? boolean.stringToBoolean(supportsMeasurements) : undefined;
+    const supportsEvents = req.query.supportsEvents;
+    const supportsEventsBoolean = !_.isUndefined(supportsEvents) ? boolean.stringToBoolean(supportsEvents) : undefined;
 
     if (!_.isUndefined(address)) {
         const location = await geocoder.geocode(address);
@@ -80,7 +85,7 @@ const _getThings = async (req) => {
     }
 
     try {
-        return await ThingModel.findThings(longitude, latitude, maxDistance);
+        return await ThingModel.findThings(longitude, latitude, maxDistance, supportsMeasurementsBoolean, supportsEventsBoolean);
     } catch (err) {
         throw err;
     }
