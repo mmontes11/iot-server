@@ -31,6 +31,6 @@ SubscriptionSchema.statics.findSubscription = function (subscription) {
     return this.findOne(findCriteria);
 };
 
-const SubscriptionsModel = mongoose.model('Subscription', SubscriptionSchema);
+const SubscriptionModel = mongoose.model('Subscription', SubscriptionSchema);
 
-export { SubscriptionSchema, SubscriptionsModel };
+export { SubscriptionSchema, SubscriptionModel };

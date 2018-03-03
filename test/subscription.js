@@ -2,7 +2,7 @@ import chai from './lib/chai';
 import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
-import { SubscriptionsModel } from '../src/models/subscription';
+import { SubscriptionModel } from '../src/models/subscription';
 import server from '../src/index';
 import constants from './constants/observations';
 import authConstants from './constants/auth';
@@ -40,7 +40,7 @@ describe('Subscriptions', () => {
     });
 
     beforeEach((done) => {
-        SubscriptionsModel.remove({})
+        SubscriptionModel.remove({})
             .then(() => {
                 done();
             }).catch((err) => {
@@ -205,7 +205,7 @@ describe('Subscriptions', () => {
                 subscriptionConstants.validSubscription3
             ];
             const promises = _.map(subscriptions, (subscription) => {
-                const newSubscription = new SubscriptionsModel(subscription);
+                const newSubscription = new SubscriptionModel(subscription);
                 return newSubscription.save();
             });
             Promise.all(promises)

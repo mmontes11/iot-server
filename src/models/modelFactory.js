@@ -2,7 +2,7 @@ import { UserModel } from './user';
 import { MeasurementModel } from './measurement';
 import { EventModel } from './event';
 import { ObservationKind } from './observationKind';
-import { SubscriptionsModel } from "./subscription"
+import { SubscriptionModel } from "./subscription"
 import requestValidator from '../helpers/requestValidator';
 import request from '../utils/request';
 import ip from '../utils/ip';
@@ -87,7 +87,7 @@ const createThing = (req, lastObservation) => {
 
 const createSubscription = (req) => {
     const subscription = req.body;
-    return new SubscriptionsModel({
+    return new SubscriptionModel({
         type: subscription.type,
         chatId: subscription.chatId,
         thing: subscription.thing,
