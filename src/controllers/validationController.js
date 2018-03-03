@@ -5,6 +5,7 @@ import requestValidator from '../helpers/requestValidator';
 import boolean from '../utils/boolean';
 import constants from '../utils/responseKeys';
 import serverKeys from '../utils/responseKeys';
+import regex from '../utils/regex';
 
 const validateCreateUserIfNotExists = (req, res, next) => {
     const user = req.body;
@@ -114,11 +115,20 @@ const validateGetThings = (req, res, next) => {
     next();
 };
 
-const validateSubscription = (req, res, next) => {
+const validateCreateSubscription = (req, res, next) => {
     const subscription = req.body;
     if (_.isUndefined(subscription) || _.isUndefined(subscription.type) || _.isUndefined(subscription.chatId) ||
         _.isUndefined(subscription.thing) || _.isUndefined(subscription.observationType)) {
         res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidSubscriptionKey]: subscription });
+    } else {
+        next();
+    }
+};
+
+const validateDeleteSubscription = (req, res, next) => {
+    const subscriptionId = req.params.id;
+    if (!regex.objectId.test(subscriptionId)) {
+        res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidPathParamKey]: subscriptionId });
     } else {
         next();
     }
@@ -146,6 +156,7 @@ export default {
     validateMeasurementStats,
     validateCreateObservations,
     validateGetThings,
-    validateSubscription,
+    validateCreateSubscription,
+    validateDeleteSubscription,
     validateGetSubscriptionsByChat
 };

@@ -22,6 +22,7 @@ export default {
     addressKey: "addressKey",
     mandatoryQueryParamKey: "mandatoryQueryParam",
     invalidQueryParamKey: "invalidQueryParam",
+    invalidPathParamKey: "invalidPathParam",
     chatIdKey: "chatId",
     supportsMeasurementsKey: "supportsMeasurements",
     supportsEventsKey: "supportsEvents"

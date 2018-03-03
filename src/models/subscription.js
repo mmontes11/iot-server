@@ -31,6 +31,11 @@ SubscriptionSchema.statics.findSubscription = function (subscription) {
     return this.findOne(findCriteria);
 };
 
+SubscriptionSchema.statics.findSubscriptionById = function (subscriptionId) {
+    const objectId = mongoose.Types.ObjectId(subscriptionId);
+    return this.findOne(objectId);
+};
+
 const SubscriptionModel = mongoose.model('Subscription', SubscriptionSchema);
 
 export { SubscriptionSchema, SubscriptionModel };

@@ -17,12 +17,9 @@ export default {
         thing: "raspi",
         observationType: "door-opened"
     },
-    invalidSubscription: {
-        type: "measurementChanged",
-        thing: "raspi",
-        observationType: "temperature"
-    },
     validChatId: 1234,
     validChatId2: 5678,
-    invalidChatId: "foo"
+    invalidChatId: "foo",
+    invalidSubscriptionId: 1,
+    nonExistingSubscriptionId: "5a9a7c4be72f3003bc5e5798"
 };

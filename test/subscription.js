@@ -102,9 +102,8 @@ describe('Subscriptions', () => {
     describe('DELETE /subscription 400', () => {
         it('tries to delete an invalid subscription', (done) => {
             chai.request(server)
-                .delete('/api/subscription')
+                .delete(`/api/subscription/${subscriptionConstants.invalidSubscriptionId}`)
                 .set('Authorization', auth())
-                .send(subscriptionConstants.invalidSubscription)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.BAD_REQUEST);
@@ -116,9 +115,8 @@ describe('Subscriptions', () => {
     describe('DELETE /subscription 404', () => {
         it('tries to delete a non existing subscription', (done) => {
             chai.request(server)
-                .delete('/api/subscription')
+                .delete(`/api/subscription/${subscriptionConstants.nonExistingSubscriptionId}`)
                 .set('Authorization', auth())
-                .send(subscriptionConstants.validSubscription)
                 .end((err, res) => {
                     should.exist(err);
                     res.should.have.status(httpStatus.NOT_FOUND);
@@ -136,11 +134,11 @@ describe('Subscriptions', () => {
                 .end((err, res) => {
                     should.not.exist(err);
                     res.should.have.status(httpStatus.CREATED);
+                    const subscriptionId = res.body._id;
 
                     chai.request(server)
-                        .delete('/api/subscription')
+                        .delete(`/api/subscription/${subscriptionId}`)
                         .set('Authorization', auth())
-                        .send(subscriptionConstants.validSubscription)
                         .end((err, res) => {
                             should.not.exist(err);
                             res.should.have.status(httpStatus.OK);
@@ -220,11 +218,11 @@ describe('Subscriptions', () => {
                             should.not.exist(err);
                             res.should.have.status(httpStatus.OK);
                             res.body[responseKeys.subscriptionsArrayKey].length.should.be.eql(2);
+                            const subscriptionId = _.first(res.body[responseKeys.subscriptionsArrayKey])._id;
 
                             chai.request(server)
-                                .delete('/api/subscription')
+                                .delete(`/api/subscription/${subscriptionId}`)
                                 .set('Authorization', auth())
-                                .send(subscriptionConstants.validSubscription2)
                                 .end((err, res) => {
                                     should.not.exist(err);
                                     res.should.have.status(httpStatus.OK);

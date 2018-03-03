@@ -20,11 +20,12 @@ const createSubscription = async (req, res, next) => {
 };
 
 const deleteSubscription = async (req, res, next) => {
+    const subscriptionId = req.params.id;
     try {
-        const foundSubscription = await SubscriptionModel.findSubscription(req.body);
+        const foundSubscription = await SubscriptionModel.findSubscriptionById(subscriptionId);
         if (!_.isNull(foundSubscription)) {
-            const removedSubscription = await foundSubscription.remove();
-            res.status(httpStatus.OK).json(removedSubscription);
+            await foundSubscription.remove();
+            res.sendStatus(httpStatus.OK);
         } else {
             res.sendStatus(httpStatus.NOT_FOUND);
         }
