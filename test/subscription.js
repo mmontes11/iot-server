@@ -100,7 +100,7 @@ describe('Subscriptions', () => {
     });
 
     describe('DELETE /subscription 400', () => {
-        it('tries to delete an invalid subscription', (done) => {
+        it('tries to delete a subscription with an invalid subscription ID', (done) => {
             chai.request(server)
                 .delete(`/api/subscription/${subscriptionConstants.invalidSubscriptionId}`)
                 .set('Authorization', auth())
@@ -113,7 +113,7 @@ describe('Subscriptions', () => {
     });
 
     describe('DELETE /subscription 404', () => {
-        it('tries to delete a non existing subscription', (done) => {
+        it('tries to delete a subscription  with non existing with subscription ID', (done) => {
             chai.request(server)
                 .delete(`/api/subscription/${subscriptionConstants.nonExistingSubscriptionId}`)
                 .set('Authorization', auth())
