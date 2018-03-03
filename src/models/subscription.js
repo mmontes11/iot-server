@@ -31,10 +31,6 @@ SubscriptionSchema.statics.findSubscription = function (subscription) {
     return this.findOne(findCriteria);
 };
 
-SubscriptionSchema.statics.subscriptionsForChat = function (chatId) {
-    return this.find({ chatId });
-};
-
 const SubscriptionsModel = mongoose.model('Subscription', SubscriptionSchema);
 
 export { SubscriptionSchema, SubscriptionsModel };

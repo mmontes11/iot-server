@@ -6,7 +6,7 @@ import responseKeys from '../utils/responseKeys';
 const getSubscriptionsByChat = async (req, res, next) => {
     const chatId = parseInt(req.query.chatId);
     try {
-        const subscriptions = await SubscriptionsModel.subscriptionsForChat(chatId);
+        const subscriptions = await SubscriptionsModel.find({ chatId });
         responseHandler.handleResponse(res, subscriptions, responseKeys.subscriptionsArrayKey);
     } catch (err) {
         responseHandler.handleError(res, err);

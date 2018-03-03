@@ -12,6 +12,7 @@ router
 
 router
     .route('/')
-        .post(validationController.validateSubscription, subscriptionController.createSubscription);
+        .post(validationController.validateSubscription, subscriptionController.createSubscription)
+        .delete(validationController.validateSubscription, subscriptionController.deleteSubscription);
 
 export default router;

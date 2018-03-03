@@ -19,4 +19,18 @@ const createSubscription = async (req, res, next) => {
     }
 };
 
-export default { createSubscription };
+const deleteSubscription = async (req, res, next) => {
+    try {
+        const foundSubscription = await SubscriptionsModel.findSubscription(req.body);
+        if (!_.isNull(foundSubscription)) {
+            const removedSubscription = await foundSubscription.remove();
+            res.status(httpStatus.OK).json(removedSubscription);
+        } else {
+            res.sendStatus(httpStatus.NOT_FOUND);
+        }
+    } catch (err) {
+        responseHandler.handleError(res, err);
+    }
+};
+
+export default { createSubscription, deleteSubscription };
