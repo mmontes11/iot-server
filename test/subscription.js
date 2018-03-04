@@ -160,9 +160,6 @@ describe('Subscriptions', () => {
                     done();
                 });
         });
-    });
-
-    describe('GET /subscriptions 400', () => {
         it('tries to get subscriptions with an invalid chatId query param', (done) => {
             chai.request(server)
                 .get('/api/subscriptions')
