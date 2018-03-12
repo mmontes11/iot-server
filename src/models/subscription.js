@@ -1,7 +1,7 @@
 import mongoose from '../lib/mongoose';
 
 const SubscriptionSchema = new mongoose.Schema({
-    type: {
+    notificationType: {
         type: String,
         required: true
     },
@@ -19,11 +19,11 @@ const SubscriptionSchema = new mongoose.Schema({
     }
 });
 
-SubscriptionSchema.index({ type: 1, chatId: 1, thing: 1, observationType: 1 }, { unique: true });
+SubscriptionSchema.index({ notificationType: 1, chatId: 1, thing: 1, observationType: 1 }, { unique: true });
 
 SubscriptionSchema.statics.findSubscription = function (subscription) {
     const findCriteria = {
-        type: subscription.type,
+        notificationType: subscription.notificationType,
         chatId: subscription.chatId,
         thing: subscription.thing,
         observationType: subscription.observationType

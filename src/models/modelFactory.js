@@ -88,7 +88,7 @@ const createThing = (req, lastObservation) => {
 const createSubscription = (req) => {
     const subscription = req.body;
     return new SubscriptionModel({
-        type: subscription.type,
+        notificationType: subscription.notificationType,
         chatId: subscription.chatId,
         thing: subscription.thing,
         observationType: subscription.observationType

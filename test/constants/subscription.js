@@ -1,18 +1,18 @@
 export default {
     validSubscription: {
-        type: "measurementChanged",
+        notificationType: "measurementChanged",
         chatId: 1234,
         thing: "raspi",
         observationType: "temperature"
     },
     validSubscription2: {
-        type: "temperature",
+        notificationType: "temperature",
         chatId: 5678,
         thing: "raspi",
         observationType: "temperature"
     },
     validSubscription3: {
-        type: "event",
+        notificationType: "event",
         chatId: 5678,
         thing: "raspi",
         observationType: "door-opened"
