@@ -39,7 +39,6 @@
     "istanbul",
     "winston",
     "docker",
-    "docker-compose",
     "iot",
     "internet-of-things",
     "iot-server"
