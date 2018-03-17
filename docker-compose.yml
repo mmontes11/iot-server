@@ -11,7 +11,7 @@ services:
   node1:
     build: .
     env_file:
-      - .env.iot-backend
+      - .env.iot-server
     expose:
       - "${NODE_PORT}"
     links:
@@ -21,7 +21,7 @@ services:
   node2:
     build: .
     env_file:
-      - .env.iot-backend
+      - .env.iot-server
     expose:
       - "${NODE_PORT}"
     links:

@@ -1,6 +1,6 @@
 FROM node:8
 
-ENV WORKDIR /usr/src/iot-backend
+ENV WORKDIR /usr/src/iot-server
 
 RUN mkdir ${WORKDIR}
 
