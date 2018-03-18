@@ -6,13 +6,13 @@ import requestValidator from '../../helpers/requestValidator';
 import modelFactory from '../../models/modelFactory';
 import { ObservationModel } from "../../models/observation"
 import thingController from './thingController';
+import mqttController from '../mqtt/mqttController';
 
 const createObservations = async (req, res, next) => {
     const observations = req.body[constants.observationsArrayKey];
     let createdObservations = [];
     let invalidObservations = [];
     let savePromises = [];
-
     for (const observation of observations) {
         try {
             const newObservation = modelFactory.createObservationUsingKind(req, observation);
@@ -21,7 +21,6 @@ const createObservations = async (req, res, next) => {
             invalidObservations.push(observation);
         }
     }
-
     await Promise.all(savePromises).each((inspection, index) => {
         if (inspection.isFulfilled()) {
             createdObservations.push(inspection.value());
@@ -29,15 +28,15 @@ const createObservations = async (req, res, next) => {
             invalidObservations.push(observations[index])
         }
     });
-
     try {
         if (!_.isEmpty(createdObservations)) {
             await createOrUpdateThing(req, createdObservations);
         }
-        handleResponse(res, createdObservations, invalidObservations);
     } catch (err) {
-        await thingController.handleThingCreationError(req, res, createdObservations);
+        return await thingController.handleThingCreationError(req, res, createdObservations);
     }
+    await mqttController.publishObservations(createdObservations);
+    handleResponse(res, createdObservations, invalidObservations);
 };
 
 const createOrUpdateThing = async (req, createdObservations) => {
