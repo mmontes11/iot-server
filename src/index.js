@@ -31,15 +31,16 @@ redis.on('end', () => {
     logInfo(`Disconnected from Redis ${config.redisUrl}`);
 });
 
+const mqttBrokerUrl = `mqtt://${config.mqttBrokerHost}:${config.mqttBrokerPort}`;
 mqtt.on('connect', () => {
-    logInfo(`Connected to MQTT Broker ${config.mqttBrokerUrl}`);
+    logInfo(`Connected to MQTT Broker ${mqttBrokerUrl}`);
 });
 mqtt.on('error', (err) => {
-    logError(`Error in MQTT Broker ${config.mqttBrokerUrl}:`);
+    logError(`Error in MQTT Broker ${mqttBrokerUrl}:`);
     logError(err);
 });
 mqtt.on('close', () => {
-    logInfo(`Disconnected from MQTT Broker ${config.mqttBrokerUrl}`);
+    logInfo(`Disconnected from MQTT Broker ${mqttBrokerUrl}`);
 });
 
 server.on('error', (err) => {
