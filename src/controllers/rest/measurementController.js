@@ -6,22 +6,25 @@ import { TimePeriod, CustomTimePeriod } from '../../models/timePeriod';
 import statsCache from '../../cache/statsCache';
 import responseHandler from '../../helpers/responseHandler';
 import thingController from './thingController';
+import mqttController from '../mqtt/mqttController';
 import constants from '../../utils/responseKeys';
 
  const createMeasurement = async (req, res) => {
+    let newMeasurement;
     try {
-        const newMeasurement = modelFactory.createMeasurement(req, req.body.measurement);
-        const savedMeasurement = await newMeasurement.save();
-        try {
-            await thingController.createOrUpdateThing(req, savedMeasurement.phenomenonTime);
-            res.status(httpStatus.CREATED).json(savedMeasurement);
-        } catch (err) {
-            await thingController.handleThingCreationError(req, res, [savedMeasurement]);
-        }
+        const measurement = modelFactory.createMeasurement(req, req.body.measurement);
+        newMeasurement = await measurement.save();
     } catch (err) {
         responseHandler.handleError(res, err);
     }
-};
+    try {
+        await thingController.createOrUpdateThing(req, newMeasurement.phenomenonTime);
+    } catch (err) {
+        await thingController.handleThingCreationError(req, res, [newMeasurement]);
+    }
+    await mqttController.publicMeasurement(newMeasurement);
+    res.status(httpStatus.CREATED).json(newMeasurement);
+ };
 
  const getTypes = async (req, res) => {
     try {
