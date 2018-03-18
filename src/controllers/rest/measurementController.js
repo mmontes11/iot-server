@@ -22,7 +22,7 @@ import constants from '../../utils/responseKeys';
     } catch (err) {
         await thingController.handleThingCreationError(req, res, [newMeasurement]);
     }
-    await mqttController.publicMeasurement(newMeasurement);
+    await mqttController.publishMeasurement(newMeasurement);
     res.status(httpStatus.CREATED).json(newMeasurement);
  };
 

@@ -7,7 +7,7 @@ const publishEvent = async (event) => {
     await _publishJSON(topic, event);
 };
 
-const publicMeasurement = async (measurement) => {
+const publishMeasurement = async (measurement) => {
     const topic = `${measurement.thing}/measurement/${measurement.type}`;
     await _publishJSON(topic, measurement);
 };
@@ -25,4 +25,4 @@ const _publishJSON = async (topic, json) => {
     }
 };
 
-export default { publishEvent, publicMeasurement };
+export default { publishEvent, publishMeasurement };
