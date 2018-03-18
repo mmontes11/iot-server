@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
-import { EventModel } from '../models/event';
-import modelFactory from '../models/modelFactory';
-import responseHandler from '../helpers/responseHandler';
+import { EventModel } from '../../models/event';
+import modelFactory from '../../models/modelFactory';
+import responseHandler from '../../helpers/responseHandler';
 import thingController from './thingController';
-import constants from '../utils/responseKeys';
+import constants from '../../utils/responseKeys';
 
  const createEvent = async (req, res) => {
     try {

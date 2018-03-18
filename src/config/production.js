@@ -3,6 +3,7 @@ export default {
     nodePort: process.env.NODE_PORT,
     mongoUrl: `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,
     redisUrl: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    mqttBrokerUrl: `mqtt://${process.env.MQTT_BROKER_HOST}:${process.env.MQTT_BROKER_PORT}`,
     defaultCacheInSeconds: process.env.DEFAULT_CACHE_IN_SECONDS,
     statsCacheInSeconds: process.env.STATS_CACHE_IN_SECONDS,
     maxDefaultNearbyDistanceInMeters: process.env.MAX_DEFAULT_NEARBY_DISTANCE_IN_METERS,

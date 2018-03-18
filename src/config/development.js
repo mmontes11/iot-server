@@ -3,6 +3,7 @@ export default {
     nodePort: 9000,
     mongoUrl: 'mongodb://localhost:27017/IoT',
     redisUrl: 'redis://localhost:6379',
+    mqttBrokerUrl : 'mqtt://localhost:1883',
     defaultCacheInSeconds: 10,
     statsCacheInSeconds: 5,
     maxDefaultNearbyDistanceInMeters: 10000,

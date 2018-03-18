@@ -1,12 +1,12 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
-import { MeasurementModel } from '../models/measurement';
-import modelFactory from '../models/modelFactory';
-import { TimePeriod, CustomTimePeriod } from '../models/timePeriod';
-import statsCache from '../cache/statsCache';
-import responseHandler from '../helpers/responseHandler';
+import { MeasurementModel } from '../../models/measurement';
+import modelFactory from '../../models/modelFactory';
+import { TimePeriod, CustomTimePeriod } from '../../models/timePeriod';
+import statsCache from '../../cache/statsCache';
+import responseHandler from '../../helpers/responseHandler';
 import thingController from './thingController';
-import constants from '../utils/responseKeys';
+import constants from '../../utils/responseKeys';
 
  const createMeasurement = async (req, res) => {
     try {

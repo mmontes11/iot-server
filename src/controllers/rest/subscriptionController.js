@@ -1,6 +1,6 @@
-import { SubscriptionModel } from "../models/subscription";
-import modelFactory from "../models/modelFactory";
-import responseHandler from "../helpers/responseHandler";
+import { SubscriptionModel } from "../../models/subscription";
+import modelFactory from "../../models/modelFactory";
+import responseHandler from "../../helpers/responseHandler";
 import _ from "underscore";
 import httpStatus from "http-status";
 

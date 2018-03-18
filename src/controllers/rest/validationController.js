@@ -1,11 +1,11 @@
 import _ from "underscore";
 import httpStatus from 'http-status';
-import { TimePeriod, CustomTimePeriod } from "../models/timePeriod";
-import requestValidator from '../helpers/requestValidator';
-import boolean from '../utils/boolean';
-import constants from '../utils/responseKeys';
-import serverKeys from '../utils/responseKeys';
-import regex from '../utils/regex';
+import { TimePeriod, CustomTimePeriod } from "../../models/timePeriod";
+import requestValidator from '../../helpers/requestValidator';
+import boolean from '../../utils/boolean';
+import constants from '../../utils/responseKeys';
+import serverKeys from '../../utils/responseKeys';
+import regex from '../../utils/regex';
 
 const validateCreateUserIfNotExists = (req, res, next) => {
     const user = req.body;
