@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/mmontes11/iot-server/badge.svg?branch=develop)](https://coveralls.io/github/mmontes11/iot-server?branch=develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Generic purpose ES6 NodeJS + MongoDB + Redis IoT server 
+Generic purpose ES6 NodeJS + MongoDB + Redis IoT server. It provides REST and MQTT interfaces to interact with IoT data.
 
 ### Run in development
 
