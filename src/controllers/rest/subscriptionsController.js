@@ -1,7 +1,7 @@
-import { SubscriptionModel } from "../models/subscription";
+import { SubscriptionModel } from "../../models/subscription";
 import httpStatus from 'http-status';
-import responseHandler from "../helpers/responseHandler";
-import responseKeys from '../utils/responseKeys';
+import responseHandler from "../../helpers/responseHandler";
+import responseKeys from '../../utils/responseKeys';
 
 const getSubscriptionsByChat = async (req, res, next) => {
     const chatId = parseInt(req.query.chatId);

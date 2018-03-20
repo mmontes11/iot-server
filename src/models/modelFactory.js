@@ -46,7 +46,6 @@ const createObservationUsingKind = (req, observation) => {
     if (_.isUndefined(observationKind)) {
         throw Error('observation.kind path is undefined');
     }
-    delete observation.kind;
     const invalidObservationError = Error('Invalid observation');
     switch (observationKind) {
         case ObservationKind.measurementKind: {

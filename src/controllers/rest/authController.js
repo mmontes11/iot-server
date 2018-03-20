@@ -2,10 +2,10 @@ import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import _ from 'underscore';
 import Promise from 'bluebird'
-import { UserModel } from '../models/user';
-import modelFactory from '../models/modelFactory';
-import config from '../config/index';
-import responseHandler from '../helpers/responseHandler';
+import { UserModel } from '../../models/user';
+import modelFactory from '../../models/modelFactory';
+import config from '../../config/index';
+import responseHandler from '../../helpers/responseHandler';
 
 const checkAuth = async(req, res) => {
     try {

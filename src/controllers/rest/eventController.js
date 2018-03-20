@@ -1,24 +1,27 @@
 import httpStatus from 'http-status';
 import _ from 'underscore';
-import { EventModel } from '../models/event';
-import modelFactory from '../models/modelFactory';
-import responseHandler from '../helpers/responseHandler';
+import { EventModel } from '../../models/event';
+import modelFactory from '../../models/modelFactory';
+import responseHandler from '../../helpers/responseHandler';
 import thingController from './thingController';
-import constants from '../utils/responseKeys';
+import mqttController from '../mqtt/mqttController';
+import constants from '../../utils/responseKeys';
 
  const createEvent = async (req, res) => {
+    let newEvent;
     try {
-        const newEvent = modelFactory.createEvent(req, req.body.event);
-        const savedEvent = await newEvent.save();
-        try {
-            await thingController.createOrUpdateThing(req, savedEvent.phenomenonTime);
-            res.status(httpStatus.CREATED).json(savedEvent);
-        } catch (err) {
-            await thingController.handleThingCreationError(req, res, [savedEvent]);
-        }
+        const event = modelFactory.createEvent(req, req.body.event);
+        newEvent = await event.save();
     } catch (err) {
-        responseHandler.handleError(res, err);
+        return responseHandler.handleError(res, err);
     }
+    try {
+        await thingController.createOrUpdateThing(req, newEvent.phenomenonTime);
+    } catch (err) {
+        return await thingController.handleThingCreationError(req, res, [newEvent]);
+    }
+    await mqttController.publishEvent(newEvent);
+    res.status(httpStatus.CREATED).json(newEvent);
 };
 
 const getTypes = async (req, res) => {

@@ -1,13 +1,13 @@
 import _ from 'underscore';
 import httpStatus from 'http-status';
 import Promise from 'bluebird';
-import requestValidator from '../helpers/requestValidator';
-import modelFactory from '../models/modelFactory';
-import { ThingModel } from "../models/thing";
-import responseHandler from '../helpers/responseHandler';
-import constants from '../utils/responseKeys';
-import geocoder from '../utils/geocoder';
-import boolean from '../utils/boolean';
+import requestValidator from '../../helpers/requestValidator';
+import modelFactory from '../../models/modelFactory';
+import { ThingModel } from "../../models/thing";
+import responseHandler from '../../helpers/responseHandler';
+import constants from '../../utils/responseKeys';
+import geocoder from '../../utils/geocoder';
+import boolean from '../../utils/boolean';
 
 const createOrUpdateThing = (req, lastObservation) => {
     const thingToUpsert = modelFactory.createThing(req, lastObservation);

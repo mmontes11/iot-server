@@ -1,5 +1,6 @@
 import mongoose from './lib/mongoose';
 import redis from './lib/redis';
+import mqtt from './lib/mqtt';
 import _ from 'underscore'
 import app from './lib/express';
 import { Server } from 'http';
@@ -30,6 +31,18 @@ redis.on('end', () => {
     logInfo(`Disconnected from Redis ${config.redisUrl}`);
 });
 
+const mqttBrokerUrl = `mqtt://${config.mqttBrokerHost}:${config.mqttBrokerPort}`;
+mqtt.on('connect', () => {
+    logInfo(`Connected to MQTT Broker ${mqttBrokerUrl}`);
+});
+mqtt.on('error', (err) => {
+    logError(`Error in MQTT Broker ${mqttBrokerUrl}:`);
+    logError(err);
+});
+mqtt.on('close', () => {
+    logInfo(`Disconnected from MQTT Broker ${mqttBrokerUrl}`);
+});
+
 server.on('error', (err) => {
     logError(`Error in NodeJS server on port ${config.nodePort}:`);
     logError(err);
@@ -39,8 +52,9 @@ server.on('close', () => {
 });
 
 process.on('SIGINT', () => {
-    redis.quit();
     mongoose.connection.close();
+    redis.quit();
+    mqtt.end();
     server.close();
 });
 

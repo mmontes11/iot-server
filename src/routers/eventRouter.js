@@ -1,7 +1,7 @@
 import express from 'express';
 import expressJwt from 'express-jwt';
-import eventController from '../controllers/eventController';
-import validationController from '../controllers/validationController';
+import eventController from '../controllers/rest/eventController';
+import validationController from '../controllers/rest/validationController';
 import config from '../config/index';
 
 const router = express.Router();
