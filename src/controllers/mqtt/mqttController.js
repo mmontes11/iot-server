@@ -5,22 +5,22 @@ import { logInfo, logError } from '../../utils/log';
 import { MeasurementModel } from '../../models/measurement';
 import { EventModel } from '../../models/event';
 
-const publishEvent = async (event) => {
-    const topic = `${event.thing}/event/${event.type}`;
+const publishEvent = async (thing, event) => {
+    const topic = `${thing.topic}/${thing.name}/event/${event.type}`;
     await _publishJSON(topic, event);
 };
 
-const publishMeasurement = async (measurement) => {
-    const topic = `${measurement.thing}/measurement/${measurement.type}`;
+const publishMeasurement = async (thing, measurement) => {
+    const topic = `${thing.topic}/${thing.name}/measurement/${measurement.type}`;
     await _publishJSON(topic, measurement);
 };
 
-const publishObservations = async (observations) => {
+const publishObservations = async (thing, observations) => {
     const promises = _.map(observations, (observation) => {
         if (observation instanceof EventModel) {
-            return publishEvent(observation);
+            return publishEvent(thing, observation);
         } else if (observation instanceof MeasurementModel) {
-            return publishMeasurement(observation);
+            return publishMeasurement(thing, observation);
         }
     });
     await Promise.all(promises);

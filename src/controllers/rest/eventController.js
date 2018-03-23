@@ -15,12 +15,13 @@ import constants from '../../utils/responseKeys';
     } catch (err) {
         return responseHandler.handleError(res, err);
     }
+    let thing;
     try {
-        await thingController.createOrUpdateThing(req, newEvent.phenomenonTime);
+        thing = await thingController.createOrUpdateThing(req, newEvent.phenomenonTime);
     } catch (err) {
         return await thingController.handleThingCreationError(req, res, [newEvent]);
     }
-    await mqttController.publishEvent(newEvent);
+    await mqttController.publishEvent(thing, newEvent);
     res.status(httpStatus.CREATED).json(newEvent);
 };
 

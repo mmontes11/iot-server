@@ -28,14 +28,15 @@ const createObservations = async (req, res, next) => {
             invalidObservations.push(observations[index])
         }
     });
+    let thing;
     try {
         if (!_.isEmpty(createdObservations)) {
-            await createOrUpdateThing(req, createdObservations);
+            thing = await createOrUpdateThing(req, createdObservations);
         }
     } catch (err) {
         return await thingController.handleThingCreationError(req, res, createdObservations);
     }
-    await mqttController.publishObservations(createdObservations);
+    await mqttController.publishObservations(thing, createdObservations);
     handleResponse(res, createdObservations, invalidObservations);
 };
 

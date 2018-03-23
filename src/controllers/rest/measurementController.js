@@ -17,12 +17,13 @@ import constants from '../../utils/responseKeys';
     } catch (err) {
         responseHandler.handleError(res, err);
     }
+    let thing;
     try {
-        await thingController.createOrUpdateThing(req, newMeasurement.phenomenonTime);
+        thing = await thingController.createOrUpdateThing(req, newMeasurement.phenomenonTime);
     } catch (err) {
         await thingController.handleThingCreationError(req, res, [newMeasurement]);
     }
-    await mqttController.publishMeasurement(newMeasurement);
+    await mqttController.publishMeasurement(thing, newMeasurement);
     res.status(httpStatus.CREATED).json(newMeasurement);
  };
 

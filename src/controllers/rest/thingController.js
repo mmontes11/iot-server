@@ -9,9 +9,10 @@ import constants from '../../utils/responseKeys';
 import geocoder from '../../utils/geocoder';
 import boolean from '../../utils/boolean';
 
-const createOrUpdateThing = (req, lastObservation) => {
+const createOrUpdateThing = async (req, lastObservation) => {
     const thingToUpsert = modelFactory.createThing(req, lastObservation);
-    return ThingModel.upsertThing(thingToUpsert);
+    await ThingModel.upsertThing(thingToUpsert);
+    return thingToUpsert;
 };
 
 const getThingByName = async (req, res, next) => {
