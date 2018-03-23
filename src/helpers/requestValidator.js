@@ -22,7 +22,8 @@ const validEvent = (event) => {
 };
 
 const validThing = (thing) => {
-    return !_.isUndefined(thing) && !_.isUndefined(thing.name) && !_.isUndefined(thing.geometry);
+    return !_.isUndefined(thing) && !_.isUndefined(thing.name) && !_.isUndefined(thing.geometry) &&
+            !_.isUndefined(thing.topic) && !_.isUndefined(thing.supportedObservationTypes)
 };
 
 export default { validUser, validObservation, validUnit, validMeasurement, validEvent, validThing }

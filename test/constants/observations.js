@@ -7,6 +7,11 @@ export default {
                 -8.4065665,
                 43.3682188
             ]
+        },
+        topic: "home/room/raspberry",
+        supportedObservationTypes: {
+            measurement: ["temperature"],
+            event: []
         }
     },
     invalidThing:  {
@@ -19,6 +24,11 @@ export default {
                 -8.4065665,
                 43.3682188
             ]
+        },
+        topic: "home/room/raspberry",
+        supportedObservationTypes: {
+            measurement: ["temperature"],
+            event: []
         }
     },
     validMeasurementWithKind: {

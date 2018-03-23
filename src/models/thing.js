@@ -31,10 +31,16 @@ const ThingSchema = mongoose.Schema({
         index: '2dsphere'
     },
     googleMapsUrl: {
-        type: String
+        type: String,
+        required: true
     },
     lastObservation: {
         type: Date,
+        required: true
+    },
+    topic: {
+        type: String,
+        required: true
     },
     supportedObservationTypes: {
         type: SupportedObservationTypesSchema,

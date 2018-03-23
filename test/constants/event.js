@@ -17,6 +17,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry/door",
+            supportedObservationTypes: {
+                measurement: [],
+                event: ["door_opened"]
             }
         }
     },
@@ -53,6 +58,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry/door",
+            supportedObservationTypes: {
+                measurement: [],
+                event: ["door_opened"]
             }
         }
     },
@@ -76,6 +86,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry/door",
+            supportedObservationTypes: {
+                measurement: [],
+                event: ["door_opened"]
             }
         }
     },

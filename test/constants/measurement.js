@@ -11,6 +11,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry",
+            supportedObservationTypes: {
+                measurement: ['temperature'],
+                event: []
             }
         }
     },
@@ -49,6 +54,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry",
+            supportedObservationTypes: {
+                measurement: ['temperature'],
+                event: []
             }
         }
     },
@@ -69,6 +79,11 @@ export default {
                     -8.4065665,
                     43.3682188
                 ]
+            },
+            topic: "home/room/raspberry",
+            supportedObservationTypes: {
+                measurement: ['temperature'],
+                event: []
             }
         }
     },
@@ -89,6 +104,11 @@ export default {
                     -74.25,
                     40.69
                 ]
+            },
+            topic: "home/room/raspberry",
+            supportedObservationTypes: {
+                measurement: ['temperature'],
+                event: []
             }
         }
     },
