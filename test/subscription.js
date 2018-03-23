@@ -21,13 +21,13 @@ describe('Subscriptions', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/auth/user')
+            .post('/auth/user')
             .set('Authorization', authConstants.validAuthHeader)
             .send(authConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/auth/token')
+                    .post('/auth/token')
                     .set('Authorization', authConstants.validAuthHeader)
                     .send(authConstants.validUser)
                     .end((err, res) => {
@@ -51,7 +51,7 @@ describe('Subscriptions', () => {
     describe('POST /subscription 400', () => {
         it('tries to create an invalid subscription', (done) => {
             chai.request(server)
-                .post('/api/subscription')
+                .post('/subscription')
                 .set('Authorization', auth())
                 .send(subscriptionConstants.invalidSubscription)
                 .end((err, res) => {
@@ -65,7 +65,7 @@ describe('Subscriptions', () => {
     describe('POST /subscription 304', () => {
         it('tries to recreate an already created subscription', (done) => {
             chai.request(server)
-                .post('/api/subscription')
+                .post('/subscription')
                 .set('Authorization', auth())
                 .send(subscriptionConstants.validSubscription)
                 .end((err, res) => {
@@ -73,7 +73,7 @@ describe('Subscriptions', () => {
                     res.should.have.status(httpStatus.CREATED);
 
                     chai.request(server)
-                        .post('/api/subscription')
+                        .post('/subscription')
                         .set('Authorization', auth())
                         .send(subscriptionConstants.validSubscription)
                         .end((err, res) => {
@@ -88,7 +88,7 @@ describe('Subscriptions', () => {
     describe('POST /subscription 201', () => {
         it('creates a subscription', (done) => {
             chai.request(server)
-                .post('/api/subscription')
+                .post('/subscription')
                 .set('Authorization', auth())
                 .send(subscriptionConstants.validSubscription)
                 .end((err, res) => {
@@ -102,7 +102,7 @@ describe('Subscriptions', () => {
     describe('DELETE /subscription 400', () => {
         it('tries to delete a subscription with an invalid subscription ID', (done) => {
             chai.request(server)
-                .delete(`/api/subscription/${subscriptionConstants.invalidSubscriptionId}`)
+                .delete(`/subscription/${subscriptionConstants.invalidSubscriptionId}`)
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -115,7 +115,7 @@ describe('Subscriptions', () => {
     describe('DELETE /subscription 404', () => {
         it('tries to delete a subscription  with non existing with subscription ID', (done) => {
             chai.request(server)
-                .delete(`/api/subscription/${subscriptionConstants.nonExistingSubscriptionId}`)
+                .delete(`/subscription/${subscriptionConstants.nonExistingSubscriptionId}`)
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -128,7 +128,7 @@ describe('Subscriptions', () => {
     describe('DELETE /subscription 200', () => {
         it('deletes a subscription', (done) => {
             chai.request(server)
-                .post('/api/subscription')
+                .post('/subscription')
                 .set('Authorization', auth())
                 .send(subscriptionConstants.validSubscription)
                 .end((err, res) => {
@@ -137,7 +137,7 @@ describe('Subscriptions', () => {
                     const subscriptionId = res.body._id;
 
                     chai.request(server)
-                        .delete(`/api/subscription/${subscriptionId}`)
+                        .delete(`/subscription/${subscriptionId}`)
                         .set('Authorization', auth())
                         .end((err, res) => {
                             should.not.exist(err);
@@ -151,7 +151,7 @@ describe('Subscriptions', () => {
     describe('GET /subscriptions 400', () => {
         it('tries to get subscriptions but no chatId query param is specified', (done) => {
             chai.request(server)
-                .get('/api/subscriptions')
+                .get('/subscriptions')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -162,7 +162,7 @@ describe('Subscriptions', () => {
         });
         it('tries to get subscriptions with an invalid chatId query param', (done) => {
             chai.request(server)
-                .get('/api/subscriptions')
+                .get('/subscriptions')
                 .set('Authorization', auth())
                 .query({
                     [responseKeys.chatIdKey]: subscriptionConstants.invalidChatId
@@ -179,7 +179,7 @@ describe('Subscriptions', () => {
     describe('GET /subscriptions 404', () => {
         it('tries to get subscriptions but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/subscriptions')
+                .get('/subscriptions')
                 .set('Authorization', auth())
                 .query({
                     [responseKeys.chatIdKey]: subscriptionConstants.validChatId
@@ -206,7 +206,7 @@ describe('Subscriptions', () => {
             Promise.all(promises)
                 .then(() => {
                     chai.request(server)
-                        .get('/api/subscriptions')
+                        .get('/subscriptions')
                         .set('Authorization', auth())
                         .query({
                             [responseKeys.chatIdKey]: subscriptionConstants.validChatId2
@@ -218,14 +218,14 @@ describe('Subscriptions', () => {
                             const subscriptionId = _.first(res.body[responseKeys.subscriptionsArrayKey])._id;
 
                             chai.request(server)
-                                .delete(`/api/subscription/${subscriptionId}`)
+                                .delete(`/subscription/${subscriptionId}`)
                                 .set('Authorization', auth())
                                 .end((err, res) => {
                                     should.not.exist(err);
                                     res.should.have.status(httpStatus.OK);
 
                                     chai.request(server)
-                                        .get('/api/subscriptions')
+                                        .get('/subscriptions')
                                         .set('Authorization', auth())
                                         .query({
                                             [responseKeys.chatIdKey]: subscriptionConstants.validChatId2

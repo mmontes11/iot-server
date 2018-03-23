@@ -34,13 +34,13 @@ describe('Observations', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/auth/user')
+            .post('/auth/user')
             .set('Authorization', authConstants.validAuthHeader)
             .send(authConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/auth/token')
+                    .post('/auth/token')
                     .set('Authorization', authConstants.validAuthHeader)
                     .send(authConstants.validUser)
                     .end((err, res) => {
@@ -69,7 +69,7 @@ describe('Observations', () => {
                 thing: constants.validThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(emptyObservations)
                 .end((err, res) => {
@@ -87,7 +87,7 @@ describe('Observations', () => {
                 thing: constants.validThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(invalidPayload)
                 .end((err, res) => {
@@ -107,7 +107,7 @@ describe('Observations', () => {
                 thing: constants.validThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(invalidObservations)
                 .end((err, res) => {
@@ -128,7 +128,7 @@ describe('Observations', () => {
                 thing: constants.invalidThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(invalidObservations)
                 .end((err, res) => {
@@ -147,7 +147,7 @@ describe('Observations', () => {
                 thing: constants.thingWithInvalidGeometry
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(invalidObservations)
                 .end((err, res) => {
@@ -169,7 +169,7 @@ describe('Observations', () => {
                 thing: constants.validThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(validObservations)
                 .end((err, res) => {
@@ -203,7 +203,7 @@ describe('Observations', () => {
                 thing: constants.validThing
             };
             chai.request(server)
-                .post('/api/observations')
+                .post('/observations')
                 .set('Authorization', auth())
                 .send(validAndInvalidObservations)
                 .end((err, res) => {

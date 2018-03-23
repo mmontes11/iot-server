@@ -16,13 +16,13 @@ describe('TimePeriod', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/auth/user')
+            .post('/auth/user')
             .set('Authorization', authConstants.validAuthHeader)
             .send(authConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/auth/token')
+                    .post('/auth/token')
                     .set('Authorization', authConstants.validAuthHeader)
                     .send(authConstants.validUser)
                     .end((err, res) => {
@@ -37,7 +37,7 @@ describe('TimePeriod', () => {
     describe('GET /timePeriods 200', () => {
         it('gets all time periods', (done) => {
             chai.request(server)
-                .get('/api/timePeriods')
+                .get('/timePeriods')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);

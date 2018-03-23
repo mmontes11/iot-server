@@ -49,6 +49,6 @@ if (config.debug) {
     }));
 }
 
-app.use('/api', routes);
+app.use('/', routes);
 
 export default app;

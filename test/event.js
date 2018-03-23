@@ -43,13 +43,13 @@ describe('Event', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/auth/user')
+            .post('/auth/user')
             .set('Authorization', authConstants.validAuthHeader)
             .send(authConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/auth/token')
+                    .post('/auth/token')
                     .set('Authorization', authConstants.validAuthHeader)
                     .send(authConstants.validUser)
                     .end((err, res) => {
@@ -74,7 +74,7 @@ describe('Event', () => {
     describe('POST /event 400', () => {
         it('tries to create an invalid event', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/event')
                 .set('Authorization', auth())
                 .send(constants.eventRequestWithInvalidEvent)
                 .end((err, res) => {
@@ -86,7 +86,7 @@ describe('Event', () => {
         });
         it('tries to create an event with an invalid thing', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/event')
                 .set('Authorization', auth())
                 .send(constants.eventRequestWithInvalidThing)
                 .end((err, res) => {
@@ -98,7 +98,7 @@ describe('Event', () => {
         });
         it('tries to create an event with a thing that has an invalid geometry', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/event')
                 .set('Authorization', auth())
                 .send(constants.eventRequestWithThingWithInvalidGeometry)
                 .end((err, res) => {
@@ -113,7 +113,7 @@ describe('Event', () => {
     describe('POST /event 200', () => {
         it('creates an event', (done) => {
             chai.request(server)
-                .post('/api/event')
+                .post('/event')
                 .set('Authorization', auth())
                 .send(constants.validEventRequest)
                 .end((err, res) => {
@@ -127,7 +127,7 @@ describe('Event', () => {
     describe('GET /event/types 404', () => {
         it('gets all event types but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/event/types')
+                .get('/event/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -144,7 +144,7 @@ describe('Event', () => {
         });
         it('gets all event types', (done) => {
             chai.request(server)
-                .get('/api/event/types')
+                .get('/event/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -159,7 +159,7 @@ describe('Event', () => {
     describe('GET /event/last 404', () => {
         it('gets the last event but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/event/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -176,7 +176,7 @@ describe('Event', () => {
         });
         it('gets the last event', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/event/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -191,7 +191,7 @@ describe('Event', () => {
     describe('GET /event/last?type=X 404', () => {
         it('gets the last event of a non existing type', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/event/last')
                 .query({
                     'type': 'whatever'
                 })
@@ -211,7 +211,7 @@ describe('Event', () => {
         });
         it('gets the last door closed event', (done) => {
             chai.request(server)
-                .get('/api/event/last')
+                .get('/event/last')
                 .query({
                     'type': 'door_closed'
                 })

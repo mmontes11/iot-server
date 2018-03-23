@@ -80,13 +80,13 @@ describe('Measurement', () => {
 
     before((done) => {
         chai.request(server)
-            .post('/api/auth/user')
+            .post('/auth/user')
             .set('Authorization', authConstants.validAuthHeader)
             .send(authConstants.validUser)
             .end((err) => {
                 assert(err !== undefined, 'Error creating user');
                 chai.request(server)
-                    .post('/api/auth/token')
+                    .post('/auth/token')
                     .set('Authorization', authConstants.validAuthHeader)
                     .send(authConstants.validUser)
                     .end((err, res) => {
@@ -111,7 +111,7 @@ describe('Measurement', () => {
     describe('POST /measurement 400', () => {
         it('tries to create an invalid measurement', (done) => {
             chai.request(server)
-                .post('/api/measurement')
+                .post('/measurement')
                 .set('Authorization', auth())
                 .send(constants.measurementRequestWithInvalidMeasurement)
                 .end((err, res) => {
@@ -122,7 +122,7 @@ describe('Measurement', () => {
         });
         it('tries to create a measurement with an invalid thing', (done) => {
             chai.request(server)
-                .post('/api/measurement')
+                .post('/measurement')
                 .set('Authorization', auth())
                 .send(constants.measurementRequestWithInvalidThing)
                 .end((err, res) => {
@@ -133,7 +133,7 @@ describe('Measurement', () => {
         });
         it('tries to create a measurement with a thing that has an invalid geometry', (done) => {
             chai.request(server)
-                .post('/api/measurement')
+                .post('/measurement')
                 .set('Authorization', auth())
                 .send(constants.measurementRequestWithThingWithInvalidGeometry)
                 .end((err, res) => {
@@ -148,7 +148,7 @@ describe('Measurement', () => {
     describe('POST /measurement 200', () => {
         it('creates a measurement', (done) => {
             chai.request(server)
-                .post('/api/measurement')
+                .post('/measurement')
                 .set('Authorization', auth())
                 .send(constants.validMeasurementRequestWithThingInCoruna)
                 .end((err, res) => {
@@ -162,7 +162,7 @@ describe('Measurement', () => {
     describe('GET /measurement/types 404', () => {
         it('gets all measurement types but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/measurement/types')
+                .get('/measurement/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -179,7 +179,7 @@ describe('Measurement', () => {
         });
         it('gets all measurement types', (done) => {
             chai.request(server)
-                .get('/api/measurement/types')
+                .get('/measurement/types')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -194,7 +194,7 @@ describe('Measurement', () => {
     describe('GET /measurement/last 404', () => {
         it('gets the last measurement but no one has been created yet', (done) => {
             chai.request(server)
-                .get('/api/measurement/last')
+                .get('/measurement/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -212,7 +212,7 @@ describe('Measurement', () => {
         });
         it('gets the last measurement', (done) => {
             chai.request(server)
-                .get('/api/measurement/last')
+                .get('/measurement/last')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -227,7 +227,7 @@ describe('Measurement', () => {
     describe('GET /measurement/last?type=X 404', () => {
         it('gets the last measurement of a non existing type', (done) => {
             chai.request(server)
-                .get('/api/measurement/last')
+                .get('/measurement/last')
                 .query({
                     'type': 'whatever'
                 })
@@ -248,7 +248,7 @@ describe('Measurement', () => {
         });
         it('gets the last temperature measurement', (done) => {
             chai.request(server)
-                .get('/api/measurement/last')
+                .get('/measurement/last')
                 .query({
                     'type': 'temperature'
                 })
@@ -268,7 +268,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats 404', () => {
         it('gets measurement stats but no measurement has been created', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -281,7 +281,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats 400', () => {
         it('gets measurement stats of a non valid time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'timePeriod': 'whatever'
                 })
@@ -295,7 +295,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'startDate': '1-1-2013',
                     'endDate': '1-1-2018'
@@ -310,7 +310,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'startDate': '2016-01-01',
                     'endDate': '2015-01-01'
@@ -325,7 +325,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a non valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'startDate': '2016-01-01T01:00:00.000Z',
                     'endDate': '2015-01-01T01:00:00.000Z'
@@ -340,7 +340,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a non valid location', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'longitude': -8.35
                 })
@@ -362,7 +362,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.not.exist(err);
@@ -375,7 +375,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a valid time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'timePeriod': 'month'
                 })
@@ -391,7 +391,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'startDate': moment().utc().subtract(1, 'minute').toISOString()
                 })
@@ -407,7 +407,7 @@ describe('Measurement', () => {
         });
         it('gets measurement stats of a valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'startDate': moment().utc().subtract(1, 'minute').toISOString(),
                     'endDate': moment().utc().add(1, 'minute').toISOString()
@@ -427,7 +427,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats?type=X 404', () => {
         it('gets measurement stats by type but no measurement has been created', (done) => {
             chai.request(server)
-                .get('/api/measurement/whatever/stats')
+                .get('/measurement/whatever/stats')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -445,7 +445,7 @@ describe('Measurement', () => {
         });
         it('gets temperature measurement stats', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature'
                 })
@@ -461,7 +461,7 @@ describe('Measurement', () => {
         });
         it('gets temperature measurement stats of a valid time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature',
                     'timePeriod': 'month'
@@ -478,7 +478,7 @@ describe('Measurement', () => {
         });
         it('gets temperature measurement stats of a valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature',
                     'startDate': moment().utc().subtract(1, 'minute').toISOString(),
@@ -499,7 +499,7 @@ describe('Measurement', () => {
     describe('GET /measurement/stats?thing=X 404', () => {
         it('gets measurement stats by thing but no measurement has been created', (done) => {
             chai.request(server)
-                .get('/api/measurement/whatever/stats')
+                .get('/measurement/whatever/stats')
                 .set('Authorization', auth())
                 .end((err, res) => {
                     should.exist(err);
@@ -517,7 +517,7 @@ describe('Measurement', () => {
         });
         it('gets raspberry measurement stats', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'thing': 'raspberry'
                 })
@@ -533,7 +533,7 @@ describe('Measurement', () => {
         });
         it('gets raspberry measurement stats of a valid time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'thing': 'raspberry',
                     'timePeriod': 'month'
@@ -550,7 +550,7 @@ describe('Measurement', () => {
         });
         it('gets raspberry measurement stats of a valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'thing': 'raspberry',
                     'startDate': moment().utc().subtract(1, 'minute').toISOString(),
@@ -576,7 +576,7 @@ describe('Measurement', () => {
         });
         it('gets temperature raspberry measurement stats', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature',
                     'thing': 'raspberry'
@@ -593,7 +593,7 @@ describe('Measurement', () => {
         });
         it('gets temperature raspberry measurement stats of a valid time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature',
                     'thing': 'raspberry',
@@ -611,7 +611,7 @@ describe('Measurement', () => {
         });
         it('gets temperature raspberry measurement stats of a valid custom time period', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'type': 'temperature',
                     'thing': 'raspberry',
@@ -636,7 +636,7 @@ describe('Measurement', () => {
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
-                        .post('/api/measurement')
+                        .post('/measurement')
                         .set('Authorization', auth())
                         .send(measurementRequestBody)
                         .end((err, res) => {
@@ -652,7 +652,7 @@ describe('Measurement', () => {
         });
         it('gets stats from an address that has no things', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'address': 'Tombuctú',
                 })
@@ -665,7 +665,7 @@ describe('Measurement', () => {
         });
         it('gets stats from a non existing address', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'address': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
                 })
@@ -684,7 +684,7 @@ describe('Measurement', () => {
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
-                        .post('/api/measurement')
+                        .post('/measurement')
                         .set('Authorization', auth())
                         .send(measurementRequestBody)
                         .end((err, res) => {
@@ -700,7 +700,7 @@ describe('Measurement', () => {
         });
         it('gets stats from A Coruña address', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'address': 'A Coruña',
                     'maxDistance': 100000
@@ -717,7 +717,7 @@ describe('Measurement', () => {
         });
         it('gets stats from NYC address', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'address': 'Times Square',
                     'maxDistance': 100000
@@ -740,7 +740,7 @@ describe('Measurement', () => {
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
-                        .post('/api/measurement')
+                        .post('/measurement')
                         .set('Authorization', auth())
                         .send(measurementRequestBody)
                         .end((err, res) => {
@@ -756,7 +756,7 @@ describe('Measurement', () => {
         });
         it('gets stats from  coordinates that have no things', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'longitude': -3.0167342,
                     'latitude': 16.7714039
@@ -776,7 +776,7 @@ describe('Measurement', () => {
             const measurementRequestPromises = _.map(measurementRequestBodies, (measurementRequestBody) => {
                 return new Promise((resolve, reject) => {
                     chai.request(server)
-                        .post('/api/measurement')
+                        .post('/measurement')
                         .set('Authorization', auth())
                         .send(measurementRequestBody)
                         .end((err, res) => {
@@ -792,7 +792,7 @@ describe('Measurement', () => {
         });
         it('gets stats from A Coruña coordinates', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'longitude': -8.4165665,
                     'latitude': 43.3682188
@@ -809,7 +809,7 @@ describe('Measurement', () => {
         });
         it('gets stats from NYC coordinates', (done) => {
             chai.request(server)
-                .get('/api/measurement/stats')
+                .get('/measurement/stats')
                 .query({
                     'longitude': -74.25,
                     'latitude': 40.69
