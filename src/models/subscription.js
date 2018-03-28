@@ -1,10 +1,6 @@
 import mongoose from '../lib/mongoose';
 
 const SubscriptionSchema = new mongoose.Schema({
-    notificationType: {
-        type: String,
-        required: true
-    },
     chatId: {
         type: Number,
         required: true
@@ -13,20 +9,19 @@ const SubscriptionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    observationType: {
+    topic: {
         type: String,
         required: true
     }
 });
 
-SubscriptionSchema.index({ notificationType: 1, chatId: 1, thing: 1, observationType: 1 }, { unique: true });
+SubscriptionSchema.index({ chatId: 1, thing: 1, topic: 1 }, { unique: true });
 
 SubscriptionSchema.statics.findSubscription = function (subscription) {
     const findCriteria = {
-        notificationType: subscription.notificationType,
         chatId: subscription.chatId,
         thing: subscription.thing,
-        observationType: subscription.observationType
+        topic: subscription.topic
     };
     return this.findOne(findCriteria);
 };

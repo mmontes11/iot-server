@@ -1,21 +1,22 @@
 export default {
     validSubscription: {
-        notificationType: "measurementChanged",
         chatId: 1234,
         thing: "raspi",
-        observationType: "temperature"
+        topic: "home/room/raspi/measurement/temperature"
     },
     validSubscription2: {
-        notificationType: "temperature",
         chatId: 5678,
         thing: "raspi",
-        observationType: "temperature"
+        topic: "home/room/raspi/measurement/humidity"
     },
     validSubscription3: {
-        notificationType: "event",
         chatId: 5678,
         thing: "raspi",
-        observationType: "door-opened"
+        topic: "home/room/raspi/event/door-opened"
+    },
+    invalidSubscription: {
+        chatId: 5678,
+        thing: "raspi"
     },
     validChatId: 1234,
     validChatId2: 5678,
