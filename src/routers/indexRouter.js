@@ -9,6 +9,7 @@ import thingsRouter from './thingsRouter';
 import timePeriodsRouter from './timePeriodsRouter';
 import subscriptionRouter from './subscriptionRouter';
 import subscriptionsRouter from './subscriptionsRouter';
+import topicsRouter from './topicsRouter';
 
 const router = express.Router();
 
@@ -25,5 +26,6 @@ router.use('/things', thingsRouter);
 router.use('/timePeriods', timePeriodsRouter);
 router.use('/subscription', subscriptionRouter);
 router.use('/subscriptions', subscriptionsRouter);
+router.use('/topics', topicsRouter);
 
 export default router;

@@ -4,6 +4,6 @@ const UnitSchema = new mongoose.Schema({
     name: String,
     symbol: String,
 });
-const Unit = mongoose.model('Unit', UnitSchema);
+const UnitModel = mongoose.model('Unit', UnitSchema);
 
-export { UnitSchema, Unit };
+export { UnitSchema, UnitModel };

@@ -7,6 +7,7 @@ export default {
     createdObservationsArrayKey: "createdObservations",
     invalidObservationsArrayKey: "invalidObservations",
     subscriptionsArrayKey: "subscriptions",
+    topicsArrayKey: "topics",
     invalidUserKey: "invalidUser",
     invalidMeasurementKey: "invalidMeasurement",
     invalidEventKey: "invalidEvent",
