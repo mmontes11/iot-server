@@ -75,7 +75,7 @@ describe('Subscriptions', () => {
         });
     });
 
-    describe('POST /subscription 304', () => {
+    describe('POST /subscription 409', () => {
         it('tries to recreate an already created subscription', (done) => {
             chai.request(server)
                 .post('/subscription')
@@ -91,7 +91,7 @@ describe('Subscriptions', () => {
                         .send(subscriptionConstants.validSubscription)
                         .end((err, res) => {
                             should.exist(err);
-                            res.should.have.status(httpStatus.NOT_MODIFIED);
+                            res.should.have.status(httpStatus.CONFLICT);
                             done();
                         });
                 });
