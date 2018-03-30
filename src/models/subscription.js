@@ -5,22 +5,17 @@ const SubscriptionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    thing: {
-        type: String,
-        required: true
-    },
     topic: {
         type: String,
         required: true
     }
 });
 
-SubscriptionSchema.index({ chatId: 1, thing: 1, topic: 1 }, { unique: true });
+SubscriptionSchema.index({ chatId: 1, topic: 1 }, { unique: true });
 
 SubscriptionSchema.statics.findSubscription = function (subscription) {
     const findCriteria = {
         chatId: subscription.chatId,
-        thing: subscription.thing,
         topic: subscription.topic
     };
     return this.findOne(findCriteria);

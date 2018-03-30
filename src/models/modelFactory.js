@@ -84,11 +84,9 @@ const createThing = (req, lastObservation) => {
     }
 };
 
-const createSubscription = (req) => {
-    const subscription = req.body;
+const createSubscription = (subscription) => {
     return new SubscriptionModel({
         chatId: subscription.chatId,
-        thing: subscription.thing,
         topic: subscription.topic
     });
 };

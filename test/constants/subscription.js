@@ -1,12 +1,10 @@
 export default {
     validSubscription: {
         chatId: 1234,
-        thing: "raspi",
         topic: "home/room/raspi/measurement/temperature"
     },
     validSubscription2: {
         chatId: 5678,
-        thing: "raspi",
         topic: "home/room/raspi/measurement/humidity"
     },
     validSubscription3: {
@@ -15,8 +13,11 @@ export default {
         topic: "home/room/raspi/event/door-opened"
     },
     invalidSubscription: {
+        chatId: 5678
+    },
+    subscriptionWithInvalidTopicId: {
         chatId: 5678,
-        thing: "raspi"
+        topicId: "whatever"
     },
     validChatId: 1234,
     validChatId2: 5678,

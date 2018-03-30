@@ -3,10 +3,12 @@ import httpStatus from 'http-status';
 import _ from 'underscore';
 import Promise from 'bluebird';
 import { SubscriptionModel } from '../src/models/subscription';
+import { TopicModel } from '../src/models/topic';
 import server from '../src/index';
 import constants from './constants/observations';
 import authConstants from './constants/auth';
 import subscriptionConstants from './constants/subscription';
+import topicConstants from './constants/topics';
 import responseKeys from '../src/utils/responseKeys';
 
 const assert = chai.assert;
@@ -60,6 +62,17 @@ describe('Subscriptions', () => {
                     done();
                 });
         });
+        it('tries to create a subscription with an invalid topicId', (done) => {
+            chai.request(server)
+                .post('/subscription')
+                .set('Authorization', auth())
+                .send(subscriptionConstants.subscriptionWithInvalidTopicId)
+                .end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(httpStatus.BAD_REQUEST);
+                    done();
+                });
+        });
     });
 
     describe('POST /subscription 304', () => {
@@ -96,6 +109,26 @@ describe('Subscriptions', () => {
                     res.should.have.status(httpStatus.CREATED);
                     done();
                 });
+        });
+        it('creates a subscription using topicId', (done) => {
+            const newTopic = new TopicModel(topicConstants.validTopic);
+            newTopic.save()
+                .then(() => {
+                    const subscription = {
+                        chatId: subscriptionConstants.validChatId,
+                        topicId: newTopic._id
+                    };
+                    chai.request(server)
+                        .post('/subscription')
+                        .set('Authorization', auth())
+                        .send(subscription)
+                        .end((err, res) => {
+                            should.not.exist(err);
+                            res.should.have.status(httpStatus.CREATED);
+                            done();
+                        });
+                })
+                .catch((err) => done(err));
         });
     });
 

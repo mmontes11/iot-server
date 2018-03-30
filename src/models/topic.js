@@ -6,6 +6,12 @@ const TopicSchema = new mongoose.Schema({
         required: true
     }
 });
+
+TopicSchema.statics.findTopicById = function (topicId) {
+    const objectId = mongoose.Types.ObjectId(topicId);
+    return this.findOne(objectId);
+};
+
 const TopicModel = mongoose.model('Topic', TopicSchema);
 
 export { TopicSchema, TopicModel };

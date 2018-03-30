@@ -117,8 +117,8 @@ const validateGetThings = (req, res, next) => {
 
 const validateCreateSubscription = (req, res, next) => {
     const subscription = req.body;
-    if (_.isUndefined(subscription) || _.isUndefined(subscription.chatId) ||  _.isUndefined(subscription.thing) ||
-        _.isUndefined(subscription.topic)) {
+    const invalidTopicId = _.isUndefined(subscription.topicId) || !regex.objectId.test(subscription.topicId);
+    if (_.isUndefined(subscription) || _.isUndefined(subscription.chatId) || (_.isUndefined(subscription.topic) && invalidTopicId)) {
         res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidSubscriptionKey]: subscription });
     } else {
         next();
