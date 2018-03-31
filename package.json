@@ -41,7 +41,8 @@
     "docker",
     "iot",
     "internet-of-things",
-    "iot-server"
+    "iot-server",
+    "mqtt"
   ],
   "dependencies": {
     "@google/maps": "^0.4.5",
