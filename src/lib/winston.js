@@ -14,14 +14,14 @@ const logger = new (winston.Logger)({
             timestamp: true,
             json: false,
             colorize: true,
-            filename: 'log_iot.log'
+            filename: 'log-iot.log'
         }),
         new winston.transports.MongoDB({
             timestamp: true,
             json: true,
             colorize: true,
             db: config.mongoUrl,
-            collection: 'log_iot'
+            collection: 'log-iot'
         })
     ]
 });
