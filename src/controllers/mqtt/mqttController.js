@@ -6,12 +6,12 @@ import { MeasurementModel } from '../../models/measurement';
 import { EventModel } from '../../models/event';
 
 const publishEvent = async (thing, event) => {
-    const topic = `${thing.topic}/${thing.name}/event/${event.type}`;
+    const topic = `${thing.topic}/event/${event.type}`;
     await _publishJSON(topic, event);
 };
 
 const publishMeasurement = async (thing, measurement) => {
-    const topic = `${thing.topic}/${thing.name}/measurement/${measurement.type}`;
+    const topic = `${thing.topic}/measurement/${measurement.type}`;
     await _publishJSON(topic, measurement);
 };
 
