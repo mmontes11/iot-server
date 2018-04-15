@@ -1,14 +1,6 @@
 export default {
     eventRequestWithInvalidEvent: {
-        event : {
-            duration: {
-                unit: {
-                    name: 'seconds',
-                    symbol: 's'
-                },
-                value: 2.4
-            }
-        },
+        event : {},
         thing: {
             name: 'raspberry',
             geometry : {
@@ -27,14 +19,7 @@ export default {
     },
     eventRequestWithInvalidThing: {
         event : {
-            type: 'door_opened',
-            duration: {
-                unit: {
-                    name: 'seconds',
-                    symbol: 's'
-                },
-                value: 2.4
-            }
+            type: 'door_opened'
         },
         thing: {
             name: 'raspberry'
@@ -42,14 +27,7 @@ export default {
     },
     eventRequestWithThingWithInvalidGeometry: {
         event : {
-            type: 'door_opened',
-            duration: {
-                unit: {
-                    name: 'seconds',
-                    symbol: 's'
-                },
-                value: 2.4
-            }
+            type: 'door_opened'
         },
         thing: {
             name: 'raspberry',
@@ -69,14 +47,7 @@ export default {
     validEventRequest: {
         event : {
             thing: 'raspberry',
-            type: 'door_opened',
-            duration: {
-                unit: {
-                    name: 'seconds',
-                    symbol: 's'
-                },
-                value: 2.4
-            }
+            type: 'door_opened'
         },
         thing: {
             name: "raspberry",
@@ -97,49 +68,21 @@ export default {
     doorOpenedEvent: {
         username: 'mmontes',
         thing: 'raspberry',
-        type: 'door_opened',
-        duration: {
-            unit: {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+        type: 'door_opened'
     },
     doorClosedEvent: {
         username: 'mmontes',
         thing: 'raspberry',
-        type: 'door_closed',
-        duration: {
-            unit: {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+        type: 'door_closed'
     },
     doorClosedEvent2: {
         username: 'mmontes',
         thing: 'arduino',
-        type: 'door_closed',
-        duration: {
-            unit: {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+        type: 'door_closed'
     },
     windowOpenedEvent: {
         username: 'mmontes',
         thing: 'raspberry',
-        type: 'window_opened',
-        duration: {
-            unit: {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+        type: 'window_opened'
     }
 };
