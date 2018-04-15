@@ -18,7 +18,7 @@ const createSubscription = async (req, res, next) => {
             const savedSubscription = await newSubscription.save();
             res.status(httpStatus.CREATED).json(savedSubscription);
         } else {
-            res.sendStatus(httpStatus.CONFLICT).json(foundSubscription)
+            res.status(httpStatus.CONFLICT).json(foundSubscription)
         }
     } catch (err) {
         responseHandler.handleError(res, err);

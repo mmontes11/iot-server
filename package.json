@@ -1,6 +1,6 @@
 {
   "name": "iot-server",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Generic purpose ES6 NodeJS + MongoDB + Redis IoT backend",
   "author": "Martín Montes <martin11lrx@gmail.com>",
   "license": "MIT",
@@ -41,7 +41,8 @@
     "docker",
     "iot",
     "internet-of-things",
-    "iot-server"
+    "iot-server",
+    "mqtt"
   ],
   "dependencies": {
     "@google/maps": "^0.4.5",
