@@ -1,101 +1,95 @@
 export default {
-    validThing: {
-        name: 'raspberry',
-        geometry : {
-            type : 'Point',
-            coordinates : [
-                -8.4065665,
-                43.3682188
-            ]
-        },
-        topic: "home/room/raspberry",
-        supportedObservationTypes: {
-            measurement: ["temperature"],
-            event: []
-        }
+  validThing: {
+    name: "raspberry",
+    geometry: {
+      type: "Point",
+      coordinates: [-8.4065665, 43.3682188],
     },
-    invalidThing:  {
-        name: 'raspberry'
+    topic: "home/room/raspberry",
+    supportedObservationTypes: {
+      measurement: ["temperature"],
+      event: [],
     },
-    thingWithInvalidGeometry:  {
-        name: 'raspberry',
-        geometry : {
-            coordinates : [
-                -8.4065665,
-                43.3682188
-            ]
-        },
-        topic: "home/room/raspberry",
-        supportedObservationTypes: {
-            measurement: ["temperature"],
-            event: []
-        }
+  },
+  invalidThing: {
+    name: "raspberry",
+  },
+  thingWithInvalidGeometry: {
+    name: "raspberry",
+    geometry: {
+      coordinates: [-8.4065665, 43.3682188],
     },
-    validMeasurementWithKind: {
-        kind: 'measurement',
-        thing: 'raspberry',
-        type: 'temperature',
-        unit: {
-            name: 'degrees',
-            symbol: '°C'
-        },
-        value: 10
+    topic: "home/room/raspberry",
+    supportedObservationTypes: {
+      measurement: ["temperature"],
+      event: [],
     },
-    invalidMeasurementWithKind: {
-        kind: 'measurement',
-        thing: 'raspberry',
-        type: 'temperature',
-        unit: {
-            name: 'degrees',
-            symbol: '°C'
-        }
+  },
+  validMeasurementWithKind: {
+    kind: "measurement",
+    thing: "raspberry",
+    type: "temperature",
+    unit: {
+      name: "degrees",
+      symbol: "°C",
     },
-    validMeasurementWithInvalidKind: {
-        kind: 'foo',
-        thing: 'raspberry',
-        type: 'temperature',
-        unit: {
-            name: 'degrees',
-            symbol: '°C'
-        },
-        value: 10
+    value: 10,
+  },
+  invalidMeasurementWithKind: {
+    kind: "measurement",
+    thing: "raspberry",
+    type: "temperature",
+    unit: {
+      name: "degrees",
+      symbol: "°C",
     },
-    validEventWithKind: {
-        kind: 'event',
-        username: 'mmontes',
-        thing: 'raspberry',
-        type: 'window_opened',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+  },
+  validMeasurementWithInvalidKind: {
+    kind: "foo",
+    thing: "raspberry",
+    type: "temperature",
+    unit: {
+      name: "degrees",
+      symbol: "°C",
     },
-    invalidEventWithKind: {
-        kind: 'event',
-        username: 'mmontes',
-        thing: 'raspberry',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
+    value: 10,
+  },
+  validEventWithKind: {
+    kind: "event",
+    username: "mmontes",
+    thing: "raspberry",
+    type: "window_opened",
+    duration: {
+      unit: {
+        name: "seconds",
+        symbol: "s",
+      },
+      value: 2.4,
     },
-    validEventWithInvalidKind: {
-        kind: 'bar',
-        username: 'mmontes',
-        thing: 'raspberry',
-        type: 'window_opened',
-        duration: {
-            unit:  {
-                name: 'seconds',
-                symbol: 's'
-            },
-            value: 2.4
-        }
-    }
+  },
+  invalidEventWithKind: {
+    kind: "event",
+    username: "mmontes",
+    thing: "raspberry",
+    duration: {
+      unit: {
+        name: "seconds",
+        symbol: "s",
+      },
+      value: 2.4,
+    },
+  },
+  validEventWithInvalidKind: {
+    kind: "bar",
+    username: "mmontes",
+    thing: "raspberry",
+    type: "window_opened",
+    duration: {
+      unit: {
+        name: "seconds",
+        symbol: "s",
+      },
+      value: 2.4,
+    },
+  },
 };

@@ -1,9 +1,9 @@
-import mongoose from '../lib/mongoose';
+import mongoose from "../lib/mongoose";
 
 const UnitSchema = new mongoose.Schema({
-    name: String,
-    symbol: String,
+  name: String,
+  symbol: String,
 });
-const UnitModel = mongoose.model('Unit', UnitSchema);
+const UnitModel = mongoose.model("Unit", UnitSchema);
 
 export { UnitSchema, UnitModel };

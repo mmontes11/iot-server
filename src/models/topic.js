@@ -1,17 +1,17 @@
-import mongoose from '../lib/mongoose';
+import mongoose from "../lib/mongoose";
 
 const TopicSchema = new mongoose.Schema({
-    topic: {
-        type: String,
-        required: true
-    }
+  topic: {
+    type: String,
+    required: true,
+  },
 });
 
-TopicSchema.statics.findTopicById = function (topicId) {
-    const objectId = mongoose.Types.ObjectId(topicId);
-    return this.findOne(objectId);
+TopicSchema.statics.findTopicById = function(topicId) {
+  const objectId = mongoose.Types.ObjectId(topicId);
+  return this.findOne(objectId);
 };
 
-const TopicModel = mongoose.model('Topic', TopicSchema);
+const TopicModel = mongoose.model("Topic", TopicSchema);
 
 export { TopicSchema, TopicModel };

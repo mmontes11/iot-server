@@ -12,10 +12,11 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon src/index.js --exec babel-node",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "npm run lint -- --fix",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rm -rf dist/*",
-    "prebuild": "npm run clean",
     "build": "babel -d dist/ src/",
     "production": "cross-env NODE_ENV=production node index.js"
   },
@@ -74,14 +75,21 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-istanbul": "^4.1.5",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "coveralls": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "mocha": "^3.5.3",
     "nodemon": "^1.14.8",
-    "nyc": "^11.4.1"
+    "nyc": "^11.4.1",
+    "prettier": "^1.12.1"
   }
 }

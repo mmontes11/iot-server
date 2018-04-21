@@ -1,9 +1,5 @@
-const stringIsBoolean = (string) => {
-    return string === "true" || string === "false";
-};
+const stringIsBoolean = string => string === "true" || string === "false";
 
-const stringToBoolean = (string) => {
-    return string === "true";
-};
+const stringToBoolean = string => string === "true";
 
 export default { stringIsBoolean, stringToBoolean };
