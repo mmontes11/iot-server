@@ -14,9 +14,11 @@
     "start": "cross-env NODE_ENV=development nodemon src/index.js --exec babel-node",
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
+    "pretest": "npm run lint",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rm -rf dist/*",
+    "prebuild": "npm run test && npm run clean",
     "build": "babel -d dist/ src/",
     "production": "cross-env NODE_ENV=production node index.js"
   },

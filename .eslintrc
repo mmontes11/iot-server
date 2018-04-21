@@ -1,20 +1,16 @@
 {
   "parser": "babel-eslint",
   "env": {
+    "es6": true,
     "node": true,
+    "mongo": true,
     "mocha": true
   },
   "extends": ["airbnb-base", "prettier"],
   "plugins": ["prettier"],
   "rules": {
     "import/no-dynamic-require": 0,
-    "prettier/prettier": [
-      "error",
-      {
-        "printWidth": 120,
-        "trailingComma": "all"
-      }
-    ],
-    "no-console": [1]
+    "prettier/prettier": "error",
+    "no-console": 1
   }
 }
