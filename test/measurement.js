@@ -1,8 +1,8 @@
-import chai from "./lib/chai";
 import httpStatus from "http-status";
 import _ from "underscore";
 import Promise from "bluebird";
 import moment from "moment";
+import chai from "./lib/chai";
 import { MeasurementModel } from "../src/models/measurement";
 import { ThingModel } from "../src/models/thing";
 import { TimePeriod } from "../src/models/timePeriod";
@@ -12,17 +12,15 @@ import server from "../src/index";
 import constants from "./constants/measurement";
 import authConstants from "./constants/auth";
 import responseKeys from "../src/utils/responseKeys";
-
 import config from "../src/config/index";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
 const createMeasurements = (measurements, done) => {
   Promise.each(measurements, measurement => {
-    measurement.phenomenonTime = new Date();
-    const newMeasurement = new MeasurementModel(measurement);
+    const newMeasurement = new MeasurementModel(Object.assign({}, measurement, { phenomenonTime: new Date() }));
     return newMeasurement.save();
   })
     .then(() => {
@@ -62,15 +60,15 @@ const testCachedStats = (type, thing, timePeriod, res, done) => {
       setTimeout(() => {
         statsCache
           .getStatsCache(type, thing, timePeriod)
-          .then(cachedStats => {
-            should.not.exist(cachedStats);
+          .then(timeoutCachedStats => {
+            should.not.exist(timeoutCachedStats);
             MeasurementModel.getStats(type, thing, timePeriod)
               .then(statsFromDB => {
                 res.body.stats.should.be.eql(statsFromDB);
                 done();
               })
-              .catch(err => {
-                done(err);
+              .catch(timeoutCachedStatsErr => {
+                done(timeoutCachedStatsErr);
               });
           })
           .catch(err => {
@@ -97,10 +95,9 @@ describe("Measurement", () => {
           .post("/auth/token")
           .set("Authorization", authConstants.validAuthHeader)
           .send(authConstants.validUser)
-          .end((err, res) => {
-            assert(err !== undefined, "Error obtaining token");
-            assert(res.body.token !== undefined, "Error obtaining token");
-            token = res.body.token;
+          .end((errInnerReq, { body: { token: tokenInnerReq } }) => {
+            assert(tokenInnerReq !== undefined, "Error obtaining token");
+            token = tokenInnerReq;
             done();
           });
       });
@@ -740,7 +737,7 @@ describe("Measurement", () => {
               .post("/measurement")
               .set("Authorization", auth())
               .send(measurementRequestBody)
-              .end((err, res) => {
+              .end(err => {
                 if (_.isUndefined(err)) {
                   resolve();
                 } else {
@@ -796,7 +793,7 @@ describe("Measurement", () => {
               .post("/measurement")
               .set("Authorization", auth())
               .send(measurementRequestBody)
-              .end((err, res) => {
+              .end(err => {
                 if (_.isUndefined(err)) {
                   resolve();
                 } else {
@@ -860,7 +857,7 @@ describe("Measurement", () => {
               .post("/measurement")
               .set("Authorization", auth())
               .send(measurementRequestBody)
-              .end((err, res) => {
+              .end(err => {
                 if (_.isUndefined(err)) {
                   resolve();
                 } else {
@@ -903,7 +900,7 @@ describe("Measurement", () => {
               .post("/measurement")
               .set("Authorization", auth())
               .send(measurementRequestBody)
-              .end((err, res) => {
+              .end(err => {
                 if (_.isUndefined(err)) {
                   resolve();
                 } else {

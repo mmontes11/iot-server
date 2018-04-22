@@ -36,8 +36,7 @@ const getTypes = async (req, res) => {
   }
 };
 
-const getLastMeasurement = async (req, res) => {
-  const type = req.query.type;
+const getLastMeasurement = async ({ query: { type } }, res) => {
   try {
     const lastMeasurements = await MeasurementModel.findLastN(1, type);
     responseHandler.handleResponse(res, _.first(lastMeasurements));
@@ -46,52 +45,50 @@ const getLastMeasurement = async (req, res) => {
   }
 };
 
-const getStats = async (req, res) => {
-  const type = req.query.type;
-  let timePeriod;
-  if (!_.isUndefined(req.query.startDate) || !_.isUndefined(req.query.endDate)) {
-    timePeriod = new CustomTimePeriod(req.query.startDate, req.query.endDate);
+const _getStatsFromDB = async (type, thing, timePeriod) => {
+  try {
+    return await MeasurementModel.getStats(type, thing, timePeriod);
+  } catch (err) {
+    throw err;
   }
-  if (!_.isUndefined(req.query.timePeriod)) {
-    timePeriod = new TimePeriod(req.query.timePeriod);
-  }
+};
 
+const getStats = async (req, res) => {
+  const {
+    query: { type, startDate, endDate, timePeriod: timePeriodReq, thing: thingReq, address, longitude, latitude },
+  } = req;
+  let timePeriod;
+  if (!_.isUndefined(startDate) || !_.isUndefined(endDate)) {
+    timePeriod = new CustomTimePeriod(startDate, endDate);
+  }
+  if (!_.isUndefined(timePeriodReq)) {
+    timePeriod = new TimePeriod(timePeriodReq);
+  }
   try {
     let thing;
     if (
-      !_.isUndefined(req.query.thing) ||
-      !_.isUndefined(req.query.address) ||
-      (!_.isUndefined(req.query.longitude) && !_.isUndefined(req.query.latitude))
+      !_.isUndefined(thingReq) ||
+      !_.isUndefined(address) ||
+      (!_.isUndefined(longitude) && !_.isUndefined(latitude))
     ) {
       thing = await thingController.getThingNameFromRequest(req);
       if (_.isUndefined(thing)) {
         return res.sendStatus(httpStatus.NOT_FOUND);
       }
     }
-
     if (statsCache.cachePolicy(timePeriod)) {
       const statsFromCache = await statsCache.getStatsCache(type, thing, timePeriod);
       if (!_.isNull(statsFromCache)) {
-        responseHandler.handleResponse(res, statsFromCache, constants.statsArrayKey);
-      } else {
-        const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
-        statsCache.setStatsCache(type, thing, timePeriod, statsFromDB);
-        responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
+        return responseHandler.handleResponse(res, statsFromCache, constants.statsArrayKey);
       }
-    } else {
-      const statsFromDB = await getStatsFromDB(type, thing, timePeriod);
-      responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
+      const statsFromDB = await _getStatsFromDB(type, thing, timePeriod);
+      statsCache.setStatsCache(type, thing, timePeriod, statsFromDB);
+      return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
     }
+    const statsFromDB = await _getStatsFromDB(type, thing, timePeriod);
+    return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
   } catch (err) {
-    responseHandler.handleError(res, err);
-  }
-};
-
-const getStatsFromDB = async (type, thing, timePeriod) => {
-  try {
-    return await MeasurementModel.getStats(type, thing, timePeriod);
-  } catch (err) {
-    throw err;
+    return responseHandler.handleError(res, err);
   }
 };
 

@@ -1,15 +1,14 @@
-import chai from "./lib/chai";
-import _ from "underscore";
 import httpStatus from "http-status";
 import Promise from "bluebird";
+import chai from "./lib/chai";
 import { ThingModel } from "../src/models/thing";
 import server from "../src/index";
 import responseKeys from "../src/utils/responseKeys";
 import constants from "./constants/thing";
 import authConstants from "./constants/auth";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
 const createthings = (things, done) => {
@@ -39,10 +38,9 @@ describe("Thing", () => {
           .post("/auth/token")
           .set("Authorization", authConstants.validAuthHeader)
           .send(authConstants.validUser)
-          .end((err, res) => {
-            assert(err !== undefined, "Error obtaining token");
-            assert(res.body.token !== undefined, "Error obtaining token");
-            token = res.body.token;
+          .end((errInnerReq, { body: { token: tokenInnerReq } }) => {
+            assert(tokenInnerReq !== undefined, "Error obtaining token");
+            token = tokenInnerReq;
             done();
           });
       });

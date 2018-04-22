@@ -3,120 +3,110 @@ import httpStatus from "http-status";
 import { TimePeriod, CustomTimePeriod } from "../../models/timePeriod";
 import requestValidator from "../../helpers/requestValidator";
 import boolean from "../../utils/boolean";
-import constants from "../../utils/responseKeys";
-import serverKeys from "../../utils/responseKeys";
+import responseKeys from "../../utils/responseKeys";
 import regex from "../../utils/regex";
 
 const validateCreateUserIfNotExists = (req, res, next) => {
   const user = req.body;
   if (!requestValidator.validUser(user)) {
-    res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidUserKey]: user });
+    res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidUserKey]: user });
   } else {
     next();
   }
 };
 
-const validateCreateMeasurement = (req, res, next) => {
-  const measurement = req.body.measurement;
-  const thing = req.body.thing;
+const validateCreateMeasurement = ({ body: { measurement, thing } }, res, next) => {
   if (!requestValidator.validMeasurement(measurement)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidMeasurementKey]: measurement });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidMeasurementKey]: measurement });
   }
   if (!requestValidator.validThing(thing)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidThingKey]: thing });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidThingKey]: thing });
   }
-  next();
+  return next();
 };
 
-const validateCreateEvent = (req, res, next) => {
-  const event = req.body.event;
-  const thing = req.body.thing;
+const validateCreateEvent = ({ body: { event, thing } }, res, next) => {
   if (!requestValidator.validEvent(event)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidEventKey]: event });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidEventKey]: event });
   }
   if (!requestValidator.validThing(thing)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidThingKey]: thing });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidThingKey]: thing });
   }
-  next();
+  return next();
 };
 
-const validateMeasurementStats = (req, res, next) => {
-  const startDateParam = req.query.startDate;
-  const endDateParam = req.query.endDate;
-  const timePeriodParam = req.query.timePeriod;
-  const latitude = req.query.latitude;
-  const longitude = req.query.longitude;
-  const address = req.query.address;
-  if (!_.isUndefined(startDateParam) || !_.isUndefined(endDateParam)) {
-    const timePeriod = new CustomTimePeriod(startDateParam, endDateParam);
-    if (!timePeriod.isValid()) {
+const _validCoordinateParams = (longitude, latitude) =>
+  (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
+
+const validateMeasurementStats = (
+  { query: { startDate, endDate, timePeriod: timePeriodReq, longitude, latitude } },
+  res,
+  next,
+) => {
+  if (!_.isUndefined(startDate) || !_.isUndefined(endDate)) {
+    const customTimePeriod = new CustomTimePeriod(startDate, endDate);
+    if (!customTimePeriod.isValid()) {
       const responseBody = {
-        [serverKeys.invalidDateRangeKey]: {
-          [serverKeys.startDateKey]: startDateParam,
-          [serverKeys.endDateKey]: endDateParam,
+        [responseKeys.invalidDateRangeKey]: {
+          [responseKeys.startDateKey]: startDate,
+          [responseKeys.endDateKey]: endDate,
         },
       };
-      return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidDateRangeKey]: responseBody });
+      return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidDateRangeKey]: responseBody });
     }
   }
-  if (!_.isUndefined(timePeriodParam)) {
-    const timePeriod = new TimePeriod(timePeriodParam);
+  if (!_.isUndefined(timePeriodReq)) {
+    const timePeriod = new TimePeriod(timePeriodReq);
     if (!timePeriod.isValid()) {
-      return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidTimePeriod]: timePeriodParam });
+      return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidTimePeriod]: timePeriodReq });
     }
   }
-  if (!validCoordinateParams(longitude, latitude)) {
+  if (!_validCoordinateParams(longitude, latitude)) {
     const responseBody = {
-      [serverKeys.invalidCoordinateParamsKey]: {
-        [serverKeys.longitudeKey]: longitude,
-        [serverKeys.latitudeKey]: latitude,
+      [responseKeys.invalidCoordinateParamsKey]: {
+        [responseKeys.longitudeKey]: longitude,
+        [responseKeys.latitudeKey]: latitude,
       },
     };
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidCoordinateParamsKey]: responseBody });
   }
-  next();
+  return next();
 };
 
-const validateCreateObservations = (req, res, next) => {
-  const observations = req.body.observations;
+const validateCreateObservations = ({ body: { observations, thing } }, res, next) => {
   if (_.isUndefined(observations) || !_.isArray(observations)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidObservationsArrayKey]: observations });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidObservationsArrayKey]: observations });
   }
   if (_.isEmpty(observations)) {
     return res.sendStatus(httpStatus.NOT_MODIFIED);
   }
-  const thing = req.body.thing;
   if (!requestValidator.validThing(thing)) {
-    return res.status(httpStatus.BAD_REQUEST).json({ [constants.invalidThingKey]: thing });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidThingKey]: thing });
   }
-  next();
+  return next();
 };
 
-const validateGetThings = (req, res, next) => {
-  const latitude = req.query.latitude;
-  const longitude = req.query.longitude;
-  const supportsMeasurements = req.query.supportsMeasurements;
-  const supportsEvents = req.query.supportsEvents;
-  if (!validCoordinateParams(longitude, latitude)) {
+const validateGetThings = ({ query: { latitude, longitude, supportsMeasurements, supportsEvents } }, res, next) => {
+  if (!_validCoordinateParams(longitude, latitude)) {
     const responseBody = {
-      [serverKeys.invalidCoordinateParamsKey]: {
-        [serverKeys.longitudeKey]: longitude,
-        [serverKeys.latitudeKey]: latitude,
+      [responseKeys.invalidCoordinateParamsKey]: {
+        [responseKeys.longitudeKey]: longitude,
+        [responseKeys.latitudeKey]: latitude,
       },
     };
-    return res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidCoordinateParamsKey]: responseBody });
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidCoordinateParamsKey]: responseBody });
   }
   if (!_.isUndefined(supportsMeasurements) && !boolean.stringIsBoolean(supportsMeasurements)) {
     return res.status(httpStatus.BAD_REQUEST).json({
-      [serverKeys.invalidQueryParamKey]: serverKeys.supportsMeasurementsKey,
+      [responseKeys.invalidQueryParamKey]: responseKeys.supportsMeasurementsKey,
     });
   }
   if (!_.isUndefined(supportsEvents) && !boolean.stringIsBoolean(supportsEvents)) {
     return res.status(httpStatus.BAD_REQUEST).json({
-      [serverKeys.invalidQueryParamKey]: serverKeys.supportsEventsKey,
+      [responseKeys.invalidQueryParamKey]: responseKeys.supportsEventsKey,
     });
   }
-  next();
+  return next();
 };
 
 const validateCreateSubscription = (req, res, next) => {
@@ -127,34 +117,29 @@ const validateCreateSubscription = (req, res, next) => {
     _.isUndefined(subscription.chatId) ||
     (_.isUndefined(subscription.topic) && invalidTopicId)
   ) {
-    res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidSubscriptionKey]: subscription });
-  } else {
-    next();
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidSubscriptionKey]: subscription });
   }
+  return next();
 };
 
 const validateDeleteSubscription = (req, res, next) => {
   const subscriptionId = req.params.id;
   if (!regex.objectId.test(subscriptionId)) {
-    res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidPathParamKey]: subscriptionId });
+    res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidPathParamKey]: subscriptionId });
   } else {
     next();
   }
 };
 
-const validateGetSubscriptionsByChat = (req, res, next) => {
-  const chatId = req.query.chatId;
+const validateGetSubscriptionsByChat = ({ query: { chatId } }, res, next) => {
   if (_.isUndefined(chatId)) {
-    res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.mandatoryQueryParamKey]: serverKeys.chatIdKey });
-  } else if (_.isNaN(parseInt(chatId))) {
-    res.status(httpStatus.BAD_REQUEST).json({ [serverKeys.invalidQueryParamKey]: chatId });
+    res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.mandatoryQueryParamKey]: responseKeys.chatIdKey });
+  } else if (_.isNaN(parseInt(chatId, 10))) {
+    res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidQueryParamKey]: chatId });
   } else {
     next();
   }
 };
-
-const validCoordinateParams = (longitude, latitude) =>
-  (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 
 export default {
   validateCreateUserIfNotExists,

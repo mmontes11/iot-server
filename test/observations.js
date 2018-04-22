@@ -1,7 +1,7 @@
-import chai from "./lib/chai";
 import httpStatus from "http-status";
 import _ from "underscore";
 import Promise from "bluebird";
+import chai from "./lib/chai";
 import { MeasurementModel } from "../src/models/measurement";
 import { EventModel } from "../src/models/event";
 import { ThingModel } from "../src/models/thing";
@@ -11,8 +11,8 @@ import constants from "./constants/observations";
 import authConstants from "./constants/auth";
 import responseKeys from "../src/utils/responseKeys";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
 const ensureNoObservationsCreated = done => {
@@ -43,10 +43,9 @@ describe("Observations", () => {
           .post("/auth/token")
           .set("Authorization", authConstants.validAuthHeader)
           .send(authConstants.validUser)
-          .end((err, res) => {
-            assert(err !== undefined, "Error obtaining token");
-            assert(res.body.token !== undefined, "Error obtaining token");
-            token = res.body.token;
+          .end((errInnerReq, { body: { token: tokenInnerReq } }) => {
+            assert(tokenInnerReq !== undefined, "Error obtaining token");
+            token = tokenInnerReq;
             done();
           });
       });

@@ -14,7 +14,7 @@ const MeasurementSchema = ObservationSchema.extend({
   },
 });
 
-MeasurementSchema.statics.getStats = function(type, thing, timePeriod) {
+MeasurementSchema.statics.getStats = function getStats(type, thing, timePeriod) {
   const match = [];
   const matchConditions = [];
   if (!_.isUndefined(type)) {

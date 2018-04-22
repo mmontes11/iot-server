@@ -1,11 +1,10 @@
 import { SubscriptionModel } from "../../models/subscription";
-import httpStatus from "http-status";
 import responseHandler from "../../helpers/responseHandler";
 import responseKeys from "../../utils/responseKeys";
 
-const getSubscriptionsByChat = async (req, res, next) => {
-  const chatId = parseInt(req.query.chatId);
+const getSubscriptionsByChat = async ({ query: { chatId: chatIdReq } }, res) => {
   try {
+    const chatId = parseInt(chatIdReq, 10);
     const subscriptions = await SubscriptionModel.find({ chatId });
     responseHandler.handleResponse(res, subscriptions, responseKeys.subscriptionsArrayKey);
   } catch (err) {

@@ -1,4 +1,4 @@
-export const ObservationKind = Object.freeze({
+export default Object.freeze({
   measurementKind: "measurement",
   eventKind: "event",
 });

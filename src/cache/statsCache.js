@@ -7,8 +7,7 @@ const statsCacheKey = "stats";
 
 const cachePolicy = timePeriod => _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod);
 
-const getStatsCacheKey = (type, thing, timePeriod) => {
-  let cacheKey = statsCacheKey;
+const _getStatsCacheKey = (type, thing, timePeriod) => {
   const elementsCacheKey = [];
   if (!_.isUndefined(type)) {
     elementsCacheKey.push(type);
@@ -19,19 +18,14 @@ const getStatsCacheKey = (type, thing, timePeriod) => {
   if (!_.isUndefined(timePeriod) && timePeriod.isValid()) {
     elementsCacheKey.push(timePeriod.name);
   }
-
-  elementsCacheKey.map(keyPart => {
-    cacheKey = cacheKey.concat(`_${keyPart}`);
-  });
-
-  return cacheKey;
+  return _.reduce(elementsCacheKey, (memo, keyPart) => memo.concat(`_${keyPart}`), statsCacheKey);
 };
 
 const setStatsCache = (type, thing, timePeriod, stats) => {
-  cacheHandler.setObjectCache(getStatsCacheKey(type, thing, timePeriod), stats, config.statsCacheInSeconds);
+  cacheHandler.setObjectCache(_getStatsCacheKey(type, thing, timePeriod), stats, config.statsCacheInSeconds);
 };
 
 const getStatsCache = (type, thing, timePeriod) =>
-  cacheHandler.getObjectCache(getStatsCacheKey(type, thing, timePeriod));
+  cacheHandler.getObjectCache(_getStatsCacheKey(type, thing, timePeriod));
 
 export default { cachePolicy, setStatsCache, getStatsCache };

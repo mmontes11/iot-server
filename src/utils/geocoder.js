@@ -1,11 +1,10 @@
-import googleMaps from "../lib/googleMaps";
 import _ from "underscore";
+import googleMaps from "../lib/googleMaps";
 import { logInfo, logError } from "./log";
 
 const geocode = async address =>
   new Promise((resolve, reject) => {
     logInfo(`Geocoding address '${address}'...`);
-
     googleMaps.geocode(
       {
         address,
@@ -23,10 +22,10 @@ const geocode = async address =>
           const firstResult = _.first(response.json.results);
           if (!_.isUndefined(firstResult)) {
             logInfo("Geocoding success");
-            const location = firstResult.geometry.location;
+            const { lng: longitude, lat: latitude } = firstResult.geometry.location;
             resolve({
-              longitude: location.lng,
-              latitude: location.lat,
+              longitude,
+              latitude,
             });
           } else {
             logInfo("Geocoding: No results");

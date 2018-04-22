@@ -1,11 +1,11 @@
+import _ from "underscore";
+import httpStatus from "http-status";
 import { SubscriptionModel } from "../../models/subscription";
 import { TopicModel } from "../../models/topic";
 import modelFactory from "../../models/modelFactory";
 import responseHandler from "../../helpers/responseHandler";
-import _ from "underscore";
-import httpStatus from "http-status";
 
-const createSubscription = async (req, res, next) => {
+const createSubscription = async (req, res) => {
   try {
     const subscription = req.body;
     if (_.isUndefined(subscription.topic) && !_.isUndefined(subscription.topicId)) {
@@ -25,7 +25,7 @@ const createSubscription = async (req, res, next) => {
   }
 };
 
-const deleteSubscription = async (req, res, next) => {
+const deleteSubscription = async (req, res) => {
   const subscriptionId = req.params.id;
   try {
     const foundSubscription = await SubscriptionModel.findSubscriptionById(subscriptionId);

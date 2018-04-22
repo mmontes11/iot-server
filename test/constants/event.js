@@ -60,20 +60,24 @@ export default {
     username: "mmontes",
     thing: "raspberry",
     type: "door_opened",
+    phenomenonTime: new Date(),
   },
   doorClosedEvent: {
     username: "mmontes",
     thing: "raspberry",
     type: "door_closed",
+    phenomenonTime: new Date(),
   },
   doorClosedEvent2: {
     username: "mmontes",
     thing: "arduino",
     type: "door_closed",
+    phenomenonTime: new Date(),
   },
   windowOpenedEvent: {
     username: "mmontes",
     thing: "raspberry",
     type: "window_opened",
+    phenomenonTime: new Date(),
   },
 };

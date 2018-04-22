@@ -1,18 +1,17 @@
-import chai from "./lib/chai";
 import httpStatus from "http-status";
 import _ from "underscore";
 import Promise from "bluebird";
+import chai from "./lib/chai";
 import { SubscriptionModel } from "../src/models/subscription";
 import { TopicModel } from "../src/models/topic";
 import server from "../src/index";
-import constants from "./constants/observations";
 import authConstants from "./constants/auth";
 import subscriptionConstants from "./constants/subscription";
 import topicConstants from "./constants/topics";
 import responseKeys from "../src/utils/responseKeys";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
 
@@ -30,10 +29,9 @@ describe("Subscriptions", () => {
           .post("/auth/token")
           .set("Authorization", authConstants.validAuthHeader)
           .send(authConstants.validUser)
-          .end((err, res) => {
-            assert(err !== undefined, "Error obtaining token");
-            assert(res.body.token !== undefined, "Error obtaining token");
-            token = res.body.token;
+          .end((errInnerReq, { body: { token: tokenInnerReq } }) => {
+            assert(tokenInnerReq !== undefined, "Error obtaining token");
+            token = tokenInnerReq;
             done();
           });
       });
@@ -92,9 +90,9 @@ describe("Subscriptions", () => {
             .post("/subscription")
             .set("Authorization", auth())
             .send(subscriptionConstants.validSubscription)
-            .end((err, res) => {
-              should.exist(err);
-              res.should.have.status(httpStatus.CONFLICT);
+            .end((errInnerReq, resInnerReq) => {
+              should.exist(errInnerReq);
+              resInnerReq.should.have.status(httpStatus.CONFLICT);
               done();
             });
         });
@@ -182,9 +180,9 @@ describe("Subscriptions", () => {
             .request(server)
             .delete(`/subscription/${subscriptionId}`)
             .set("Authorization", auth())
-            .end((err, res) => {
-              should.not.exist(err);
-              res.should.have.status(httpStatus.OK);
+            .end((errInnerReq, resInnerReq) => {
+              should.not.exist(errInnerReq);
+              resInnerReq.should.have.status(httpStatus.OK);
               done();
             });
         });
@@ -268,9 +266,9 @@ describe("Subscriptions", () => {
                 .request(server)
                 .delete(`/subscription/${subscriptionId}`)
                 .set("Authorization", auth())
-                .end((err, res) => {
-                  should.not.exist(err);
-                  res.should.have.status(httpStatus.OK);
+                .end((errInnerReq, resInnerReq) => {
+                  should.not.exist(errInnerReq);
+                  resInnerReq.should.have.status(httpStatus.OK);
 
                   chai
                     .request(server)
@@ -279,10 +277,10 @@ describe("Subscriptions", () => {
                     .query({
                       [responseKeys.chatIdKey]: subscriptionConstants.validChatId2,
                     })
-                    .end((err, res) => {
-                      should.not.exist(err);
-                      res.should.have.status(httpStatus.OK);
-                      res.body[responseKeys.subscriptionsArrayKey].length.should.be.eql(1);
+                    .end((errInnerInnerReq, resInnerInnerReq) => {
+                      should.not.exist(errInnerInnerReq);
+                      resInnerInnerReq.should.have.status(httpStatus.OK);
+                      resInnerInnerReq.body[responseKeys.subscriptionsArrayKey].length.should.be.eql(1);
                       done();
                     });
                 });

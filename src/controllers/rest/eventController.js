@@ -19,10 +19,10 @@ const createEvent = async (req, res) => {
   try {
     thing = await thingController.createOrUpdateThing(req, newEvent.phenomenonTime);
   } catch (err) {
-    return await thingController.handleThingCreationError(req, res, [newEvent]);
+    return thingController.handleThingCreationError(req, res, [newEvent]);
   }
   await mqttController.publishEvent(thing, newEvent);
-  res.status(httpStatus.CREATED).json(newEvent);
+  return res.status(httpStatus.CREATED).json(newEvent);
 };
 
 const getTypes = async (req, res) => {
@@ -34,8 +34,7 @@ const getTypes = async (req, res) => {
   }
 };
 
-const getLastEvent = async (req, res) => {
-  const type = req.query.type;
+const getLastEvent = async ({ query: { type } }, res) => {
   try {
     const lastEvents = await EventModel.findLastN(1, type);
     responseHandler.handleResponse(res, _.first(lastEvents));

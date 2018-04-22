@@ -1,12 +1,12 @@
-import chai from "./lib/chai";
 import httpStatus from "http-status";
+import chai from "./lib/chai";
 import { UserModel } from "../src/models/user";
 import server from "../src/index";
 import responseKeys from "../src/utils/responseKeys";
 import constants from "./constants/auth";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 
 describe("Auth", () => {
   beforeEach(done => {
@@ -74,9 +74,9 @@ describe("Auth", () => {
             .post("/auth/user")
             .set("Authorization", constants.validAuthHeader)
             .send(constants.validUser)
-            .end((err, res) => {
-              should.exist(err);
-              res.should.have.status(httpStatus.CONFLICT);
+            .end((errInnerReq, resInnerReq) => {
+              should.exist(errInnerReq);
+              resInnerReq.should.have.status(httpStatus.CONFLICT);
               done();
             });
         });
@@ -98,9 +98,9 @@ describe("Auth", () => {
             .post("/auth")
             .set("Authorization", constants.invalidAuthHeader)
             .send(constants.validUser)
-            .end((err, res) => {
-              should.exist(err);
-              res.should.have.status(httpStatus.UNAUTHORIZED);
+            .end((errInnerReqhest, resInnerRequest) => {
+              should.exist(errInnerReqhest);
+              resInnerRequest.should.have.status(httpStatus.UNAUTHORIZED);
               done();
             });
         });
@@ -134,9 +134,9 @@ describe("Auth", () => {
             .post("/auth")
             .set("Authorization", constants.validAuthHeader)
             .send(constants.validUser)
-            .end((err, res) => {
-              should.not.exist(err);
-              res.should.have.status(httpStatus.OK);
+            .end((errInnerReq, resInnerReq) => {
+              should.not.exist(errInnerReq);
+              resInnerReq.should.have.status(httpStatus.OK);
               done();
             });
         });
@@ -158,9 +158,9 @@ describe("Auth", () => {
             .post("/auth/token")
             .set("Authorization", constants.invalidAuthHeader)
             .send(constants.validUser)
-            .end((err, res) => {
-              should.exist(err);
-              res.should.have.status(httpStatus.UNAUTHORIZED);
+            .end((errInnerReq, resInnerReq) => {
+              should.exist(errInnerReq);
+              resInnerReq.should.have.status(httpStatus.UNAUTHORIZED);
               done();
             });
         });
@@ -194,10 +194,10 @@ describe("Auth", () => {
             .post("/auth/token")
             .set("Authorization", constants.validAuthHeader)
             .send(constants.validUser)
-            .end((err, res) => {
-              should.not.exist(err);
-              should.exist(res.body.token);
-              res.should.have.status(httpStatus.OK);
+            .end((errInnerReq, resInnerReq) => {
+              should.not.exist(errInnerReq);
+              should.exist(resInnerReq.body.token);
+              resInnerReq.should.have.status(httpStatus.OK);
               done();
             });
         });

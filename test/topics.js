@@ -1,14 +1,14 @@
-import chai from "./lib/chai";
 import httpStatus from "http-status";
 import Promise from "bluebird";
+import chai from "./lib/chai";
 import { TopicModel } from "../src/models/topic";
 import server from "../src/index";
 import responseKeys from "../src/utils/responseKeys";
 import constants from "./constants/topics";
 import authConstants from "./constants/auth";
 
-const assert = chai.assert;
-const should = chai.should();
+const { assert, should: chaiShould } = chai;
+const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
 
@@ -26,10 +26,9 @@ describe("Topics", () => {
           .post("/auth/token")
           .set("Authorization", authConstants.validAuthHeader)
           .send(authConstants.validUser)
-          .end((err, res) => {
-            assert(err !== undefined, "Error obtaining token");
-            assert(res.body.token !== undefined, "Error obtaining token");
-            token = res.body.token;
+          .end((errInnerReq, { body: { token: tokenInnerReq } }) => {
+            assert(tokenInnerReq !== undefined, "Error obtaining token");
+            token = tokenInnerReq;
             done();
           });
       });
@@ -42,7 +41,7 @@ describe("Topics", () => {
     });
   });
 
-  describe("GET /topics 404", done => {
+  describe("GET /topics 404", () => {
     it("tries to get topics but no one has been created yet", done => {
       chai
         .request(server)
@@ -56,7 +55,7 @@ describe("Topics", () => {
     });
   });
 
-  describe("GET /topics 200", done => {
+  describe("GET /topics 200", () => {
     before(done => {
       const topics = [constants.validTopic, constants.validTopic2, constants.validTopic3];
       Promise.each(topics, topic => {

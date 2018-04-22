@@ -1,6 +1,6 @@
+import _ from "underscore";
 import mongoose from "../lib/mongoose";
 import config from "../config/index";
-import _ from "underscore";
 import regex from "../utils/regex";
 
 const SupportedObservationTypesSchema = new mongoose.Schema({
@@ -48,15 +48,15 @@ const ThingSchema = mongoose.Schema({
   },
 });
 
-ThingSchema.statics.upsertThing = function(thing) {
+ThingSchema.statics.upsertThing = function upsertThing(thing) {
   return this.update({ name: thing.name }, thing, { upsert: true });
 };
 
-ThingSchema.statics.findThingByName = function(name) {
+ThingSchema.statics.findThingByName = function findThingByName(name) {
   return this.findOne({ name });
 };
 
-ThingSchema.statics.findThings = function(
+ThingSchema.statics.findThings = function findThings(
   longitude,
   latitude,
   maxDistance = config.maxDefaultNearbyDistanceInMeters,

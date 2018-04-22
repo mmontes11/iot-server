@@ -7,7 +7,7 @@ const TopicSchema = new mongoose.Schema({
   },
 });
 
-TopicSchema.statics.findTopicById = function(topicId) {
+TopicSchema.statics.findTopicById = function findTopicById(topicId) {
   const objectId = mongoose.Types.ObjectId(topicId);
   return this.findOne(objectId);
 };

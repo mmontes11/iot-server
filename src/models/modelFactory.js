@@ -1,13 +1,13 @@
+import _ from "underscore";
 import { UserModel } from "./user";
 import { MeasurementModel } from "./measurement";
 import { EventModel } from "./event";
-import { ObservationKind } from "./observationKind";
+import ObservationKind from "./observationKind";
 import { SubscriptionModel } from "./subscription";
 import requestValidator from "../helpers/requestValidator";
 import request from "../utils/request";
 import ip from "../utils/ip";
 import geojson from "../utils/geojson";
-import _ from "underscore";
 
 const createUser = user =>
   new UserModel({
@@ -15,38 +15,46 @@ const createUser = user =>
     password: user.password,
   });
 
-const createMeasurement = (req, measurement) => {
+const createMeasurement = (req, { type, unit, value }) => {
+  const {
+    body: {
+      thing: { name },
+    },
+  } = req;
   const username = request.extractUserNameFromRequest(req);
-  const thing = req.body.thing;
   return new MeasurementModel({
     username,
-    thing: thing.name,
+    thing: name,
     phenomenonTime: new Date(),
-    type: measurement.type,
-    unit: measurement.unit,
-    value: measurement.value,
+    type,
+    unit,
+    value,
   });
 };
 
-const createEvent = (req, event) => {
+const createEvent = (req, { type, duration }) => {
+  const {
+    body: {
+      thing: { name },
+    },
+  } = req;
   const username = request.extractUserNameFromRequest(req);
-  const thing = req.body.thing;
   return new EventModel({
     username,
-    thing: thing.name,
+    thing: name,
     phenomenonTime: new Date(),
-    type: event.type,
-    duration: event.duration,
+    type,
+    duration,
   });
 };
 
 const createObservationUsingKind = (req, observation) => {
-  const observationKind = observation.kind;
-  if (_.isUndefined(observationKind)) {
+  const { kind } = observation;
+  if (_.isUndefined(kind)) {
     throw Error("observation.kind path is undefined");
   }
   const invalidObservationError = Error("Invalid observation");
-  switch (observationKind) {
+  switch (kind) {
     case ObservationKind.measurementKind: {
       if (requestValidator.validMeasurement(observation)) {
         return createMeasurement(req, observation);
@@ -60,13 +68,15 @@ const createObservationUsingKind = (req, observation) => {
       throw invalidObservationError;
     }
     default: {
-      throw Error(`Unsupported observation kind: ${observationKind}`);
+      throw Error(`Unsupported observation kind: ${kind}`);
     }
   }
 };
 
 const createThing = (req, lastObservation) => {
-  const thing = req.body.thing;
+  const {
+    body: { thing },
+  } = req;
   try {
     const thingIp = ip.extractIPfromRequest(req);
     const { latitude, longitude } = geojson.latLangFromGeometry(thing.geometry);

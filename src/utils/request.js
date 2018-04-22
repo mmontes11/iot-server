@@ -5,6 +5,7 @@ const extractUserNameFromRequest = req => {
     const token = req.headers.authorization.split(" ")[1];
     return jwt.decode(token).username;
   }
+  return undefined;
 };
 
 export default { extractUserNameFromRequest };

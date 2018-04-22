@@ -1,9 +1,9 @@
+import { Server } from "http";
+import _ from "underscore";
 import mongoose from "./lib/mongoose";
 import redis from "./lib/redis";
 import mqtt from "./lib/mqtt";
-import _ from "underscore";
 import app from "./lib/express";
-import { Server } from "http";
 import config from "./config/index";
 import { logInfo, logError } from "./utils/log";
 

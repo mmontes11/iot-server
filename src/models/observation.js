@@ -17,11 +17,11 @@ const ObservationSchema = new mongoose.Schema({
   },
 });
 
-ObservationSchema.statics.types = function() {
+ObservationSchema.statics.types = function types() {
   return this.distinct("type");
 };
 
-ObservationSchema.statics.findLastN = function(n = 10, type) {
+ObservationSchema.statics.findLastN = function findLastN(n = 10, type) {
   let findCriteria;
   if (!_.isUndefined(type)) {
     findCriteria = { type };

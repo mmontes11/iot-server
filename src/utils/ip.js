@@ -1,11 +1,10 @@
 import requestIp from "request-ip";
-import _ from "underscore";
+
+const _stripIPV6prefix = ip => ip.replace(/^.*:/, "");
 
 const extractIPfromRequest = req => {
   const ip = requestIp.getClientIp(req);
-  return stripIPV6prefix(ip);
+  return _stripIPV6prefix(ip);
 };
-
-const stripIPV6prefix = ip => ip.replace(/^.*:/, "");
 
 export default { extractIPfromRequest };

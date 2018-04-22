@@ -7,9 +7,28 @@ import modelFactory from "../../models/modelFactory";
 import config from "../../config/index";
 import responseHandler from "../../helpers/responseHandler";
 
+const _checkAuthInDB = req =>
+  new Promise((resolve, reject) => {
+    UserModel.where({
+      username: req.body.username,
+      password: req.body.password,
+    })
+      .findOne()
+      .then(user => {
+        if (_.isUndefined(user) || _.isNull(user)) {
+          reject(new Error("Invalid credentials"));
+        } else {
+          resolve();
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+
 const checkAuth = async (req, res) => {
   try {
-    await _checkAuth(req);
+    await _checkAuthInDB(req);
     res.sendStatus(httpStatus.OK);
   } catch (err) {
     res.sendStatus(httpStatus.UNAUTHORIZED);
@@ -33,31 +52,12 @@ const createUserIfNotExists = async (req, res) => {
 
 const getToken = async (req, res) => {
   try {
-    await _checkAuth(req);
+    await _checkAuthInDB(req);
   } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
   const token = jwt.sign({ username: req.body.username }, config.jwtSecret);
-  responseHandler.handleResponse(res, { token });
+  return responseHandler.handleResponse(res, { token });
 };
-
-const _checkAuth = req =>
-  new Promise((resolve, reject) => {
-    UserModel.where({
-      username: req.body.username,
-      password: req.body.password,
-    })
-      .findOne()
-      .then(user => {
-        if (_.isUndefined(user) || _.isNull(user)) {
-          reject(new Error("Invalid credentials"));
-        } else {
-          resolve();
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
 
 export default { checkAuth, createUserIfNotExists, getToken };
