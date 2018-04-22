@@ -45,7 +45,8 @@
     "iot",
     "internet-of-things",
     "iot-server",
-    "mqtt"
+    "mqtt",
+    "eslint"
   ],
   "dependencies": {
     "@google/maps": "^0.4.5",
