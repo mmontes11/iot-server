@@ -18,7 +18,7 @@ $ npm start
 $ npm run lint
 ```
 
-### Test and show coverage
+### Test and Coverage
 
 ```bash
 $ npm test
