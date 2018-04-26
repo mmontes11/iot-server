@@ -24,7 +24,7 @@ $ npm run lint
 $ npm test
 ```
 
-### Build image
+### Build Image
 
 ```bash
 $ npm run build 
