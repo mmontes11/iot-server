@@ -36,9 +36,9 @@ const getTypes = async (req, res) => {
   }
 };
 
-const getLastMeasurement = async ({ query: { type } }, res) => {
+const getLastMeasurement = async ({ query: { type, thing } }, res) => {
   try {
-    const lastMeasurements = await MeasurementModel.findLastN(1, type);
+    const lastMeasurements = await MeasurementModel.findLastN(1, type, thing);
     responseHandler.handleResponse(res, _.first(lastMeasurements));
   } catch (err) {
     responseHandler.handleError(res, err);

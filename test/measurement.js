@@ -242,13 +242,14 @@ describe("Measurement", () => {
     });
   });
 
-  describe("GET /measurement/last?type=X 404", () => {
+  describe("GET /measurement/last?type=X&thing=Y 404", () => {
     it("gets the last measurement of a non existing type", done => {
       chai
         .request(server)
         .get("/measurement/last")
         .query({
           type: "whatever",
+          thing: "whatever",
         })
         .set("Authorization", auth())
         .end((err, res) => {
@@ -259,7 +260,7 @@ describe("Measurement", () => {
     });
   });
 
-  describe("GET /measurement/last?type=X 200", () => {
+  describe("GET /measurement/last?type=X&thing=Y 200", () => {
     beforeEach(done => {
       const measurements = [
         constants.temperatureMeasurement,
@@ -275,6 +276,7 @@ describe("Measurement", () => {
         .get("/measurement/last")
         .query({
           type: "temperature",
+          thing: "raspberry",
         })
         .set("Authorization", auth())
         .end((err, res) => {
@@ -282,6 +284,8 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.type.should.be.a("string");
           res.body.type.should.equal("temperature");
+          res.body.thing.should.be.a("string");
+          res.body.thing.should.equal("raspberry");
           res.body.value.should.be.a("number");
           res.body.value.should.equal(15);
           done();
@@ -478,6 +482,9 @@ describe("Measurement", () => {
       chai
         .request(server)
         .get("/measurement/whatever/stats")
+        .query({
+          type: "whatever",
+        })
         .set("Authorization", auth())
         .end((err, res) => {
           should.exist(err);

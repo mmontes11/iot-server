@@ -21,10 +21,13 @@ ObservationSchema.statics.types = function types() {
   return this.distinct("type");
 };
 
-ObservationSchema.statics.findLastN = function findLastN(n = 10, type) {
-  let findCriteria;
+ObservationSchema.statics.findLastN = function findLastN(n = 10, type, thing) {
+  let findCriteria = {};
   if (!_.isUndefined(type)) {
-    findCriteria = { type };
+    findCriteria = Object.assign(findCriteria, { type });
+  }
+  if (!_.isUndefined(thing)) {
+    findCriteria = Object.assign(findCriteria, { thing });
   }
   return this.find(findCriteria)
     .sort({ phenomenonTime: -1 })

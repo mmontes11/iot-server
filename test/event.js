@@ -195,13 +195,14 @@ describe("Event", () => {
     });
   });
 
-  describe("GET /event/last?type=X 404", () => {
+  describe("GET /event/last?type=X&thing=Y 404", () => {
     it("gets the last event of a non existing type", done => {
       chai
         .request(server)
         .get("/event/last")
         .query({
           type: "whatever",
+          thing: "whatever",
         })
         .set("Authorization", auth())
         .end((err, res) => {
@@ -212,7 +213,7 @@ describe("Event", () => {
     });
   });
 
-  describe("GET /event/last?type=X 200", () => {
+  describe("GET /event/last?type=X&thing=Y 200", () => {
     beforeEach(done => {
       createEvents(
         [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent, constants.doorClosedEvent2],
@@ -225,6 +226,7 @@ describe("Event", () => {
         .get("/event/last")
         .query({
           type: "door_closed",
+          thing: "arduino",
         })
         .set("Authorization", auth())
         .end((err, res) => {
