@@ -52,17 +52,17 @@ const ensureNoMeasurementsCreated = done => {
       done(err);
     });
 };
-const testCachedStats = (type, thing, timePeriod, res, done) => {
+const testCachedStats = (type, things, timePeriod, res, done) => {
   statsCache
-    .getStatsCache(type, thing, timePeriod)
+    .getMeasurementStatsCache(type, things, timePeriod)
     .then(cachedStats => {
       res.body.stats.should.be.eql(cachedStats);
       setTimeout(() => {
         statsCache
-          .getStatsCache(type, thing, timePeriod)
+          .getMeasurementStatsCache(type, things, timePeriod)
           .then(timeoutCachedStats => {
             should.not.exist(timeoutCachedStats);
-            MeasurementModel.getStats(type, thing, timePeriod)
+            MeasurementModel.getStats(type, things, timePeriod)
               .then(statsFromDB => {
                 res.body.stats.should.be.eql(statsFromDB);
                 done();
@@ -414,6 +414,20 @@ describe("Measurement", () => {
           testCachedStats(undefined, undefined, undefined, res, done);
         });
     });
+  });
+
+  describe("GET /measurement/stats?timePeriod=X&statDate=Y&endDate=Z 200", () => {
+    beforeEach(done => {
+      const measurements = [
+        constants.temperatureMeasurement,
+        constants.temperatureMeasurement2,
+        constants.temperatureMeasurement3,
+        constants.humidityMeasurement,
+        constants.humidityMeasurement2,
+        constants.humidityMeasurement3,
+      ];
+      createMeasurements(measurements, done);
+    });
     it("gets measurement stats of a valid time period", done => {
       chai
         .request(server)
@@ -604,7 +618,7 @@ describe("Measurement", () => {
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
           res.body.stats.length.should.be.equal(2);
-          testCachedStats(undefined, "raspberry", undefined, res, done);
+          testCachedStats(undefined, ["raspberry"], undefined, res, done);
         });
     });
     it("gets raspberry measurement stats of a valid time period", done => {
@@ -622,7 +636,7 @@ describe("Measurement", () => {
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
           res.body.stats.length.should.be.equal(2);
-          testCachedStats(undefined, "raspberry", new TimePeriod("month"), res, done);
+          testCachedStats(undefined, ["raspberry"], new TimePeriod("month"), res, done);
         });
     });
     it("gets raspberry measurement stats of a valid custom time period", done => {
@@ -679,7 +693,7 @@ describe("Measurement", () => {
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
           res.body.stats.length.should.be.equal(1);
-          testCachedStats("temperature", "raspberry", undefined, res, done);
+          testCachedStats("temperature", ["raspberry"], undefined, res, done);
         });
     });
     it("gets temperature raspberry measurement stats of a valid time period", done => {
@@ -698,7 +712,7 @@ describe("Measurement", () => {
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
           res.body.stats.length.should.be.equal(1);
-          testCachedStats("temperature", "raspberry", new TimePeriod("month"), res, done);
+          testCachedStats("temperature", ["raspberry"], new TimePeriod("month"), res, done);
         });
     });
     it("gets temperature raspberry measurement stats of a valid custom time period", done => {
@@ -789,6 +803,7 @@ describe("Measurement", () => {
     beforeEach(done => {
       const measurementRequestBodies = [
         constants.validMeasurementRequestWithThingInCoruna,
+        constants.validMeasurementRequestWithThingInCoruna2,
         constants.validMeasurementRequestWithThingInNYC,
       ];
       const measurementRequestPromises = _.map(
@@ -825,7 +840,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
+          res.body.stats.length.should.be.equal(2);
           done();
         });
     });
@@ -896,6 +911,7 @@ describe("Measurement", () => {
     beforeEach(done => {
       const measurementRequestBodies = [
         constants.validMeasurementRequestWithThingInCoruna,
+        constants.validMeasurementRequestWithThingInCoruna2,
         constants.validMeasurementRequestWithThingInNYC,
       ];
       const measurementRequestPromises = _.map(
@@ -923,8 +939,9 @@ describe("Measurement", () => {
         .request(server)
         .get("/measurement/stats")
         .query({
-          longitude: -8.4165665,
-          latitude: 43.3682188,
+          longitude: -8.4115401,
+          latitude: 43.3623436,
+          maxDistance: 100000,
         })
         .set("Authorization", auth())
         .end((err, res) => {
@@ -932,7 +949,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
+          res.body.stats.length.should.be.equal(2);
           done();
         });
     });
@@ -943,6 +960,7 @@ describe("Measurement", () => {
         .query({
           longitude: -74.25,
           latitude: 40.69,
+          maxDistance: 100000,
         })
         .set("Authorization", auth())
         .end((err, res) => {

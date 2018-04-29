@@ -75,6 +75,28 @@ export default {
       },
     },
   },
+  validMeasurementRequestWithThingInCoruna2: {
+    measurement: {
+      type: "temperature",
+      unit: {
+        name: "degrees",
+        symbol: "°C",
+      },
+      value: 12,
+    },
+    thing: {
+      name: "raspi-orzan",
+      geometry: {
+        type: "Point",
+        coordinates: [-8.4165665, 43.2682188],
+      },
+      topic: "home/room/raspberry",
+      supportedObservationTypes: {
+        measurement: ["temperature"],
+        event: [],
+      },
+    },
+  },
   validMeasurementRequestWithThingInNYC: {
     measurement: {
       type: "temperature",

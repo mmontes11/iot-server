@@ -10,6 +10,7 @@ export default {
   defaultCacheInSeconds: 10,
   statsCacheInSeconds: 1,
   maxDefaultNearbyDistanceInMeters: 10000,
+  maxNumOfThingsInStatsResults: 10,
   basicAuthUsers: {
     admin: "admin",
   },

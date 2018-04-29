@@ -14,7 +14,7 @@ const MeasurementSchema = ObservationSchema.extend({
   },
 });
 
-MeasurementSchema.statics.getStats = function getStats(type, thing, timePeriod) {
+MeasurementSchema.statics.getStats = function getStats(type, things = [], timePeriod) {
   const match = [];
   const matchConditions = [];
   if (!_.isUndefined(type)) {
@@ -22,9 +22,10 @@ MeasurementSchema.statics.getStats = function getStats(type, thing, timePeriod) 
       type,
     });
   }
-  if (!_.isUndefined(thing)) {
+  if (!_.isEmpty(things)) {
+    const thingsConditions = _.map(things, thing => ({ thing: { $eq: thing } }));
     matchConditions.push({
-      thing,
+      $or: thingsConditions,
     });
   }
   if (!_.isUndefined(timePeriod)) {
@@ -98,6 +99,7 @@ MeasurementSchema.statics.getStats = function getStats(type, thing, timePeriod) 
     {
       $sort: {
         "data.type": 1,
+        "data.thing": 1,
       },
     },
   ];

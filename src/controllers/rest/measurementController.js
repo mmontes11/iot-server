@@ -45,9 +45,9 @@ const getLastMeasurement = async ({ query: { type, thing } }, res) => {
   }
 };
 
-const _getStatsFromDB = async (type, thing, timePeriod) => {
+const _getStatsFromDB = async (type, things, timePeriod) => {
   try {
-    return await MeasurementModel.getStats(type, thing, timePeriod);
+    return await MeasurementModel.getStats(type, things, timePeriod);
   } catch (err) {
     throw err;
   }
@@ -55,7 +55,7 @@ const _getStatsFromDB = async (type, thing, timePeriod) => {
 
 const getStats = async (req, res) => {
   const {
-    query: { type, startDate, endDate, timePeriod: timePeriodReq, thing: thingReq, address, longitude, latitude },
+    query: { type, startDate, endDate, timePeriod: timePeriodReq },
   } = req;
   let timePeriod;
   if (!_.isUndefined(startDate) || !_.isUndefined(endDate)) {
@@ -65,27 +65,23 @@ const getStats = async (req, res) => {
     timePeriod = new TimePeriod(timePeriodReq);
   }
   try {
-    let thing;
-    if (
-      !_.isUndefined(thingReq) ||
-      !_.isUndefined(address) ||
-      (!_.isUndefined(longitude) && !_.isUndefined(latitude))
-    ) {
-      thing = await thingController.getThingNameFromRequest(req);
-      if (_.isUndefined(thing)) {
+    let things;
+    if (thingController.hasRequestedThings(req)) {
+      things = await thingController.getThingsFromRequest(req);
+      if (_.isUndefined(things)) {
         return res.sendStatus(httpStatus.NOT_FOUND);
       }
     }
     if (statsCache.cachePolicy(timePeriod)) {
-      const statsFromCache = await statsCache.getStatsCache(type, thing, timePeriod);
+      const statsFromCache = await statsCache.getMeasurementStatsCache(type, things, timePeriod);
       if (!_.isNull(statsFromCache)) {
         return responseHandler.handleResponse(res, statsFromCache, constants.statsArrayKey);
       }
-      const statsFromDB = await _getStatsFromDB(type, thing, timePeriod);
-      statsCache.setStatsCache(type, thing, timePeriod, statsFromDB);
+      const statsFromDB = await _getStatsFromDB(type, things, timePeriod);
+      statsCache.setMeasurementStatsCache(type, things, timePeriod, statsFromDB);
       return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
     }
-    const statsFromDB = await _getStatsFromDB(type, thing, timePeriod);
+    const statsFromDB = await _getStatsFromDB(type, things, timePeriod);
     return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
   } catch (err) {
     return responseHandler.handleError(res, err);

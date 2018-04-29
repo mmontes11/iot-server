@@ -10,6 +10,7 @@ export default {
   defaultCacheInSeconds: process.env.DEFAULT_CACHE_IN_SECONDS,
   statsCacheInSeconds: process.env.STATS_CACHE_IN_SECONDS,
   maxDefaultNearbyDistanceInMeters: process.env.MAX_DEFAULT_NEARBY_DISTANCE_IN_METERS,
+  maxNumOfThingsInStatsResults: process.env.MAX_NUM_OF_THINGS_IN_STATS_RESULTS,
   basicAuthUsers: {
     [`${process.env.BASIC_AUTH_USER}`]: `${process.env.BASIC_AUTH_PASSWORD}`,
   },

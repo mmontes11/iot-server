@@ -7,6 +7,7 @@ import responseHandler from "../../helpers/responseHandler";
 import constants from "../../utils/responseKeys";
 import geocoder from "../../utils/geocoder";
 import boolean from "../../utils/boolean";
+import config from "../../config/index";
 
 const createOrUpdateThing = async (req, lastObservation) => {
   const thingToUpsert = modelFactory.createThing(req, lastObservation);
@@ -67,9 +68,12 @@ const getThings = async (req, res) => {
   }
 };
 
-const getThingNameFromRequest = async req => {
+const hasRequestedThings = ({ query: { thing: thingReq, address, longitude, latitude } }) =>
+  !_.isUndefined(thingReq) || !_.isUndefined(address) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
+
+const getThingsFromRequest = async req => {
   if (!_.isUndefined(req.query.thing)) {
-    return req.query.thing;
+    return [req.query.thing];
   }
   let things;
   try {
@@ -77,8 +81,10 @@ const getThingNameFromRequest = async req => {
   } catch (err) {
     throw err;
   }
-  const firstThing = _.first(things);
-  return _.isUndefined(firstThing) ? undefined : firstThing.name;
+  if (!_.isUndefined(things) && !_.isEmpty(things)) {
+    return _.map(_.first(things, config.maxNumOfThingsInStatsResults), thing => thing.name);
+  }
+  return undefined;
 };
 
 const _sendThingErrorResponse = (req, res) => {
@@ -106,6 +112,7 @@ export default {
   createOrUpdateThing,
   getThingByName,
   getThings,
-  getThingNameFromRequest,
+  hasRequestedThings,
+  getThingsFromRequest,
   handleThingCreationError,
 };
