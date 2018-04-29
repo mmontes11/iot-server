@@ -1,7 +1,7 @@
 import _ from "underscore";
 import httpStatus from "http-status";
 import { MeasurementModel } from "../../models/measurement";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import { TimePeriod, CustomTimePeriod } from "../../models/timePeriod";
 import statsCache from "../../cache/statsCache";
 import responseHandler from "../../helpers/responseHandler";

@@ -2,7 +2,7 @@ import _ from "underscore";
 import httpStatus from "http-status";
 import Promise from "bluebird";
 import constants from "../../utils/responseKeys";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import thingController from "./thingController";
 import mqttController from "../mqtt/mqttController";
 

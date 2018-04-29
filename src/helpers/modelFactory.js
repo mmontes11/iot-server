@@ -1,10 +1,10 @@
 import _ from "underscore";
-import { UserModel } from "./user";
-import { MeasurementModel } from "./measurement";
-import { EventModel } from "./event";
-import ObservationKind from "./observationKind";
-import { SubscriptionModel } from "./subscription";
-import requestValidator from "../helpers/requestValidator";
+import { UserModel } from "../models/user";
+import { MeasurementModel } from "../models/measurement";
+import { EventModel } from "../models/event";
+import ObservationKind from "../models/observationKind";
+import { SubscriptionModel } from "../models/subscription";
+import requestValidator from "./requestValidator";
 import request from "../utils/request";
 import ip from "../utils/ip";
 import geojson from "../utils/geojson";

@@ -1,7 +1,7 @@
 import _ from "underscore";
 import httpStatus from "http-status";
 import Promise from "bluebird";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import { ThingModel } from "../../models/thing";
 import responseHandler from "../../helpers/responseHandler";
 import constants from "../../utils/responseKeys";

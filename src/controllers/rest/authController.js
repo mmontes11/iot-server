@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import _ from "underscore";
 import Promise from "bluebird";
 import { UserModel } from "../../models/user";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import config from "../../config/index";
 import responseHandler from "../../helpers/responseHandler";
 

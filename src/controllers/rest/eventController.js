@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import _ from "underscore";
 import { EventModel } from "../../models/event";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import responseHandler from "../../helpers/responseHandler";
 import thingController from "./thingController";
 import mqttController from "../mqtt/mqttController";

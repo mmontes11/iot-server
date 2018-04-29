@@ -2,7 +2,7 @@ import _ from "underscore";
 import httpStatus from "http-status";
 import { SubscriptionModel } from "../../models/subscription";
 import { TopicModel } from "../../models/topic";
-import modelFactory from "../../models/modelFactory";
+import modelFactory from "../../helpers/modelFactory";
 import responseHandler from "../../helpers/responseHandler";
 
 const createSubscription = async (req, res) => {
