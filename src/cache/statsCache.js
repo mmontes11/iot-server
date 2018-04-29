@@ -4,32 +4,40 @@ import config from "../config/index";
 import { CustomTimePeriod } from "../models/timePeriod";
 
 const statsPrefix = "stats";
-const measurementStatsPrefix = `measurement_${statsPrefix}`;
 
-const cachePolicy = timePeriod => _.isUndefined(timePeriod) || !(timePeriod instanceof CustomTimePeriod);
-
-const _getStatsCacheKey = (prefix, type, things, timePeriod) => {
-  const elementsCacheKey = [];
-  if (!_.isUndefined(type)) {
-    elementsCacheKey.push(type);
+class StatsCache {
+  constructor(prefix, type, timePeriod, things) {
+    this.timePeriod = timePeriod;
+    this.cacheKey = StatsCache._getStatsCacheKey(prefix, type, timePeriod, things);
   }
-  if (!_.isUndefined(timePeriod) && timePeriod.isValid()) {
-    elementsCacheKey.push(timePeriod.name);
+  cachePolicy() {
+    return _.isUndefined(this.timePeriod) || !(this.timePeriod instanceof CustomTimePeriod);
   }
-  if (!_.isUndefined(things) && !_.isEmpty(things)) {
-    elementsCacheKey.push(...things);
+  setStatsCache(stats) {
+    cacheHandler.setObjectCache(this.cacheKey, stats, config.statsCacheInSeconds);
   }
-  return _.reduce(elementsCacheKey, (memo, keyPart) => memo.concat(`_${keyPart}`), prefix);
-};
+  getStatsCache() {
+    return cacheHandler.getObjectCache(this.cacheKey);
+  }
+  static _getStatsCacheKey(prefix, type, timePeriod, things) {
+    const elementsCacheKey = [];
+    if (!_.isUndefined(type)) {
+      elementsCacheKey.push(type);
+    }
+    if (!_.isUndefined(timePeriod) && timePeriod.isValid()) {
+      elementsCacheKey.push(timePeriod.name);
+    }
+    if (!_.isUndefined(things) && !_.isEmpty(things)) {
+      elementsCacheKey.push(...things);
+    }
+    return _.reduce(elementsCacheKey, (memo, keyPart) => memo.concat(`_${keyPart}`), prefix);
+  }
+}
 
-const setMeasurementStatsCache = (type, things, timePeriod, stats) =>
-  cacheHandler.setObjectCache(
-    _getStatsCacheKey(measurementStatsPrefix, type, things, timePeriod),
-    stats,
-    config.statsCacheInSeconds,
-  );
+class MeasurementStatsCache extends StatsCache {
+  constructor(type, timePeriod, things) {
+    super(`measurement_${statsPrefix}`, type, timePeriod, things);
+  }
+}
 
-const getMeasurementStatsCache = (type, things, timePeriod) =>
-  cacheHandler.getObjectCache(_getStatsCacheKey(measurementStatsPrefix, type, things, timePeriod));
-
-export default { cachePolicy, setMeasurementStatsCache, getMeasurementStatsCache };
+export { MeasurementStatsCache };

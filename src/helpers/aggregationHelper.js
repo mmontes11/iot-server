@@ -1,17 +1,11 @@
 import _ from "underscore";
 
-const buildMatch = (type, things = [], timePeriod) => {
+const buildMatch = (type, timePeriod, things) => {
   const match = [];
   const matchConditions = [];
   if (!_.isUndefined(type)) {
     matchConditions.push({
       type,
-    });
-  }
-  if (!_.isEmpty(things)) {
-    const thingsConditions = _.map(things, thing => ({ thing: { $eq: thing } }));
-    matchConditions.push({
-      $or: thingsConditions,
     });
   }
   if (!_.isUndefined(timePeriod)) {
@@ -29,6 +23,12 @@ const buildMatch = (type, things = [], timePeriod) => {
         },
       });
     }
+  }
+  if (!_.isUndefined(things) && !_.isEmpty(things)) {
+    const thingsConditions = _.map(things, thing => ({ thing: { $eq: thing } }));
+    matchConditions.push({
+      $or: thingsConditions,
+    });
   }
   if (!_.isEmpty(matchConditions)) {
     match.push({

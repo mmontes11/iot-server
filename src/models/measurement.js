@@ -14,8 +14,8 @@ const MeasurementSchema = ObservationSchema.extend({
   },
 });
 
-MeasurementSchema.statics.getStats = function getStats(type, things = [], timePeriod) {
-  const match = aggregationHelper.buildMatch(type, things, timePeriod);
+MeasurementSchema.statics.getStats = function getStats(type, timePeriod, things) {
+  const match = aggregationHelper.buildMatch(type, timePeriod, things);
   const pipeline = [
     {
       $project: {

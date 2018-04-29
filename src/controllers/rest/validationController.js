@@ -38,7 +38,7 @@ const validateCreateEvent = ({ body: { event, thing } }, res, next) => {
 const _validCoordinateParams = (longitude, latitude) =>
   (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 
-const validateMeasurementStats = (
+const validateGetStats = (
   { query: { startDate, endDate, timePeriod: timePeriodReq, longitude, latitude } },
   res,
   next,
@@ -145,7 +145,7 @@ export default {
   validateCreateUserIfNotExists,
   validateCreateMeasurement,
   validateCreateEvent,
-  validateMeasurementStats,
+  validateGetStats,
   validateCreateObservations,
   validateGetThings,
   validateCreateSubscription,

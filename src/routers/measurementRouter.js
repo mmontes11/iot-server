@@ -14,6 +14,6 @@ router.route("/types").get(measurementController.getTypes);
 
 router.route("/last").get(measurementController.getLastMeasurement);
 
-router.route("/stats").get(validationController.validateMeasurementStats, measurementController.getStats);
+router.route("/stats").get(validationController.validateGetStats, measurementController.getStats);
 
 export default router;
