@@ -14,4 +14,6 @@ router.route("/types").get(eventController.getTypes);
 
 router.route("/last").get(eventController.getLastEvent);
 
+router.route("/stats").get(validationController.validateGetStats, eventController.getStats);
+
 export default router;

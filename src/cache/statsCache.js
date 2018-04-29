@@ -34,10 +34,16 @@ class StatsCache {
   }
 }
 
+class EventStatsCache extends StatsCache {
+  constructor(type, timePeriod, things) {
+    super(`event_${statsPrefix}`, type, timePeriod, things);
+  }
+}
+
 class MeasurementStatsCache extends StatsCache {
   constructor(type, timePeriod, things) {
     super(`measurement_${statsPrefix}`, type, timePeriod, things);
   }
 }
 
-export { MeasurementStatsCache };
+export { EventStatsCache, MeasurementStatsCache };

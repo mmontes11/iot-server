@@ -240,4 +240,24 @@ describe("Event", () => {
         });
     });
   });
+
+  describe("GET /event/stats 200", () => {
+    beforeEach(done => {
+      createEvents(
+        [constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent, constants.doorClosedEvent2],
+        done,
+      );
+    });
+    it("gets event stats", done => {
+      chai
+        .request(server)
+        .get("/event/stats")
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          done();
+        });
+    });
+  });
 });

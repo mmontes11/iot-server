@@ -1,10 +1,12 @@
 import httpStatus from "http-status";
 import _ from "underscore";
 import { EventModel } from "../../models/event";
+import { EventStatsCache } from "../../cache/statsCache";
 import modelFactory from "../../helpers/modelFactory";
 import responseHandler from "../../helpers/responseHandler";
 import thingController from "./thingController";
 import mqttController from "../mqtt/mqttController";
+import statsController from "../rest/statsController";
 import constants from "../../utils/responseKeys";
 
 const createEvent = async (req, res) => {
@@ -43,4 +45,14 @@ const getLastEvent = async ({ query: { type, thing } }, res) => {
   }
 };
 
-export default { createEvent, getTypes, getLastEvent };
+const _getStatsFromDB = async (type, timePeriod, things) => {
+  try {
+    return await EventModel.getStats(type, timePeriod, things);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getStats = (req, res) => statsController.getStats(req, res, EventStatsCache, _getStatsFromDB);
+
+export default { createEvent, getTypes, getLastEvent, getStats };
