@@ -56,6 +56,25 @@ export default {
       },
     },
   },
+  validEventRequestWithValue: {
+    event: {
+      thing: "raspberry",
+      type: "luminosity-changed",
+      value: true,
+    },
+    thing: {
+      name: "raspberry",
+      geometry: {
+        type: "Point",
+        coordinates: [-8.4065665, 43.3682188],
+      },
+      topic: "home/room/raspberry/door",
+      supportedObservationTypes: {
+        measurement: [],
+        event: ["door_opened"],
+      },
+    },
+  },
   doorOpenedEvent: {
     username: "mmontes",
     thing: "raspberry",

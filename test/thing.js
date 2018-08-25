@@ -126,37 +126,6 @@ describe("Thing", () => {
     });
   });
 
-  describe("GET /things?address=X 404", () => {
-    it("tries to get things using an invalid address", done => {
-      chai
-        .request(server)
-        .get("/things")
-        .query({
-          address: "foo",
-        })
-        .set("Authorization", auth())
-        .end((err, res) => {
-          should.exist(err);
-          res.should.have.status(httpStatus.NOT_FOUND);
-          done();
-        });
-    });
-    it("gets things by Madagascar address", done => {
-      chai
-        .request(server)
-        .get("/things")
-        .query({
-          address: "Madagascar",
-        })
-        .set("Authorization", auth())
-        .end((err, res) => {
-          should.exist(err);
-          res.should.have.status(httpStatus.NOT_FOUND);
-          done();
-        });
-    });
-  });
-
   describe("GET /things 200", () => {
     it("gets all things", done => {
       chai
@@ -204,24 +173,6 @@ describe("Thing", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body[responseKeys.thingsArrayKey].length.should.be.eql(1);
-          done();
-        });
-    });
-  });
-
-  describe("GET /things?address=X 200", () => {
-    it("gets things by A Coruna address", done => {
-      chai
-        .request(server)
-        .get("/things")
-        .query({
-          address: "A Coruna",
-        })
-        .set("Authorization", auth())
-        .end((err, res) => {
-          should.not.exist(err);
-          res.should.have.status(httpStatus.OK);
-          res.body[responseKeys.thingsArrayKey].length.should.be.eql(2);
           done();
         });
     });

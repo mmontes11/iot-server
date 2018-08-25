@@ -2,7 +2,12 @@ import mongoose from "../lib/mongoose";
 import { ObservationSchema } from "./observation";
 import aggregationHelper from "../helpers/aggregationHelper";
 
-const EventSchema = ObservationSchema.extend({});
+const EventSchema = ObservationSchema.extend({
+  value: {
+    type: mongoose.Schema.Types.Mixed,
+    required: false,
+  },
+});
 
 EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) {
   const match = aggregationHelper.buildMatch(type, timePeriod, things);

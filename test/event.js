@@ -127,6 +127,18 @@ describe("Event", () => {
           done();
         });
     });
+    it("creates an event with value", done => {
+      chai
+        .request(server)
+        .post("/event")
+        .set("Authorization", auth())
+        .send(constants.validEventRequestWithValue)
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.CREATED);
+          done();
+        });
+    });
   });
 
   describe("GET /event/types 404", () => {
