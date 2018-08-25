@@ -5,8 +5,9 @@ import compress from "compression";
 import methodOverride from "method-override";
 import cors from "cors";
 import helmet from "helmet";
+import expressWinston from "express-winston";
+import winston from "./winston";
 import routes from "../routers/indexRouter";
-import { logInfo } from "../utils/log";
 
 const app = express();
 
@@ -18,10 +19,14 @@ app.use(methodOverride());
 app.use(cors());
 app.use(helmet());
 
-app.use((req, res, next) => {
-  logInfo(`HTTP ${req.method} ${req.url} ${res.statusCode}`);
-  next();
-});
+app.use(
+  expressWinston.logger({
+    winstonInstance: winston,
+    expressFormat: true,
+    meta: true,
+    colorize: true,
+  }),
+);
 
 app.use("/", routes);
 
