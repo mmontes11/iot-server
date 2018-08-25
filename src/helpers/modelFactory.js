@@ -32,7 +32,7 @@ const createMeasurement = (req, { type, unit, value }) => {
   });
 };
 
-const createEvent = (req, { type, duration }) => {
+const createEvent = (req, { type, value }) => {
   const {
     body: {
       thing: { name },
@@ -44,7 +44,7 @@ const createEvent = (req, { type, duration }) => {
     thing: name,
     phenomenonTime: new Date(),
     type,
-    duration,
+    value,
   });
 };
 
