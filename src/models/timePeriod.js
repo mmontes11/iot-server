@@ -1,12 +1,13 @@
 import moment from "moment";
 import _ from "underscore";
 
+const minuteString = "minute";
 const hourString = "hour";
 const dayString = "day";
 const weekString = "week";
 const monthString = "month";
 const yearString = "year";
-const supportedTimePeriods = [hourString, dayString, weekString, monthString, yearString];
+const supportedTimePeriods = [minuteString, hourString, dayString, weekString, monthString, yearString];
 const supportedDateFormats = [moment.ISO_8601, "YYYY-MM-DD"];
 
 class TimePeriod {

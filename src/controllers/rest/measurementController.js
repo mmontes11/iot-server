@@ -55,9 +55,12 @@ const _getStatsFromDB = async (type, timePeriod, things) => {
 
 const getStats = async (req, res) => statsController.getStats(req, res, MeasurementStatsCache, _getStatsFromDB);
 
+const getData = async (req, res) => res.send(httpStatus.OK);
+
 export default {
   createMeasurement,
   getTypes,
   getLastMeasurement,
   getStats,
+  getData,
 };

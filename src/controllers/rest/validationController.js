@@ -38,7 +38,15 @@ const validateCreateEvent = ({ body: { event, thing } }, res, next) => {
 const _validCoordinateParams = (longitude, latitude) =>
   (_.isUndefined(longitude) && _.isUndefined(latitude)) || (!_.isUndefined(longitude) && !_.isUndefined(latitude));
 
-const validateGetStats = (
+const validateTimePeriod = timePeriodReq => {
+  if (!_.isUndefined(timePeriodReq)) {
+    const timePeriod = new TimePeriod(timePeriodReq);
+    return timePeriod.isValid();
+  }
+  return true;
+};
+
+const validateCommonParams = (
   { query: { startDate, endDate, timePeriod: timePeriodReq, longitude, latitude } },
   res,
   next,
@@ -55,11 +63,8 @@ const validateGetStats = (
       return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidDateRangeKey]: responseBody });
     }
   }
-  if (!_.isUndefined(timePeriodReq)) {
-    const timePeriod = new TimePeriod(timePeriodReq);
-    if (!timePeriod.isValid()) {
-      return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidTimePeriod]: timePeriodReq });
-    }
+  if (!validateTimePeriod(timePeriodReq)) {
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidTimePeriod]: timePeriodReq });
   }
   if (!_validCoordinateParams(longitude, latitude)) {
     const responseBody = {
@@ -69,6 +74,13 @@ const validateGetStats = (
       },
     };
     return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidCoordinateParamsKey]: responseBody });
+  }
+  return next();
+};
+
+const validateGetMeasurementData = ({ query: { groupBy: groupByReq } }, res, next) => {
+  if (!validateTimePeriod(groupByReq)) {
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidTimePeriod]: groupByReq });
   }
   return next();
 };
@@ -145,7 +157,8 @@ export default {
   validateCreateUserIfNotExists,
   validateCreateMeasurement,
   validateCreateEvent,
-  validateGetStats,
+  validateCommonParams,
+  validateGetMeasurementData,
   validateCreateObservations,
   validateGetThings,
   validateCreateSubscription,

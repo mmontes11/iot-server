@@ -8,12 +8,19 @@ const router = express.Router();
 
 router.route("*").all(expressJwt({ secret: config.jwtSecret }));
 
-router.route("/").post(validationController.validateCreateMeasurement, measurementController.createMeasurement);
+router
+  .route("/")
+  .post(validationController.validateCreateMeasurement, measurementController.createMeasurement)
+  .get(
+    validationController.validateCommonParams,
+    validationController.validateGetMeasurementData,
+    measurementController.getData,
+  );
 
 router.route("/types").get(measurementController.getTypes);
 
 router.route("/last").get(measurementController.getLastMeasurement);
 
-router.route("/stats").get(validationController.validateGetStats, measurementController.getStats);
+router.route("/stats").get(validationController.validateCommonParams, measurementController.getStats);
 
 export default router;
