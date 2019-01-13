@@ -1,7 +1,7 @@
 import mongoose from "../lib/mongoose";
 import { ObservationSchema } from "./observation";
 import { UnitSchema } from "./unit";
-import aggregationHelper from "../helpers/aggregationHelper";
+import { buildMatch, buildDateHelpers } from "../helpers/aggregationHelper";
 
 const MeasurementSchema = ObservationSchema.extend({
   unit: {
@@ -15,7 +15,7 @@ const MeasurementSchema = ObservationSchema.extend({
 });
 
 MeasurementSchema.statics.getStats = function getStats(type, timePeriod, things) {
-  const match = aggregationHelper.buildMatch(type, timePeriod, things);
+  const match = buildMatch(type, timePeriod, things);
   const pipeline = [
     {
       $project: {
@@ -65,6 +65,111 @@ MeasurementSchema.statics.getStats = function getStats(type, timePeriod, things)
       $sort: {
         "data.type": 1,
         "data.thing": 1,
+      },
+    },
+  ];
+  return this.aggregate([...match, ...pipeline]);
+};
+
+MeasurementSchema.statics.getData = function getData(groupBy, type, timePeriod, things) {
+  const { dateToParts, dateFromParts } = buildDateHelpers(groupBy);
+  const match = buildMatch(type, timePeriod, things);
+  const pipeline = [
+    {
+      $project: {
+        _id: 0,
+        value: 1,
+        type: 1,
+        thing: 1,
+        unit: {
+          name: "$unit.name",
+          symbol: "$unit.symbol",
+        },
+        date: dateToParts,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$type",
+          thing: "$thing",
+          unit: "$unit",
+          date: "$date",
+        },
+        value: {
+          $avg: "$value",
+        },
+      },
+    },
+    {
+      $project: {
+        type: "$_id.type",
+        thing: "$_id.thing",
+        unit: "$_id.unit",
+        phenomenonTime: dateFromParts,
+        value: 1,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$type",
+          unit: "$unit",
+          phenomenonTime: "$phenomenonTime",
+        },
+        data: {
+          $push: {
+            thing: "$thing",
+            value: "$value",
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        "_id.phenomenonTime": 1,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$_id.type",
+          unit: "$_id.unit",
+        },
+        measurements: {
+          $push: {
+            data: "$data",
+            phenomenonTime: "$_id.phenomenonTime",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        type: "$_id.type",
+        unit: "$_id.unit",
+        measurements: 1,
+      },
+    },
+  ];
+  return this.aggregate([...match, ...pipeline]);
+};
+
+MeasurementSchema.statics.getThings = function getThings(type, timePeriod) {
+  const match = buildMatch(type, timePeriod);
+  const pipeline = [
+    {
+      $group: {
+        _id: {
+          thing: "$thing",
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        thing: "$_id.thing",
       },
     },
   ];
