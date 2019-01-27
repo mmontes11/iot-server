@@ -853,4 +853,155 @@ describe("Measurement", () => {
         });
     });
   });
+
+  describe("GET /measurement 400", () => {
+    it("tries to get measurement data with invalid groupBy param", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          groupBy: "foo",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.exist(err);
+          res.should.have.status(httpStatus.BAD_REQUEST);
+          res.body.should.be.a("object");
+          done();
+        });
+    });
+  });
+
+  describe("GET /measurement 404", () => {
+    it("gets measurement data of a non existing thing", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          thing: "foo",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.exist(err);
+          res.should.have.status(httpStatus.NOT_FOUND);
+          done();
+        });
+    });
+  });
+
+  describe("GET /measurement 200", () => {
+    beforeEach(done => {
+      const measurementRequestBodies = [
+        constants.validMeasurementRequestWithThingInCoruna,
+        constants.validMeasurementRequestWithThingInCoruna2,
+        constants.validMeasurementRequestWithThingInNYC,
+      ];
+      const measurementRequestPromises = _.map(
+        measurementRequestBodies,
+        measurementRequestBody =>
+          new Promise((resolve, reject) => {
+            chai
+              .request(server)
+              .post("/measurement")
+              .set("Authorization", auth())
+              .send(measurementRequestBody)
+              .end(err => {
+                if (_.isUndefined(err)) {
+                  resolve();
+                } else {
+                  reject(err);
+                }
+              });
+          }),
+      );
+      performMeasurementCreationRequest(measurementRequestPromises, done);
+    });
+    it("gets measurement data grouped by minute", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          groupBy: "minute",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          res.body.should.be.a("object");
+          res.body.measurementData.should.be.a("array");
+          done();
+        });
+    });
+    it("gets measurement data of an specific thing", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          thing: "raspi-coruna",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          res.body.should.be.a("object");
+          res.body.measurementData.should.be.a("array");
+          done();
+        });
+    });
+    it("gets measurement data of an specific thing", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          thing: "raspi-coruna",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          res.body.should.be.a("object");
+          res.body.measurementData.should.be.a("array");
+          done();
+        });
+    });
+    it("gets measurement data of a time period", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          timePeriod: "month",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          res.body.should.be.a("object");
+          res.body.measurementData.should.be.a("array");
+          done();
+        });
+    });
+    it("gets raspberry measurement stats of a custom time period", done => {
+      chai
+        .request(server)
+        .get("/measurement")
+        .query({
+          startDate: moment()
+            .utc()
+            .subtract(1, "minute")
+            .toISOString(),
+          endDate: moment()
+            .utc()
+            .add(1, "minute")
+            .toISOString(),
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.not.exist(err);
+          res.should.have.status(httpStatus.OK);
+          res.body.should.be.a("object");
+          res.body.measurementData.should.be.a("array");
+          done();
+        });
+    });
+  });
 });

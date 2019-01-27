@@ -90,7 +90,22 @@ describe("Thing", () => {
     });
   });
 
-  describe("GET /things?latitude=X 400", () => {
+  describe("GET /things?supportsEvents=X 400", () => {
+    it("tries to get things providing invalid supportsEvent param", done => {
+      chai
+        .request(server)
+        .get("/things")
+        .query({
+          supportsEvents: "foo",
+        })
+        .set("Authorization", auth())
+        .end((err, res) => {
+          should.exist(err);
+          should.exist(res.body[responseKeys.invalidQueryParamKey]);
+          res.should.have.status(httpStatus.BAD_REQUEST);
+          done();
+        });
+    });
     it("tries to get things using invalid coordinates", done => {
       chai
         .request(server)
