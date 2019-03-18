@@ -3,19 +3,22 @@ import httpStatus from "http-status";
 import responseHandler from "../../helpers/responseHandler";
 import { CustomTimePeriod, TimePeriod } from "../../models/timePeriod";
 import thingController from "./thingController";
-import constants from "../../utils/responseKeys";
 
-const getStats = async (req, res, StatsCache, getStatsFromDB) => {
+const _getTimePeriod = (startDate, endDate, timePeriod) => {
+  if (!_.isUndefined(startDate) || !_.isUndefined(endDate)) {
+    return new CustomTimePeriod(startDate, endDate);
+  }
+  if (!_.isUndefined(timePeriod)) {
+    return new TimePeriod(timePeriod);
+  }
+  return undefined;
+};
+
+const getStats = async (req, res, StatsCache, getStatsFromDB, getThings) => {
   const {
     query: { type, startDate, endDate, timePeriod: timePeriodReq },
   } = req;
-  let timePeriod;
-  if (!_.isUndefined(startDate) || !_.isUndefined(endDate)) {
-    timePeriod = new CustomTimePeriod(startDate, endDate);
-  }
-  if (!_.isUndefined(timePeriodReq)) {
-    timePeriod = new TimePeriod(timePeriodReq);
-  }
+  const timePeriod = _getTimePeriod(startDate, endDate, timePeriodReq);
   try {
     let things;
     if (thingController.hasRequestedThings(req)) {
@@ -28,14 +31,40 @@ const getStats = async (req, res, StatsCache, getStatsFromDB) => {
     if (statsCache.cachePolicy()) {
       const statsFromCache = await statsCache.getStatsCache();
       if (!_.isNull(statsFromCache)) {
-        return responseHandler.handleResponse(res, statsFromCache, constants.statsArrayKey);
+        return responseHandler.handleResponse(res, statsFromCache);
       }
       const statsFromDB = await getStatsFromDB(type, timePeriod, things);
-      statsCache.setStatsCache(statsFromDB);
-      return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
+      if (_.isEmpty(statsFromDB)) {
+        return res.sendStatus(httpStatus.NOT_FOUND);
+      }
+      if (_.isUndefined(things)) {
+        things = await getThings(type, timePeriod);
+      }
+      if (_.isEmpty(things)) {
+        return res.sendStatus(httpStatus.NOT_FOUND);
+      }
+      const statsToCache = {
+        stats: statsFromDB,
+        things,
+      };
+      statsCache.setStatsCache(statsToCache);
+      return responseHandler.handleResponse(res, statsToCache);
+    }
+    if (_.isUndefined(things)) {
+      things = await getThings(type, timePeriod);
+    }
+    if (_.isEmpty(things)) {
+      return res.sendStatus(httpStatus.NOT_FOUND);
     }
     const statsFromDB = await getStatsFromDB(type, timePeriod, things);
-    return responseHandler.handleResponse(res, statsFromDB, constants.statsArrayKey);
+    if (_.isEmpty(statsFromDB)) {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    const statsRes = {
+      stats: statsFromDB,
+      things,
+    };
+    return responseHandler.handleResponse(res, statsRes);
   } catch (err) {
     return responseHandler.handleError(res, err);
   }

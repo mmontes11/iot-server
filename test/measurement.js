@@ -5,14 +5,11 @@ import moment from "moment";
 import chai from "./lib/chai";
 import { MeasurementModel } from "../src/models/measurement";
 import { ThingModel } from "../src/models/thing";
-import { TimePeriod } from "../src/models/timePeriod";
-import { MeasurementStatsCache } from "../src/cache/statsCache";
 import redisClient from "../src/lib/redis";
 import server from "../src/index";
 import constants from "./constants/measurement";
 import authConstants from "./constants/auth";
 import responseKeys from "../src/utils/responseKeys";
-import config from "../src/config/index";
 
 const { assert, should: chaiShould } = chai;
 const should = chaiShould();
@@ -47,35 +44,6 @@ const ensureNoMeasurementsCreated = done => {
       } else {
         done(new Error("Some measurements have been created"));
       }
-    })
-    .catch(err => {
-      done(err);
-    });
-};
-const testCachedStats = (res, done, type, timePeriod, ...things) => {
-  const statsCache = new MeasurementStatsCache(type, timePeriod, things);
-  statsCache
-    .getStatsCache(type, timePeriod, things)
-    .then(cachedStats => {
-      res.body.stats.should.be.eql(cachedStats);
-      setTimeout(() => {
-        statsCache
-          .getStatsCache(type, timePeriod, things)
-          .then(timeoutCachedStats => {
-            should.not.exist(timeoutCachedStats);
-            MeasurementModel.getStats(type, timePeriod, things)
-              .then(statsFromDB => {
-                res.body.stats.should.be.eql(statsFromDB);
-                done();
-              })
-              .catch(timeoutCachedStatsErr => {
-                done(timeoutCachedStatsErr);
-              });
-          })
-          .catch(err => {
-            done(err);
-          });
-      }, config.statsCacheInSeconds * 1000 + 1);
     })
     .catch(err => {
       done(err);
@@ -411,8 +379,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(4);
-          testCachedStats(res, done, undefined, undefined);
+          done();
         });
     });
   });
@@ -442,8 +409,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(4);
-          testCachedStats(res, done, undefined, new TimePeriod("month"));
+          done();
         });
     });
     it("gets measurement stats of a valid custom time period", done => {
@@ -462,7 +428,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(4);
           done();
         });
     });
@@ -486,7 +451,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(4);
           done();
         });
     });
@@ -532,8 +496,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
-          testCachedStats(res, done, "temperature", undefined);
+          done();
         });
     });
     it("gets temperature measurement stats of a valid time period", done => {
@@ -550,8 +513,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
-          testCachedStats(res, done, "temperature", new TimePeriod("month"));
+          done();
         });
     });
     it("gets temperature measurement stats of a valid custom time period", done => {
@@ -575,7 +537,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
           done();
         });
     });
@@ -618,8 +579,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(2);
-          testCachedStats(res, done, undefined, undefined, "raspberry");
+          done();
         });
     });
     it("gets raspberry measurement stats of a valid time period", done => {
@@ -636,8 +596,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(2);
-          testCachedStats(res, done, undefined, new TimePeriod("month"), "raspberry");
+          done();
         });
     });
     it("gets raspberry measurement stats of a valid custom time period", done => {
@@ -661,7 +620,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(2);
           done();
         });
     });
@@ -693,8 +651,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
-          testCachedStats(res, done, "temperature", undefined, "raspberry");
+          done();
         });
     });
     it("gets temperature raspberry measurement stats of a valid time period", done => {
@@ -712,8 +669,7 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
-          testCachedStats(res, done, "temperature", new TimePeriod("month"), "raspberry");
+          done();
         });
     });
     it("gets temperature raspberry measurement stats of a valid custom time period", done => {
@@ -738,7 +694,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
           done();
         });
     });
@@ -829,7 +784,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(2);
           done();
         });
     });
@@ -848,7 +802,6 @@ describe("Measurement", () => {
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
           res.body.stats.should.be.a("array");
-          res.body.stats.length.should.be.equal(1);
           done();
         });
     });

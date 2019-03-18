@@ -53,6 +53,14 @@ const _getStatsFromDB = async (type, timePeriod, things) => {
   }
 };
 
-const getStats = (req, res) => statsController.getStats(req, res, EventStatsCache, _getStatsFromDB);
+const _getThings = async (type, timePeriod) => {
+  try {
+    return (await EventModel.getThings(type, timePeriod)).map(result => result.thing);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getStats = (req, res) => statsController.getStats(req, res, EventStatsCache, _getStatsFromDB, _getThings);
 
 export default { createEvent, getTypes, getLastEvent, getStats };

@@ -33,10 +33,19 @@ EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) 
       },
     },
     {
+      $project: {
+        _id: 0,
+        type: "$_id.type",
+        thing: "$_id.thing",
+        hour: "$_id.hour",
+        count: "$count",
+      },
+    },
+    {
       $group: {
         _id: {
-          type: "$_id.type",
-          thing: "$_id.thing",
+          type: "$type",
+          thing: "$thing",
         },
         total: {
           $sum: "$count",
@@ -58,18 +67,42 @@ EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) 
     {
       $project: {
         _id: 0,
-        data: "$_id",
-        total: 1,
-        avgByHour: 1,
-        maxByHour: 1,
-        minByHour: 1,
-        stdDevByHour: 1,
+        type: "$_id.type",
+        thing: "$_id.thing",
+        total: "$total",
+        avgByHour: "$avgByHour",
+        maxByHour: "$maxByHour",
+        minByHour: "$minByHour",
+        stdDevByHour: "$stdDevByHour",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$type",
+        },
+        data: {
+          $push: {
+            thing: "$thing",
+            total: "$total",
+            avgByHour: "$avgByHour",
+            maxByHour: "$maxByHour",
+            minByHour: "$minByHour",
+            stdDevByHour: "$stdDevByHour",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        type: "$_id.type",
+        data: 1,
       },
     },
     {
       $sort: {
-        "data.type": 1,
-        "data.thing": 1,
+        type: 1,
       },
     },
   ];

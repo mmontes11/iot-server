@@ -54,17 +54,38 @@ MeasurementSchema.statics.getStats = function getStats(type, timePeriod, things)
     {
       $project: {
         _id: 0,
-        data: "$_id",
-        avg: 1,
-        max: 1,
-        min: 1,
-        stdDev: 1,
+        type: "$_id.type",
+        unit: "$_id.unit",
+        thing: "$_id.thing",
+        avg: "$avg",
+        max: "$max",
+        min: "$min",
+        stdDev: "$stdDev",
       },
     },
     {
-      $sort: {
-        "data.type": 1,
-        "data.thing": 1,
+      $group: {
+        _id: {
+          type: "$type",
+          unit: "$unit",
+        },
+        data: {
+          $push: {
+            thing: "$thing",
+            avg: "$avg",
+            max: "$max",
+            min: "$min",
+            stdDev: "$stdDev",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        type: "$_id.type",
+        unit: "$_id.unit",
+        data: 1,
       },
     },
   ];
@@ -152,24 +173,9 @@ MeasurementSchema.statics.getData = function getData(groupBy, type, timePeriod, 
         measurements: 1,
       },
     },
-  ];
-  return this.aggregate([...match, ...pipeline]);
-};
-
-MeasurementSchema.statics.getThings = function getThings(type, timePeriod) {
-  const match = buildMatch(type, timePeriod);
-  const pipeline = [
     {
-      $group: {
-        _id: {
-          thing: "$thing",
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        thing: "$_id.thing",
+      $sort: {
+        type: 1,
       },
     },
   ];
