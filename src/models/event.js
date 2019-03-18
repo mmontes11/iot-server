@@ -1,6 +1,6 @@
 import mongoose from "../lib/mongoose";
 import { ObservationSchema } from "./observation";
-import aggregationHelper from "../helpers/aggregationHelper";
+import { buildMatch } from "../helpers/aggregationHelper";
 
 const EventSchema = ObservationSchema.extend({
   value: {
@@ -10,7 +10,7 @@ const EventSchema = ObservationSchema.extend({
 });
 
 EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) {
-  const match = aggregationHelper.buildMatch(type, timePeriod, things);
+  const match = buildMatch(type, timePeriod, things);
   const pipeline = [
     {
       $project: {
