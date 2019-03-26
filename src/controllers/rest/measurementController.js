@@ -80,17 +80,10 @@ const getData = async (req, res) => {
       }
     }
     const measurementData = await MeasurementModel.getData(groupByTimePeriod, type, timePeriod, things);
-    if (_.isUndefined(things)) {
-      things = (await MeasurementModel.getThings(type, timePeriod)).map(result => result.thing);
-    }
-    if (_.isEmpty(measurementData) || _.isEmpty(things)) {
+    if (_.isEmpty(measurementData)) {
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
-    const response = {
-      measurementData,
-      things,
-    };
-    return responseHandler.handleResponse(res, response);
+    return responseHandler.handleResponse(res, measurementData, constants.measurementDataArrayKey);
   } catch (err) {
     return responseHandler.handleError(res, err);
   }

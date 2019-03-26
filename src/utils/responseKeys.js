@@ -1,6 +1,7 @@
 export default {
   typesArrayKey: "types",
   statsArrayKey: "stats",
+  measurementDataArrayKey: "measurementData",
   thingsArrayKey: "things",
   timePeriodsArrayKey: "timePeriods",
   observationsArrayKey: "observations",
