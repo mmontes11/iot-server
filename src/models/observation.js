@@ -1,6 +1,5 @@
 import _ from "underscore";
 import mongoose from "../lib/mongoose";
-import { buildMatch } from "../helpers/aggregationHelper";
 
 const ObservationSchema = new mongoose.Schema({
   username: String,
