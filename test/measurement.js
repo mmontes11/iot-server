@@ -881,7 +881,7 @@ describe("Measurement", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
-          res.body.measurementData.should.be.a("array");
+          res.body.data.should.be.a("array");
           done();
         });
     });
@@ -897,7 +897,7 @@ describe("Measurement", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
-          res.body.measurementData.should.be.a("array");
+          res.body.data.should.be.a("array");
           done();
         });
     });
@@ -913,7 +913,7 @@ describe("Measurement", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
-          res.body.measurementData.should.be.a("array");
+          res.body.data.should.be.a("array");
           done();
         });
     });
@@ -929,7 +929,7 @@ describe("Measurement", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
-          res.body.measurementData.should.be.a("array");
+          res.body.data.should.be.a("array");
           done();
         });
     });
@@ -952,7 +952,7 @@ describe("Measurement", () => {
           should.not.exist(err);
           res.should.have.status(httpStatus.OK);
           res.body.should.be.a("object");
-          res.body.measurementData.should.be.a("array");
+          res.body.data.should.be.a("array");
           done();
         });
     });

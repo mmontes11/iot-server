@@ -7,6 +7,7 @@ import responseHandler from "../../helpers/responseHandler";
 import thingController from "./thingController";
 import mqttController from "../mqtt/mqttController";
 import statsController from "../rest/statsController";
+import dataController from "../rest/dataController";
 import constants from "../../utils/responseKeys";
 
 const createEvent = async (req, res) => {
@@ -45,14 +46,19 @@ const getLastEvent = async ({ query: { type, thing } }, res) => {
   }
 };
 
-const _getStatsFromDB = async (type, timePeriod, things) => {
-  try {
-    return await EventModel.getStats(type, timePeriod, things);
-  } catch (err) {
-    throw err;
-  }
-};
+const _getStatsFromDB = async (type, timePeriod, things) => EventModel.getStats(type, timePeriod, things);
 
 const getStats = (req, res) => statsController.getStats(req, res, EventStatsCache, _getStatsFromDB);
 
-export default { createEvent, getTypes, getLastEvent, getStats };
+const _getDataFromDB = async (groupBy, type, timePeriod, things) =>
+  EventModel.getData(groupBy, type, timePeriod, things);
+
+const getData = (req, res) => dataController.getData(req, res, _getDataFromDB);
+
+export default {
+  createEvent,
+  getTypes,
+  getLastEvent,
+  getStats,
+  getData,
+};

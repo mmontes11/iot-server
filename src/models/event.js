@@ -1,6 +1,6 @@
 import mongoose from "../lib/mongoose";
 import { ObservationSchema } from "./observation";
-import { buildMatch } from "../helpers/aggregationHelper";
+import { buildMatch, buildDateHelpers } from "../helpers/aggregationHelper";
 
 const EventSchema = ObservationSchema.extend({
   value: {
@@ -9,7 +9,7 @@ const EventSchema = ObservationSchema.extend({
   },
 });
 
-EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) {
+EventSchema.statics.getStats = function getStats(type, timePeriod, things) {
   const match = buildMatch(type, timePeriod, things);
   const pipeline = [
     {
@@ -98,6 +98,86 @@ EventSchema.statics.getStats = function getStatsCount(type, timePeriod, things) 
         _id: 0,
         type: "$_id.type",
         data: 1,
+      },
+    },
+    {
+      $sort: {
+        type: 1,
+      },
+    },
+  ];
+  return this.aggregate([...match, ...pipeline]);
+};
+
+EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things) {
+  const { dateToParts, dateFromParts } = buildDateHelpers(groupBy);
+  const match = buildMatch(type, timePeriod, things);
+  const pipeline = [
+    {
+      $project: {
+        _id: 0,
+        type: 1,
+        thing: 1,
+        date: dateToParts,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$type",
+          thing: "$thing",
+          date: "$date",
+        },
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+    {
+      $project: {
+        type: "$_id.type",
+        thing: "$_id.thing",
+        phenomenonTime: dateFromParts,
+        count: 1,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$type",
+          phenomenonTime: "$phenomenonTime",
+        },
+        data: {
+          $push: {
+            thing: "$thing",
+            count: "$count",
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        "_id.phenomenonTime": 1,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$_id.type",
+        },
+        events: {
+          $push: {
+            data: "$data",
+            phenomenonTime: "$_id.phenomenonTime",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        type: "$_id.type",
+        events: 1,
       },
     },
     {

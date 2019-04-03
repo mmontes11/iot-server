@@ -78,7 +78,7 @@ const validateCommonParams = (
   return next();
 };
 
-const validateGetMeasurementData = ({ query: { groupBy: groupByReq } }, res, next) => {
+const validateGetData = ({ query: { groupBy: groupByReq } }, res, next) => {
   if (!validateTimePeriod(groupByReq)) {
     return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidTimePeriod]: groupByReq });
   }
@@ -158,7 +158,7 @@ export default {
   validateCreateMeasurement,
   validateCreateEvent,
   validateCommonParams,
-  validateGetMeasurementData,
+  validateGetData,
   validateCreateObservations,
   validateGetThings,
   validateCreateSubscription,

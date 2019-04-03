@@ -271,5 +271,27 @@ describe("Event", () => {
           done();
         });
     });
+
+    describe("GET /measurement 200", () => {
+      beforeEach(done => {
+        createEvents([constants.doorOpenedEvent, constants.doorClosedEvent, constants.windowOpenedEvent], done);
+      });
+      it("gets event data grouped by minute", done => {
+        chai
+          .request(server)
+          .get("/event")
+          .query({
+            groupBy: "minute",
+          })
+          .set("Authorization", auth())
+          .end((err, res) => {
+            should.not.exist(err);
+            res.should.have.status(httpStatus.OK);
+            res.body.should.be.a("object");
+            res.body.data.should.be.a("array");
+            done();
+          });
+      });
+    });
   });
 });

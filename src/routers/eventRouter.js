@@ -8,7 +8,10 @@ const router = express.Router();
 
 router.route("*").all(expressJwt({ secret: config.jwtSecret }));
 
-router.route("/").post(validationController.validateCreateEvent, eventController.createEvent);
+router
+  .route("/")
+  .post(validationController.validateCreateEvent, eventController.createEvent)
+  .get(validationController.validateCommonParams, validationController.validateGetData, eventController.getData);
 
 router.route("/types").get(eventController.getTypes);
 

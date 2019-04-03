@@ -11,11 +11,7 @@ router.route("*").all(expressJwt({ secret: config.jwtSecret }));
 router
   .route("/")
   .post(validationController.validateCreateMeasurement, measurementController.createMeasurement)
-  .get(
-    validationController.validateCommonParams,
-    validationController.validateGetMeasurementData,
-    measurementController.getData,
-  );
+  .get(validationController.validateCommonParams, validationController.validateGetData, measurementController.getData);
 
 router.route("/types").get(measurementController.getTypes);
 
