@@ -53,7 +53,16 @@ const getStats = (req, res) => statsController.getStats(req, res, EventStatsCach
 const _getDataFromDB = async (groupBy, type, timePeriod, things) =>
   EventModel.getData(groupBy, type, timePeriod, things);
 
-const getData = (req, res) => dataController.getData(req, res, _getDataFromDB);
+const _getThingsFromDB = async (type, timePeriod) => {
+  try {
+    const result = await EventModel.getThings(type, timePeriod);
+    return result.map(item => item.thing);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getData = (req, res) => dataController.getData(req, res, _getDataFromDB, _getThingsFromDB);
 
 export default {
   createEvent,

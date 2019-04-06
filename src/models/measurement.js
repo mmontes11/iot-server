@@ -138,7 +138,7 @@ MeasurementSchema.statics.getData = function getData(groupBy, type, timePeriod, 
           unit: "$unit",
           phenomenonTime: "$phenomenonTime",
         },
-        data: {
+        values: {
           $push: {
             thing: "$thing",
             value: "$value",
@@ -157,9 +157,9 @@ MeasurementSchema.statics.getData = function getData(groupBy, type, timePeriod, 
           type: "$_id.type",
           unit: "$_id.unit",
         },
-        measurements: {
+        items: {
           $push: {
-            data: "$data",
+            values: "$values",
             phenomenonTime: "$_id.phenomenonTime",
           },
         },
@@ -170,7 +170,7 @@ MeasurementSchema.statics.getData = function getData(groupBy, type, timePeriod, 
         _id: 0,
         type: "$_id.type",
         unit: "$_id.unit",
-        measurements: 1,
+        items: 1,
       },
     },
     {

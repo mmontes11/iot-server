@@ -1,5 +1,6 @@
 import _ from "underscore";
 import mongoose from "../lib/mongoose";
+import { buildMatch } from "../helpers/aggregationHelper";
 
 const ObservationSchema = new mongoose.Schema({
   username: String,
@@ -32,6 +33,31 @@ ObservationSchema.statics.findLastN = function findLastN(n = 10, type, thing) {
   return this.find(findCriteria)
     .sort({ phenomenonTime: -1 })
     .limit(n);
+};
+
+ObservationSchema.statics.getThings = function getData(type, timePeriod) {
+  const match = buildMatch(type, timePeriod);
+  const pipeline = [
+    {
+      $group: {
+        _id: {
+          thing: "$thing",
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        thing: "$_id.thing",
+      },
+    },
+    {
+      $sort: {
+        thing: 1,
+      },
+    },
+  ];
+  return this.aggregate([...match, ...pipeline]);
 };
 
 const ObservationModel = mongoose.model("Observation", ObservationSchema);

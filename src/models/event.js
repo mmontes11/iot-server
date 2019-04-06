@@ -128,7 +128,7 @@ EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things
           thing: "$thing",
           date: "$date",
         },
-        count: {
+        value: {
           $sum: 1,
         },
       },
@@ -138,7 +138,7 @@ EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things
         type: "$_id.type",
         thing: "$_id.thing",
         phenomenonTime: dateFromParts,
-        count: 1,
+        value: 1,
       },
     },
     {
@@ -147,10 +147,10 @@ EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things
           type: "$type",
           phenomenonTime: "$phenomenonTime",
         },
-        data: {
+        values: {
           $push: {
             thing: "$thing",
-            count: "$count",
+            value: "$value",
           },
         },
       },
@@ -165,9 +165,9 @@ EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things
         _id: {
           type: "$_id.type",
         },
-        events: {
+        items: {
           $push: {
-            data: "$data",
+            values: "$values",
             phenomenonTime: "$_id.phenomenonTime",
           },
         },
@@ -177,7 +177,7 @@ EventSchema.statics.getData = function getData(groupBy, type, timePeriod, things
       $project: {
         _id: 0,
         type: "$_id.type",
-        events: 1,
+        items: 1,
       },
     },
     {

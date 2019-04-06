@@ -53,7 +53,16 @@ const getStats = async (req, res) => statsController.getStats(req, res, Measurem
 const _getDataFromDB = async (groupBy, type, timePeriod, things) =>
   MeasurementModel.getData(groupBy, type, timePeriod, things);
 
-const getData = async (req, res) => dataController.getData(req, res, _getDataFromDB);
+const _getThingsFromDB = async (type, timePeriod) => {
+  try {
+    const result = await MeasurementModel.getThings(type, timePeriod);
+    return result.map(item => item.thing);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getData = async (req, res) => dataController.getData(req, res, _getDataFromDB, _getThingsFromDB);
 
 export default {
   createMeasurement,
