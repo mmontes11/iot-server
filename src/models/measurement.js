@@ -1,9 +1,10 @@
 import mongoose from "../lib/mongoose";
-import { ObservationSchema } from "./observation";
+import observation, * as observationHelpers from "./observation";
 import { UnitSchema } from "./unit";
 import { buildMatch, buildDateHelpers } from "../helpers/aggregationHelper";
 
-const MeasurementSchema = ObservationSchema.extend({
+const MeasurementSchema = new mongoose.Schema({
+  ...observation,
   unit: {
     type: UnitSchema,
     required: true,
@@ -13,6 +14,18 @@ const MeasurementSchema = ObservationSchema.extend({
     required: true,
   },
 });
+
+MeasurementSchema.statics.types = function types() {
+  return observationHelpers.types(this);
+};
+
+MeasurementSchema.statics.findLastN = function findLastN(n = 10, type, thing) {
+  return observationHelpers.findLastN(this, n, type, thing);
+};
+
+MeasurementSchema.statics.getThings = function getThings(type, timePeriod) {
+  return observationHelpers.getThings(this, type, timePeriod);
+};
 
 MeasurementSchema.statics.getStats = function getStats(type, timePeriod, things) {
   const match = buildMatch(type, timePeriod, things);

@@ -5,7 +5,6 @@ import chai from "./lib/chai";
 import { MeasurementModel } from "../src/models/measurement";
 import { EventModel } from "../src/models/event";
 import { ThingModel } from "../src/models/thing";
-import { ObservationModel } from "../src/models/observation";
 import server from "../src/index";
 import constants from "./constants/observations";
 import authConstants from "./constants/auth";
@@ -15,19 +14,6 @@ const { assert, should: chaiShould } = chai;
 const should = chaiShould();
 let token = null;
 const auth = () => `Bearer ${token}`;
-const ensureNoObservationsCreated = done => {
-  ObservationModel.find()
-    .then(observations => {
-      if (_.isEmpty(observations)) {
-        done();
-      } else {
-        done(new Error("Some observations have been created"));
-      }
-    })
-    .catch(err => {
-      done(err);
-    });
-};
 
 describe("Observations", () => {
   before(done => {
@@ -76,7 +62,7 @@ describe("Observations", () => {
         .end((err, res) => {
           should.exist(err);
           res.should.have.status(httpStatus.NOT_MODIFIED);
-          ensureNoObservationsCreated(done);
+          done();
         });
     });
   });
@@ -95,7 +81,7 @@ describe("Observations", () => {
         .end((err, res) => {
           should.exist(err);
           res.should.have.status(httpStatus.BAD_REQUEST);
-          ensureNoObservationsCreated(done);
+          done();
         });
     });
     it("tries to create invalid observations", done => {
@@ -121,7 +107,7 @@ describe("Observations", () => {
           res.body[responseKeys.invalidObservationsArrayKey].length.should.be.eql(
             _.size(invalidObservations.observations),
           );
-          ensureNoObservationsCreated(done);
+          done();
         });
     });
     it("tries to create observations with an invalid thing", done => {
@@ -138,7 +124,7 @@ describe("Observations", () => {
           should.exist(err);
           should.exist(res.body[responseKeys.invalidThingKey]);
           res.should.have.status(httpStatus.BAD_REQUEST);
-          ensureNoObservationsCreated(done);
+          done();
         });
     });
     it("tries to create observations with a thing that has an invalid geometry", done => {
@@ -155,7 +141,7 @@ describe("Observations", () => {
           should.exist(err);
           should.exist(res.body[responseKeys.invalidThingKey]);
           res.should.have.status(httpStatus.BAD_REQUEST);
-          ensureNoObservationsCreated(done);
+          done();
         });
     });
   });

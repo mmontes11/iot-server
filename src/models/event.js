@@ -1,13 +1,26 @@
 import mongoose from "../lib/mongoose";
-import { ObservationSchema } from "./observation";
+import observation, * as observationHelpers from "./observation";
 import { buildMatch, buildDateHelpers } from "../helpers/aggregationHelper";
 
-const EventSchema = ObservationSchema.extend({
+const EventSchema = new mongoose.Schema({
+  ...observation,
   value: {
     type: mongoose.Schema.Types.Mixed,
     required: false,
   },
 });
+
+EventSchema.statics.types = function types() {
+  return observationHelpers.types(this);
+};
+
+EventSchema.statics.findLastN = function findLastN(n = 10, type, thing) {
+  return observationHelpers.findLastN(this, n, type, thing);
+};
+
+EventSchema.statics.getThings = function getThings(type, timePeriod) {
+  return observationHelpers.getThings(this, type, timePeriod);
+};
 
 EventSchema.statics.getStats = function getStats(type, timePeriod, things) {
   const match = buildMatch(type, timePeriod, things);

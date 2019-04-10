@@ -1,8 +1,7 @@
 import _ from "underscore";
-import mongoose from "../lib/mongoose";
 import { buildMatch } from "../helpers/aggregationHelper";
 
-const ObservationSchema = new mongoose.Schema({
+export default {
   username: String,
   thing: {
     type: String,
@@ -16,26 +15,25 @@ const ObservationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
-
-ObservationSchema.statics.types = function types() {
-  return this.distinct("type");
 };
 
-ObservationSchema.statics.findLastN = function findLastN(n = 10, type, thing) {
+export const types = model => model.distinct("type");
+
+export const findLastN = (model, n = 10, type, thing) => {
   let findCriteria = {};
   if (!_.isUndefined(type)) {
-    findCriteria = Object.assign(findCriteria, { type });
+    findCriteria = { type };
   }
   if (!_.isUndefined(thing)) {
-    findCriteria = Object.assign(findCriteria, { thing });
+    findCriteria = { ...findCriteria, thing };
   }
-  return this.find(findCriteria)
+  return model
+    .find(findCriteria)
     .sort({ phenomenonTime: -1 })
     .limit(n);
 };
 
-ObservationSchema.statics.getThings = function getData(type, timePeriod) {
+export const getThings = (model, type, timePeriod) => {
   const match = buildMatch(type, timePeriod);
   const pipeline = [
     {
@@ -57,9 +55,5 @@ ObservationSchema.statics.getThings = function getData(type, timePeriod) {
       },
     },
   ];
-  return this.aggregate([...match, ...pipeline]);
+  return model.aggregate([...match, ...pipeline]);
 };
-
-const ObservationModel = mongoose.model("Observation", ObservationSchema);
-
-export { ObservationSchema, ObservationModel };

@@ -1,5 +1,4 @@
 import "mongoose-geojson-schema";
-import "mongoose-schema-extend";
 import Promise from "bluebird";
 import mongoose from "mongoose";
 import config from "../config/index";
@@ -14,6 +13,6 @@ if (config.debug) {
   });
 }
 
-mongoose.connect(config.mongoUrl, { useMongoClient: true });
+mongoose.connect(config.mongoUrl);
 
 export default mongoose;
