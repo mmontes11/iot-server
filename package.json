@@ -17,7 +17,7 @@
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rm -rf dist/",
-    "prebuild": "npm run test && npm run clean",
+    "prebuild": "npm run clean",
     "build": "babel -d dist/ src/",
     "production": "cross-env NODE_ENV=production node index.js"
   },
