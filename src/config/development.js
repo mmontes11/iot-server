@@ -16,5 +16,6 @@ export default {
   },
   jwtSecret: "2SrZAfNgGhn7eff2P5hvPUdX",
   googleMapsKey: `${process.env.GOOGLE_MAPS_KEY}`,
+  storeLogsInMongo: false,
   debug: true,
 };

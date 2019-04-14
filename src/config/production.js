@@ -16,5 +16,6 @@ export default {
   },
   jwtSecret: `${process.env.JWT_SECRET}`,
   googleMapsKey: `${process.env.GOOGLE_MAPS_KEY}`,
+  storeLogsInMongo: process.env.STORE_LOGS_IN_MONGO,
   debug: process.env.IOT_DEBUG,
 };
