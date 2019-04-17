@@ -6,13 +6,20 @@ import boolean from "../../utils/boolean";
 import responseKeys from "../../utils/responseKeys";
 import regex from "../../utils/regex";
 
+const validateCheckAuth = (req, res, next) => {
+  const { token, username, password } = req.body;
+  if (!_.isUndefined(token) || (!_.isUndefined(username) && !_.isUndefined(password))) {
+    return next();
+  }
+  return res.sendStatus(httpStatus.BAD_REQUEST);
+};
+
 const validateCreateUserIfNotExists = (req, res, next) => {
   const user = req.body;
   if (!requestValidator.validUser(user)) {
-    res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidUserKey]: user });
-  } else {
-    next();
+    return res.status(httpStatus.BAD_REQUEST).json({ [responseKeys.invalidUserKey]: user });
   }
+  return next();
 };
 
 const validateCreateMeasurement = ({ body: { measurement, thing } }, res, next) => {
@@ -154,6 +161,7 @@ const validateGetSubscriptionsByChat = ({ query: { chatId } }, res, next) => {
 };
 
 export default {
+  validateCheckAuth,
   validateCreateUserIfNotExists,
   validateCreateMeasurement,
   validateCreateEvent,

@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("*").all(expressBasicAuth({ users: config.basicAuthUsers }));
 
-router.route("/").post(authController.checkAuth);
+router.route("/").post(validationController.validateCheckAuth, authController.checkAuth);
 
 router.route("/user").post(validationController.validateCreateUserIfNotExists, authController.createUserIfNotExists);
 

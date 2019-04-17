@@ -165,18 +165,6 @@ describe("Auth", () => {
             });
         });
     });
-    it("tries get a token with a non existing user", done => {
-      chai
-        .request(server)
-        .post("/auth/token")
-        .set("Authorization", constants.validAuthHeader)
-        .send(constants.validUser)
-        .end((err, res) => {
-          should.exist(err);
-          res.should.have.status(httpStatus.UNAUTHORIZED);
-          done();
-        });
-    });
   });
 
   describe("POST /auth/token 200", () => {

@@ -1,38 +1,43 @@
 import httpStatus from "http-status";
 import jwt from "jsonwebtoken";
 import _ from "underscore";
-import Promise from "bluebird";
 import { UserModel } from "../../models/user";
 import modelFactory from "../../helpers/modelFactory";
 import config from "../../config/index";
 import responseHandler from "../../helpers/responseHandler";
 
-const _checkAuthInDB = req =>
-  new Promise((resolve, reject) => {
-    UserModel.where({
-      username: req.body.username,
-      password: req.body.password,
-    })
-      .findOne()
-      .then(user => {
-        if (_.isUndefined(user) || _.isNull(user)) {
-          reject(new Error("Invalid credentials"));
-        } else {
-          resolve();
-        }
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+const _checkCredentials = async (username, password) => {
+  try {
+    const user = await UserModel.where({ username, password }).findOne();
+    return !_.isUndefined(user) && !_.isNull(user);
+  } catch (err) {
+    return false;
+  }
+};
 
 const checkAuth = async (req, res) => {
-  try {
-    await _checkAuthInDB(req);
-    res.sendStatus(httpStatus.OK);
-  } catch (err) {
-    res.sendStatus(httpStatus.UNAUTHORIZED);
+  const { token, username, password } = req.body;
+  if (!_.isUndefined(token)) {
+    try {
+      if (jwt.verify(token, config.jwtSecret)) {
+        return res.sendStatus(httpStatus.OK);
+      }
+      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    } catch (err) {
+      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    }
   }
+  if (!_.isUndefined(username) && !_.isUndefined(password)) {
+    try {
+      if (await _checkCredentials(username, password)) {
+        return res.sendStatus(httpStatus.OK);
+      }
+      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    } catch (err) {
+      return res.sendStatus(httpStatus.UNAUTHORIZED);
+    }
+  }
+  return res.sendStatus(httpStatus.UNAUTHORIZED);
 };
 
 const createUserIfNotExists = async (req, res) => {
@@ -52,7 +57,7 @@ const createUserIfNotExists = async (req, res) => {
 
 const getToken = async (req, res) => {
   try {
-    await _checkAuthInDB(req);
+    await _checkCredentials(req);
   } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
