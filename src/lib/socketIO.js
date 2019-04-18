@@ -31,6 +31,7 @@ export const setupSocketIO = server => {
           logError(thingNotFoundError);
           return next(thingNotFoundError);
         }
+        socket.token = token;
         socket.thing = thing;
         return next();
       }

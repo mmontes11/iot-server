@@ -16,5 +16,6 @@ export default {
   },
   jwtSecret: `${process.env.JWT_SECRET}`,
   googleMapsKey: `${process.env.GOOGLE_MAPS_KEY}`,
+  thingSocketPort: process.env.THING_SOCKET_PORT,
   debug: process.env.IOT_DEBUG,
 };
