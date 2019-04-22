@@ -2,12 +2,15 @@ import { Server } from "http";
 import _ from "underscore";
 import mongoose from "./lib/mongoose";
 import redis from "./lib/redis";
-import mqtt from "./lib/mqtt";
+import mqtt, { mqttBrokerUrl } from "./lib/mqtt";
 import app from "./lib/express";
+import { setupSocketIO } from "./lib/socketIO";
+import { SocketController } from "./controllers/socket/socketController";
 import config from "./config/index";
 import { logInfo, logError } from "./utils/log";
 
 const server = new Server(app);
+const io = setupSocketIO(server);
 
 mongoose.connection.on("connected", () => {
   logInfo(`Connected to MongoDB ${config.mongoUrl}`);
@@ -31,7 +34,6 @@ redis.on("end", () => {
   logInfo(`Disconnected from Redis ${config.redisUrl}`);
 });
 
-const mqttBrokerUrl = `mqtt://${config.mqttBrokerHost}:${config.mqttBrokerPort}`;
 mqtt.on("connect", () => {
   logInfo(`Connected to MQTT Broker ${mqttBrokerUrl}`);
 });
@@ -51,17 +53,21 @@ server.on("close", () => {
   logInfo(`Stopped NodeJS server on port ${config.nodePort}`);
 });
 
+server.listen(config.nodePort, err => {
+  if (_.isUndefined(err) || _.isNull(err)) {
+    logInfo(`NodeJS server started on port ${config.nodePort}`);
+  }
+});
+
+const socketController = new SocketController(io);
+socketController.listen();
+
 process.on("SIGINT", () => {
   mongoose.connection.close();
   redis.quit();
   mqtt.end();
   server.close();
-});
-
-server.listen(config.nodePort, err => {
-  if (_.isUndefined(err) || _.isNull(err)) {
-    logInfo(`NodeJS server started on port ${config.nodePort}`);
-  }
+  socketController.close();
 });
 
 export default server;

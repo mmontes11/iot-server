@@ -8,4 +8,6 @@ const mqttClient = mqtt.connect({
   password: config.mqttBrokerPassword,
 });
 
+export const mqttBrokerUrl = `mqtt://${config.mqttBrokerHost}:${config.mqttBrokerPort}`;
+
 export default mqttClient;
