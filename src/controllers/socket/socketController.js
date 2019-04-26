@@ -17,6 +17,11 @@ export class SocketController {
     }
     return query;
   }
+  static _handleThingDisconnect = (socket, err) => {
+    logError(`Thing connection error: ${err}`);
+    socket.emit("thing_disconnect", err);
+    socket.disconnect();
+  };
   listen() {
     this.io.on("connection", socket => {
       logInfo("Socket connection");
@@ -28,27 +33,23 @@ export class SocketController {
         logInfo(JSON.stringify(data));
         socket.emit("data", data);
       });
-      thingSocket.on("disconnect", () => {
-        logInfo("Thing disconnection");
+      thingSocket.on("disconnect", () =>
+        SocketController._handleThingDisconnect(socket, new Error("Thing disconnected")),
+      );
+      thingSocket.on("connect_error", err => SocketController._handleThingDisconnect(socket, err));
+      thingSocket.on("thing_disconnect", err => SocketController._handleThingDisconnect(socket, err));
+      thingSocket.on("error", err => {
+        logError(`Thing error: ${err}`);
+        socket.emit("thing_error", err);
         socket.disconnect();
       });
       socket.on("disconnect", () => {
         logInfo("Socket disconnection");
         thingSocket.disconnect();
       });
-      thingSocket.on("connect_error", err => {
-        logError(`Thing connection error: ${err}`);
-        thingSocket.disconnect();
-        socket.disconnect();
-      });
-      thingSocket.on("error", err => {
-        logError(`Thing error: ${err}`);
-        thingSocket.disconnect();
-        socket.disconnect();
-      });
       socket.on("error", err => {
         logError(`Socket error: ${err}`);
-        thingSocket.disconnect();
+        socket.emit("socket_server_error", err);
         socket.disconnect();
       });
     });
