@@ -10,7 +10,7 @@ export const setupSocketIO = server => {
   io.use(async (socket, next) => {
     const {
       handshake: {
-        query: { token, thing: thingName },
+        query: { token, thing: thingName, type },
       },
     } = socket;
     if (_.isUndefined(token)) {
@@ -33,6 +33,7 @@ export const setupSocketIO = server => {
         }
         socket.token = token;
         socket.thing = thing;
+        socket.type = type;
         return next();
       }
       const authError = new Error("Auth error");

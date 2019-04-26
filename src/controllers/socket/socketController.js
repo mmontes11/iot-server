@@ -1,16 +1,28 @@
 import SocketIOClient from "socket.io-client";
-import { logInfo } from "../../utils/log";
+import { logInfo, logError } from "../../utils/log";
 import config from "../../config";
 
 export class SocketController {
   constructor(io) {
     this.io = io;
   }
+  static _getQueryParams(socket) {
+    const { token, type } = socket;
+    let query = { token };
+    if (type) {
+      query = {
+        ...query,
+        type,
+      };
+    }
+    return query;
+  }
   listen() {
     this.io.on("connection", socket => {
-      logInfo("New connection");
-      const { token, thing } = socket;
-      const thingSocket = new SocketIOClient(`http://${thing.ip}:${config.thingSocketPort}`, { query: { token } });
+      logInfo("Socket connection");
+      const { thing } = socket;
+      const query = SocketController._getQueryParams(socket);
+      const thingSocket = new SocketIOClient(`http://${thing.ip}:${config.thingSocketPort}`, { query });
       thingSocket.on("data", data => {
         logInfo(`Receiving data from ${thing.name}:`);
         logInfo(JSON.stringify(data));
@@ -21,8 +33,23 @@ export class SocketController {
         socket.disconnect();
       });
       socket.on("disconnect", () => {
-        logInfo("New disconnection");
+        logInfo("Socket disconnection");
         thingSocket.disconnect();
+      });
+      thingSocket.on("connect_error", err => {
+        logError(`Thing connection error: ${err}`);
+        thingSocket.disconnect();
+        socket.disconnect();
+      });
+      thingSocket.on("error", err => {
+        logError(`Thing error: ${err}`);
+        thingSocket.disconnect();
+        socket.disconnect();
+      });
+      socket.on("error", err => {
+        logError(`Socket error: ${err}`);
+        thingSocket.disconnect();
+        socket.disconnect();
       });
     });
   }
