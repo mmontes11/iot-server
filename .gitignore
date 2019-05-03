@@ -36,3 +36,6 @@ coverage
 # other
 *.rdb
 
+# env
+.env
+
