@@ -7,12 +7,11 @@ import config from "../../config/index";
 import responseHandler from "../../helpers/responseHandler";
 
 const _checkCredentials = async (username, password) => {
-  try {
-    const user = await UserModel.where({ username, password }).findOne();
-    return !_.isUndefined(user) && !_.isNull(user);
-  } catch (err) {
-    return false;
+  const user = await UserModel.where({ username, password }).findOne();
+  if (!user) {
+    throw new Error("Unauthorized");
   }
+  return true;
 };
 
 const checkAuth = async (req, res) => {
@@ -56,8 +55,9 @@ const createUserIfNotExists = async (req, res) => {
 };
 
 const getToken = async (req, res) => {
+  const { username, password } = req.body;
   try {
-    await _checkCredentials(req);
+    await _checkCredentials(username, password);
   } catch (err) {
     return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
